@@ -50,9 +50,6 @@ git clone https://github.com/SuLingGG/luci-app-frpc
 # Add luci-app-adguardhome.
 git clone https://github.com/rufengsuixing/luci-app-adguardhome
 
-# Add Rclone-OpenWrt.
-git clone https://github.com/ElonH/Rclone-OpenWrt
-
 # Add openwrt-iptvhelper.
 git clone https://github.com/riverscn/openwrt-iptvhelper
 
