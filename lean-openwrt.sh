@@ -44,7 +44,7 @@ mkdir parted
 cp luci-app-diskman/Parted.Makefile parted/Makefile
 
 # Add luci-theme-argon
-git clone https://github.com/jerrykuku/luci-theme-argon
+git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon
 rm -rf ../lean/luci-theme-argon
 
 # Change timezone
