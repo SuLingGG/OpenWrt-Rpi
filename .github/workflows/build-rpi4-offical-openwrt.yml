@@ -16,8 +16,8 @@ on:
       - master
     paths:
       - 'rpi4-offical-openwrt.config'
-  schedule:
-    - cron: 0 18 * * *
+#  schedule:
+#    - cron: 0 18 * * *
 #  watch:
 #    types: [started]
 
@@ -97,10 +97,10 @@ jobs:
     - name: Extract Gz Files
       run: |
         cd openwrt/bin/targets/brcm2708/bcm2711
-        gzip -d openwrt-brcm2708-bcm2711-rpi-4-squashfs-factory.img.gz || true
-        gzip -d openwrt-brcm2708-bcm2711-rpi-4-squashfs-sysupgrade.img.gz || true
-        gzip -d openwrt-brcm2708-bcm2711-rpi-4-ext4-factory.img.gz || true
-        gzip -d openwrt-brcm2708-bcm2711-rpi-4-ext4-sysupgrade.img.gz || true
+        gzip -q -d openwrt-brcm2708-bcm2711-rpi-4-squashfs-factory.img.gz || true
+        gzip -q -d openwrt-brcm2708-bcm2711-rpi-4-squashfs-sysupgrade.img.gz || true
+        gzip -q -d openwrt-brcm2708-bcm2711-rpi-4-ext4-factory.img.gz || true
+        gzip -q -d openwrt-brcm2708-bcm2711-rpi-4-ext4-sysupgrade.img.gz || true
 
     - name: Generate Sha256sum File
       run: |
