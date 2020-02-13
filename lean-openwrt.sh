@@ -28,10 +28,6 @@ git clone https://github.com/Leo-Jo/luci-app-koolproxyR
 # Add luci-app-onliner (need luci-app-nlbwmon)
 git clone https://github.com/rufengsuixing/luci-app-onliner
 
-# Add luci-app-dockerman
-git clone https://github.com/lisaac/luci-lib-docker
-git clone https://github.com/lisaac/luci-app-dockerman
-
 # Add luci-app-adguardhome
 git clone https://github.com/rufengsuixing/luci-app-adguardhome
 
