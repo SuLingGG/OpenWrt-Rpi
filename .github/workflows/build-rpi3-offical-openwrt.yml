@@ -16,7 +16,7 @@ on:
       - master
     paths:
       - 'rpi3-offical-openwrt.config'
-  schedule:
+#  schedule:
     - cron: 0 18 * * *
 #  watch:
 #    types: [started]
@@ -101,15 +101,15 @@ jobs:
 
     - name: Extract Gz Files
       run: |
-        cd openwrt/bin/targets/brcm2708/bcm2710
-        gzip -q -d openwrt-brcm2708-bcm2710-rpi-3-squashfs-factory.img.gz || true
-        gzip -q -d openwrt-brcm2708-bcm2710-rpi-3-squashfs-sysupgrade.img.gz || true
-        gzip -q -d openwrt-brcm2708-bcm2710-rpi-3-ext4-factory.img.gz || true
-        gzip -q -d openwrt-brcm2708-bcm2710-rpi-3-ext4-sysupgrade.img.gz || true
+        cd openwrt/bin/targets/bcm27xx/bcm2710
+        gzip -q -d openwrt-bcm27xx-bcm2710-rpi-3-squashfs-factory.img.gz || true
+        gzip -q -d openwrt-bcm27xx-bcm2710-rpi-3-squashfs-sysupgrade.img.gz || true
+        gzip -q -d openwrt-bcm27xx-bcm2710-rpi-3-ext4-factory.img.gz || true
+        gzip -q -d openwrt-bcm27xx-bcm2710-rpi-3-ext4-sysupgrade.img.gz || true
 
     - name: Generate Sha256sum File
       run: |
-        cd openwrt/bin/targets/brcm2708/bcm2710
+        cd openwrt/bin/targets/bcm27xx/bcm2710
         rm -rf sha256sums
         sha256sum openwrt* > sha256sums
 
@@ -118,7 +118,7 @@ jobs:
       if: steps.compile.outputs.status == 'success'
       with:
         name: config.buildinfo
-        path: openwrt/bin/targets/brcm2708/bcm2710/config.buildinfo
+        path: openwrt/bin/targets/bcm27xx/bcm2710/config.buildinfo
         
     - name: Upload Packages
       uses: actions/upload-artifact@master
@@ -131,54 +131,54 @@ jobs:
       uses: actions/upload-artifact@master
       if: steps.compile.outputs.status == 'success'
       with:
-        name: openwrt-brcm2708-bcm2710-rpi-3.manifest
-        path: openwrt/bin/targets/brcm2708/bcm2710/openwrt-brcm2708-bcm2710-rpi-3.manifest
+        name: openwrt-bcm27xx-bcm2710-rpi-3.manifest
+        path: openwrt/bin/targets/bcm27xx/bcm2710/openwrt-bcm27xx-bcm2710-rpi-3.manifest
         
     - name: Upload Kernel Packages
       uses: actions/upload-artifact@master
       if: steps.compile.outputs.status == 'success'
       with:
         name: kernel-packages
-        path: openwrt/bin/targets/brcm2708/bcm2710/packages/
+        path: openwrt/bin/targets/bcm27xx/bcm2710/packages/
         
     - name: Upload RootFS Archive
       uses: actions/upload-artifact@master
       if: steps.compile.outputs.status == 'success'
       with:
-        name: openwrt-brcm2708-bcm2710-rpi-3-rootfs.tar.gz
-        path: openwrt/bin/targets/brcm2708/bcm2710/openwrt-brcm2708-bcm2710-rpi-3-rootfs.tar.gz
+        name: openwrt-bcm27xx-bcm2710-rpi-3-rootfs.tar.gz
+        path: openwrt/bin/targets/bcm27xx/bcm2710/openwrt-bcm27xx-bcm2710-rpi-3-rootfs.tar.gz
         
     - name: Upload SquashFS Factory Image
       uses: actions/upload-artifact@master
       if: steps.compile.outputs.status == 'success'
       with:
-        name: openwrt-brcm2708-bcm2710-rpi-3-squashfs-factory.img
-        path: openwrt/bin/targets/brcm2708/bcm2710/openwrt-brcm2708-bcm2710-rpi-3-squashfs-factory.img
+        name: openwrt-bcm27xx-bcm2710-rpi-3-squashfs-factory.img
+        path: openwrt/bin/targets/bcm27xx/bcm2710/openwrt-bcm27xx-bcm2710-rpi-3-squashfs-factory.img
         
     - name: Upload SquashFS Sysupgrade Image
       uses: actions/upload-artifact@master
       if: steps.compile.outputs.status == 'success'
       with:
-        name: openwrt-brcm2708-bcm2710-rpi-3-squashfs-sysupgrade.img
-        path: openwrt/bin/targets/brcm2708/bcm2710/openwrt-brcm2708-bcm2710-rpi-3-squashfs-sysupgrade.img
+        name: openwrt-bcm27xx-bcm2710-rpi-3-squashfs-sysupgrade.img
+        path: openwrt/bin/targets/bcm27xx/bcm2710/openwrt-bcm27xx-bcm2710-rpi-3-squashfs-sysupgrade.img
         
     - name: Upload Ext4 Factory Image
       uses: actions/upload-artifact@master
       if: steps.compile.outputs.status == 'success'
       with:
-        name: openwrt-brcm2708-bcm2710-rpi-3-ext4-factory.img
-        path: openwrt/bin/targets/brcm2708/bcm2710/openwrt-brcm2708-bcm2710-rpi-3-ext4-factory.img
+        name: openwrt-bcm27xx-bcm2710-rpi-3-ext4-factory.img
+        path: openwrt/bin/targets/bcm27xx/bcm2710/openwrt-bcm27xx-bcm2710-rpi-3-ext4-factory.img
         
     - name: Upload Ext4 Sysupgrade Image
       uses: actions/upload-artifact@master
       if: steps.compile.outputs.status == 'success'
       with:
-        name: openwrt-brcm2708-bcm2710-rpi-3-ext4-sysupgrade.img
-        path: openwrt/bin/targets/brcm2708/bcm2710/openwrt-brcm2708-bcm2710-rpi-3-ext4-sysupgrade.img
+        name: openwrt-bcm27xx-bcm2710-rpi-3-ext4-sysupgrade.img
+        path: openwrt/bin/targets/bcm27xx/bcm2710/openwrt-bcm27xx-bcm2710-rpi-3-ext4-sysupgrade.img
         
     - name: Upload Images Sha256sums
       uses: actions/upload-artifact@master
       if: steps.compile.outputs.status == 'success'
       with:
         name: sha256sums
-        path: openwrt/bin/targets/brcm2708/bcm2710/sha256sums
+        path: openwrt/bin/targets/bcm27xx/bcm2710/sha256sums
