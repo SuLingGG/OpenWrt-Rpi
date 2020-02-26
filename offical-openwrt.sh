@@ -87,8 +87,6 @@ svn co https://github.com/Leo-Jo-My/my/trunk/openwrt-dnsforwarder
 svn co https://github.com/Leo-Jo-My/my/trunk/openwrt-udp2raw-speeder
 svn co https://github.com/Leo-Jo-My/my/trunk/GoQuiet
 svn co https://github.com/Leo-Jo-My/my/trunk/chinadns
-sed -i 's/armv8/arm64/g' dnscrypt-proxy-full/Makefile
-sed -i 's/armv6/arm/g' dnscrypt-proxy-full/Makefile
 sed -i 's/mux = 1/mux = 0/g' luci-app-vssr/root/usr/share/vssr/subscribe.lua
 rm -rf ../../feeds/packages/net/kcptun
 
