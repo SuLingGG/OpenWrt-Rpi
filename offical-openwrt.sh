@@ -16,7 +16,7 @@ popd
 # Copy Lean's packages to ./package/lean.
 mkdir package/lean
 pushd package/lede/package/lean
-cp -r {adbyby,automount,baidupcs-web,ddns-scripts_aliyun,ddns-scripts_dnspod,ipt2socks,kcptun,luci-app-adbyby-plus,luci-app-autoreboot,luci-app-baidupcs-web,luci-app-dockerman,luci-app-familycloud,luci-app-flowoffload,luci-app-kodexplorer,luci-app-mwan3helper,luci-app-n2n_v2,luci-app-netdata,luci-app-nps,luci-app-syncdial,luci-app-usb-printer,luci-app-unblockmusic,luci-app-unblockneteasemusic-go,luci-app-unblockneteasemusic-mini,luci-app-verysync,luci-app-vsftpd,luci-app-xlnetacc,luci-app-zerotier,luci-lib-docker,n2n_v2,npc,pdnsd-alt,shadowsocksr-libev,simple-obfs,srelay,trojan,UnblockNeteaseMusic,UnblockNeteaseMusicGo,v2ray,v2ray-plugin,verysync,vsftpd-alt} "../../../lean"
+cp -r {adbyby,automount,baidupcs-web,ddns-scripts_aliyun,ddns-scripts_dnspod,frpc,ipt2socks,kcptun,luci-app-adbyby-plus,luci-app-autoreboot,luci-app-baidupcs-web,luci-app-familycloud,luci-app-flowoffload,luci-app-frpc,luci-app-kodexplorer,luci-app-mwan3helper,luci-app-n2n_v2,luci-app-netdata,luci-app-nps,luci-app-syncdial,luci-app-usb-printer,luci-app-unblockmusic,luci-app-unblockneteasemusic-go,luci-app-unblockneteasemusic-mini,luci-app-verysync,luci-app-vsftpd,luci-app-xlnetacc,luci-app-zerotier,n2n_v2,npc,pdnsd-alt,shadowsocksr-libev,simple-obfs,srelay,trojan,UnblockNeteaseMusic,UnblockNeteaseMusicGo,v2ray,v2ray-plugin,verysync,vsftpd-alt} "../../../lean"
 popd
 
 # Add upx & ucl
@@ -90,6 +90,7 @@ rm -rf ../../feeds/packages/net/kcptun
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/subconverter
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/jpcre2
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/rapidjson
+popd
 
 # Enable irqbalance
 sed -i 's/0/1/g' feeds/packages/utils/irqbalance/files/irqbalance.config
