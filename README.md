@@ -27,7 +27,7 @@
 5. 固件在每天凌晨 02:00 拉取 Lean 大源码自动编译，默认情况下每日编译一次 (config 文件更新时除外)，未经实机测试，故 **不保证 100% 可靠性**。
 6. 固件 (功能性) 更新内容可前往 Telegram 频道: [Beautiful Apps Channel](https://t.me/beautifulapps) 查看。
 
-## 鸣谢
+## 鸣谢：
 
 Lean's OpenWrt source:
 
