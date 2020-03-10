@@ -26,9 +26,18 @@ env:
   REPO_BRANCH: master
   CONFIG_FILE: rpi4-lean-openwrt.config
   DIY_SH: lean-openwrt.sh
+  DOWNLOAD_URL_FILE: Tmp-Link-Url.txt
+  TZ: Asia/Shanghai
+  TARGET: bcm27xx
+  SUBTARGET: bcm2711
+  DEVICE: openwrt-bcm27xx-bcm2711-rpi-4
   FREE_UP_DISK: true
   SSH_ACTIONS: false
-  TZ: Asia/Shanghai
+  UPLOAD_EXT4_IMAGES: true
+  UPLOAD_SQUASHFS_IMAGES: true
+  UPLOAD_ROOTFS: true
+  UPLOAD_TMP_LINK: true
+
 
 jobs:
   build:
@@ -101,85 +110,121 @@ jobs:
         echo "::set-output name=status::success"
 
     - name: Extract Gz Files
+      if: steps.compile.outputs.status == 'success'
       run: |
-        cd openwrt/bin/targets/bcm27xx/bcm2711
-        gzip -q -d openwrt-bcm27xx-bcm2711-rpi-4-squashfs-factory.img.gz || true
-        gzip -q -d openwrt-bcm27xx-bcm2711-rpi-4-squashfs-sysupgrade.img.gz || true
-        gzip -q -d openwrt-bcm27xx-bcm2711-rpi-4-ext4-factory.img.gz || true
-        gzip -q -d openwrt-bcm27xx-bcm2711-rpi-4-ext4-sysupgrade.img.gz || true
+        cd openwrt/bin/targets/$TARGET/$SUBTARGET
+        gzip -qdc $DEVICE-squashfs-factory.img.gz > $DEVICE-squashfs-factory.img || true
+        gzip -qdc $DEVICE-squashfs-sysupgrade.img.gz > $DEVICE-squashfs-sysupgrade.img || true
+        gzip -qdc $DEVICE-ext4-factory.img.gz > $DEVICE-ext4-factory.img || true
+        gzip -qdc $DEVICE-ext4-sysupgrade.img.gz > $DEVICE-ext4-sysupgrade.img || true
 
-    - name: Generate Sha256sum File
+    - name: Generate Sha256sum File For Images
+      if: steps.compile.outputs.status == 'success'
       run: |
-        cd openwrt/bin/targets/bcm27xx/bcm2711
-        rm -rf sha256sums
-        sha256sum openwrt* > sha256sums
+        cd openwrt/bin/targets/$TARGET/$SUBTARGET
+        mv sha256sums sha256sums.orig
+        sha256sum *.img > sha256sums
 
     - name: Upload Config
       uses: actions/upload-artifact@master
       if: steps.compile.outputs.status == 'success'
       with:
         name: config.seed
-        path: openwrt/bin/targets/bcm27xx/bcm2711/config.seed
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/config.seed
         
     - name: Upload Packages
       uses: actions/upload-artifact@master
       if: steps.compile.outputs.status == 'success'
       with:
         name: packages
-        path: openwrt/bin/packages/aarch64_cortex-a72/
+        path: openwrt/bin/packages
         
     - name: Upload Packages Info
       uses: actions/upload-artifact@master
       if: steps.compile.outputs.status == 'success'
       with:
-        name: openwrt-bcm27xx-bcm2711-rpi-4.manifest
-        path: openwrt/bin/targets/bcm27xx/bcm2711/openwrt-bcm27xx-bcm2711-rpi-4.manifest
+        name: ${{ env.DEVICE }}.manifest
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}.manifest
         
     - name: Upload Kernel Packages
       uses: actions/upload-artifact@master
       if: steps.compile.outputs.status == 'success'
       with:
         name: kernel-packages
-        path: openwrt/bin/targets/bcm27xx/bcm2711/packages/
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/packages/
         
     - name: Upload RootFS Archive
       uses: actions/upload-artifact@master
-      if: steps.compile.outputs.status == 'success'
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_ROOTFS == 'true'
       with:
-        name: openwrt-bcm27xx-bcm2711-rpi-4-rootfs.tar.gz
-        path: openwrt/bin/targets/bcm27xx/bcm2711/openwrt-bcm27xx-bcm2711-rpi-4-rootfs.tar.gz
+        name: ${{ env.DEVICE }}-rootfs.tar.gz
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-rootfs.tar.gz
         
     - name: Upload SquashFS Factory Image
       uses: actions/upload-artifact@master
-      if: steps.compile.outputs.status == 'success'
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_SQUASHFS_IMAGES == 'true'
       with:
-        name: openwrt-bcm27xx-bcm2711-rpi-4-squashfs-factory.img
-        path: openwrt/bin/targets/bcm27xx/bcm2711/openwrt-bcm27xx-bcm2711-rpi-4-squashfs-factory.img
+        name: ${{ env.DEVICE }}-squashfs-factory.img
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-factory.img
         
     - name: Upload SquashFS Sysupgrade Image
       uses: actions/upload-artifact@master
-      if: steps.compile.outputs.status == 'success'
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_SQUASHFS_IMAGES == 'true'
       with:
-        name: openwrt-bcm27xx-bcm2711-rpi-4-squashfs-sysupgrade.img
-        path: openwrt/bin/targets/bcm27xx/bcm2711/openwrt-bcm27xx-bcm2711-rpi-4-squashfs-sysupgrade.img
+        name: ${{ env.DEVICE }}-squashfs-sysupgrade.img
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-sysupgrade.img
         
     - name: Upload Ext4 Factory Image
       uses: actions/upload-artifact@master
-      if: steps.compile.outputs.status == 'success'
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_EXT4_IMAGES == 'true'
       with:
-        name: openwrt-bcm27xx-bcm2711-rpi-4-ext4-factory.img
-        path: openwrt/bin/targets/bcm27xx/bcm2711/openwrt-bcm27xx-bcm2711-rpi-4-ext4-factory.img
+        name: ${{ env.DEVICE }}-ext4-factory.img
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-ext4-factory.img
         
     - name: Upload Ext4 Sysupgrade Image
       uses: actions/upload-artifact@master
-      if: steps.compile.outputs.status == 'success'
+      if: steps.compile.outputs.status == 'success' env.UPLOAD_EXT4_IMAGES == 'true'
       with:
-        name: openwrt-bcm27xx-bcm2711-rpi-4-ext4-sysupgrade.img
-        path: openwrt/bin/targets/bcm27xx/bcm2711/openwrt-bcm27xx-bcm2711-rpi-4-ext4-sysupgrade.img
-        
+        name: ${{ env.DEVICE }}-ext4-sysupgrade.img
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-ext4-sysupgrade.img
+
     - name: Upload Images Sha256sums
       uses: actions/upload-artifact@master
       if: steps.compile.outputs.status == 'success'
       with:
         name: sha256sums
-        path: openwrt/bin/targets/bcm27xx/bcm2711/sha256sums
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/sha256sums
+        
+    - name: Upload Files to Tmp.Link
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_TMP_LINK == 'true'
+      run: |
+        # Compress Packages
+        cd openwrt/bin/packages
+        zip -q -r ../targets/$TARGET/$SUBTARGET/packages.zip *
+
+        # Compress Kernel-Packages
+        cd ../targets/$TARGET/$SUBTARGET
+        zip -q -r kernel-packages.zip packages
+
+        # Delete *.img Files
+        rm -f *.img
+        
+        # Restore Orig sha256sums
+        rm sha256sums
+        mv sha256sums.orig sha256sums
+        
+        # Upload Files to Tmp.Link
+        find . -maxdepth 1 ! -name "$DOWNLOAD_URL_FILE" -type f -exec echo {} >> $DOWNLOAD_URL_FILE \; -exec curl -k -F "file=@{}" -F "token=${{ secrets.TMP_LINK_TOKEN }}" -F "model=0" -X POST "https://connect.tmp.link/api_v2/cli_uploader" -s >> $DOWNLOAD_URL_FILE \;
+
+        # Remove No Need Contents
+        sed -i 's/\.\///g' $DOWNLOAD_URL_FILE
+        sed -i '/^Upload.*/d' $DOWNLOAD_URL_FILE
+        sed -i '/^Thank.*/d' $DOWNLOAD_URL_FILE
+        sed -i '/Download/G' $DOWNLOAD_URL_FILE
+
+    - name: Upload Download Url File
+      uses: actions/upload-artifact@master
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_TMP_LINK == 'true'
+      with:
+        name: ${{ env.DOWNLOAD_URL_FILE }}
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DOWNLOAD_URL_FILE }}
