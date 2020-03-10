@@ -183,7 +183,7 @@ jobs:
         
     - name: Upload Ext4 Sysupgrade Image
       uses: actions/upload-artifact@master
-      if: steps.compile.outputs.status == 'success' env.UPLOAD_EXT4_IMAGES == 'true'
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_EXT4_IMAGES == 'true'
       with:
         name: ${{ env.DEVICE }}-ext4-sysupgrade.img
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-ext4-sysupgrade.img
