@@ -46,11 +46,6 @@ svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/msgpack-c
 # Add gotop
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/gotop
 
-# Subscribe converters
-svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/subconverter
-svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/jpcre2
-svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/rapidjson
-
 # Add luci-theme-argon
 git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon
 rm -rf ../lean/luci-theme-argon
