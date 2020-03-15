@@ -39,13 +39,6 @@ git clone https://github.com/lisaac/luci-app-diskman
 mkdir parted
 cp luci-app-diskman/Parted.Makefile parted/Makefile
 
-# Add tmate
-svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/tmate
-svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/msgpack-c
-
-# Add gotop
-svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/gotop
-
 # Add luci-theme-argon
 git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon
 rm -rf ../lean/luci-theme-argon
