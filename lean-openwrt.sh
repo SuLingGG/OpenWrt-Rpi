@@ -39,9 +39,24 @@ git clone https://github.com/lisaac/luci-app-diskman
 mkdir parted
 cp luci-app-diskman/Parted.Makefile parted/Makefile
 
+# Add tmate
+svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/tmate
+svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/msgpack-c
+
+# Add gotop
+svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/gotop
+
+# Subscribe converters
+svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/subconverter
+svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/jpcre2
+svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/rapidjson
+
 # Add luci-theme-argon
 git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon
 rm -rf ../lean/luci-theme-argon
+
+# Add luci-theme-rosy
+git clone https://github.com/rosywrt/luci-theme-rosy
 
 # Add smartdns
 svn co https://github.com/pymumu/smartdns/trunk/package/openwrt ../smartdns
@@ -53,9 +68,3 @@ popd
 
 # Change timezone
 sed -i "s/'UTC'/'CST-8'\n        set system.@system[-1].zonename='Asia\/Shanghai'/g" package/base-files/files/bin/config_generate
-
-# Change default theme
-sed -i 's/config internal themes/config internal themes\n    option Argon  \"\/luci-static\/argon\"/g' feeds/luci/modules/luci-base/root/etc/config/luci
-
-# Remove bootstrap theme
-sed -i '/set luci.main.mediaurlbase=\/luci-static\/bootstrap/d' feeds/luci/themes/luci-theme-bootstrap/root/etc/uci-defaults/30_luci-theme-bootstrap
