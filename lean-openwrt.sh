@@ -46,12 +46,30 @@ rm -rf ../lean/luci-theme-argon
 # Add luci-theme-rosy
 git clone https://github.com/rosywrt/luci-theme-rosy
 
+# Add tmate
+svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/tmate
+svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/msgpack-c
+
+# Add gotop
+svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/gotop
+
+# Subscribe converters
+svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/subconverter
+svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/jpcre2
+svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/rapidjson
+
 # Add smartdns
 svn co https://github.com/pymumu/smartdns/trunk/package/openwrt ../smartdns
 git clone https://github.com/SuLingGG/luci-app-smartdns ../luci-app-smartdns
 
 # Add OpenAppFilter
 git clone https://github.com/destan19/OpenAppFilter
+popd
+
+# Fix libssh
+pushd feeds/packages/libs
+rm -rf libssh
+svn co https://github.com/openwrt/packages/trunk/libs/libssh
 popd
 
 # Change timezone
