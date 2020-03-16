@@ -43,9 +43,6 @@ cp luci-app-diskman/Parted.Makefile parted/Makefile
 git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon
 rm -rf ../lean/luci-theme-argon
 
-# Add luci-theme-rosy
-git clone https://github.com/rosywrt/luci-theme-rosy
-
 # Add tmate
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/tmate
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/msgpack-c
