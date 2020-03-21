@@ -76,7 +76,7 @@ jobs:
 
     - name: Install feeds
       run: cd openwrt && ./scripts/feeds install -a
-
+      
     - name: Load custom configuration
       run: |
         [ -e files ] && mv files openwrt/files
@@ -86,6 +86,13 @@ jobs:
         ../$DIY_SH
         make defconfig
 
+    - name: Bind Folders
+      run: |
+        cd openwrt
+        mkdir -p bin/targets/$TARGET/$SUBTARGET/packages
+        mkdir -p files/www/snapshots/targets/$TARGET/$SUBTARGET/packages
+        sudo mount --bind bin/targets/$TARGET/$SUBTARGET/packages files/www/snapshots/targets/$TARGET/$SUBTARGET/packages
+        
     - name: SSH connection to Actions
       uses: P3TERX/debugger-action@master
       if: env.SSH_ACTIONS == 'true'
@@ -103,9 +110,40 @@ jobs:
       run: |
         cd openwrt
         echo -e "$(nproc) thread compile"
-        make -j$(nproc) || make -j1 V=s
+        make -j$(nproc) IGNORE_ERRORS=1 || make -j1 V=s IGNORE_ERRORS=1
         echo "::set-output name=status::success"
 
+    - name: Extract Gz Files
+      if: steps.compile.outputs.status == 'success'
+      run: |
+        cd openwrt/bin/targets/$TARGET/$SUBTARGET
+        gzip -qdc $DEVICE-squashfs-factory.img.gz > $DEVICE-squashfs-factory.img || true
+        gzip -qdc $DEVICE-squashfs-sysupgrade.img.gz > $DEVICE-squashfs-sysupgrade.img || true
+        gzip -qdc $DEVICE-ext4-factory.img.gz > $DEVICE-ext4-factory.img || true
+        gzip -qdc $DEVICE-ext4-sysupgrade.img.gz > $DEVICE-ext4-sysupgrade.img || true
+        
+    - name: Generate Sha256sum File For Images
+      if: steps.compile.outputs.status == 'success'
+      run: |
+        cd openwrt/bin/targets/$TARGET/$SUBTARGET
+        mv sha256sums sha256sums.orig
+        sha256sum *.img > sha256sums
+        
+    - name: Arrange Packages
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_TMP_LINK == 'true'
+      run: |
+        cd openwrt/bin
+        mkdir -p targets/$TARGET/$SUBTARGET/pre-snapshots/snapshots
+        mkdir -p targets/$TARGET/$SUBTARGET/pre-snapshots/snapshots/targets/$TARGET/$SUBTARGET
+        cp -r packages targets/$TARGET/$SUBTARGET/pre-snapshots/snapshots
+        cp -r targets/$TARGET/$SUBTARGET/packages targets/$TARGET/$SUBTARGET/pre-snapshots/snapshots/targets/$TARGET/$SUBTARGET
+        zip -q -r targets/$TARGET/$SUBTARGET/packages.zip targets/$TARGET/$SUBTARGET/pre-snapshots/snapshots
+        mkdir -p targets/$TARGET/$SUBTARGET/pre-packages-server
+        cp -r ../../packages-server targets/$TARGET/$SUBTARGET/pre-packages-server
+        cd targets/$TARGET/$SUBTARGET
+        cp -r pre-snapshots/snapshots pre-packages-server/packages-server/web
+        zip -q -r packages-server.zip pre-packages-server/packages-server
+        
     - name: Upload Config
       uses: actions/upload-artifact@master
       if: steps.compile.outputs.status == 'success'
@@ -118,7 +156,14 @@ jobs:
       if: steps.compile.outputs.status == 'success'
       with:
         name: packages
-        path: openwrt/bin/packages
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/pre-snapshots
+        
+    - name: Upload Packages-Server
+      uses: actions/upload-artifact@master
+      if: steps.compile.outputs.status == 'success'
+      with:
+        name: packages-server
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/pre-packages-server
         
     - name: Upload Packages Info
       uses: actions/upload-artifact@master
@@ -228,10 +273,10 @@ jobs:
     - name: Upload Files to Tmp.Link
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_TMP_LINK == 'true'
       run: |
-        cd openwrt/bin/packages
-        zip -q -r ../targets/$TARGET/$SUBTARGET/packages.zip *
-        cd ../targets/$TARGET/$SUBTARGET
-        zip -q -r kernel-packages.zip packages
+        cd openwrt/bin/targets/$TARGET/$SUBTARGET/
+        rm -f *.img
+        rm sha256sums
+        mv sha256sums.orig sha256sums
         find . -maxdepth 1 ! -name "$DOWNLOAD_URL_FILE" -type f -exec echo {} >> $DOWNLOAD_URL_FILE \; -exec curl -k -F "file=@{}" -F "token=${{ secrets.TMP_LINK_TOKEN }}" -F "model=0" -X POST "https://connect.tmp.link/api_v2/cli_uploader" -s >> $DOWNLOAD_URL_FILE \;
         sed -i 's/\.\///g' $DOWNLOAD_URL_FILE
         sed -i '/^Upload.*/d' $DOWNLOAD_URL_FILE

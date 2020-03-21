@@ -23,7 +23,7 @@ git clone https://github.com/tty228/luci-app-serverchan
 git clone https://github.com/vernesong/OpenClash
 
 # Add luci-app-koolproxyR
-git clone https://github.com/Leo-Jo/luci-app-koolproxyR
+git clone https://github.com/jefferymvp/luci-app-koolproxyR
 
 # Add luci-app-onliner (need luci-app-nlbwmon)
 git clone https://github.com/rufengsuixing/luci-app-onliner
@@ -69,5 +69,5 @@ rm -rf libssh
 svn co https://github.com/openwrt/packages/trunk/libs/libssh
 popd
 
-# Change timezone
-sed -i "s/'UTC'/'CST-8'\n        set system.@system[-1].zonename='Asia\/Shanghai'/g" package/base-files/files/bin/config_generate
+# Add local opkg sources
+sed -i "/https/a\sed -i 's/https:\\\/\\\/openwrt.proxy.ustclug.org\\\/snapshots\\\/targets/http:\\\/\\\/127.0.0.1\\\/snapshots\\\/targets/g' \/etc\/opkg\/distfeeds.conf" package/lean/default-settings/files/zzz-default-settings
