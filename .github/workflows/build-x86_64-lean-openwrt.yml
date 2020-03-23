@@ -221,12 +221,12 @@ jobs:
         name: ${{ env.DEVICE }}-combined-squashfs.vmdk
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-combined-squashfs.vmdk
         
-    - name: Upload Combined Hyper-V Image
-      uses: actions/upload-artifact@master
-      if: steps.compile.outputs.status == 'success'
-      with:
-        name: ${{ env.DEVICE }}-combined-squashfs.vhdx
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-combined-squashfs.vhdx
+#    - name: Upload Combined Hyper-V Image
+#      uses: actions/upload-artifact@master
+#      if: steps.compile.outputs.status == 'success'
+#      with:
+#        name: ${{ env.DEVICE }}-combined-squashfs.vhdx
+#        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-combined-squashfs.vhdx
 
     - name: Upload GPT DVD Image
       uses: actions/upload-artifact@master
@@ -256,12 +256,12 @@ jobs:
         name: ${{ env.DEVICE }}-uefi-gpt-squashfs.vmdk
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-uefi-gpt-squashfs.vmdk
         
-    - name: Upload GPT Hyper-V Image
-      uses: actions/upload-artifact@master
-      if: steps.compile.outputs.status == 'success'
-      with:
-        name: ${{ env.DEVICE }}-uefi-gpt-squashfs.vhdx
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-uefi-gpt-squashfs.vhdx
+#    - name: Upload GPT Hyper-V Image
+#      uses: actions/upload-artifact@master
+#      if: steps.compile.outputs.status == 'success'
+#      with:
+#        name: ${{ env.DEVICE }}-uefi-gpt-squashfs.vhdx
+#        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-uefi-gpt-squashfs.vhdx
 
     - name: Upload Images Sha256sums
       uses: actions/upload-artifact@master
