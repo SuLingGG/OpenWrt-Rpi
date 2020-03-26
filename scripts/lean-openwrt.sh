@@ -57,7 +57,7 @@ svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/rapidjson
 
 # Add smartdns
 svn co https://github.com/pymumu/smartdns/trunk/package/openwrt ../smartdns
-git clone https://github.com/SuLingGG/luci-app-smartdns ../luci-app-smartdns
+svn co https://github.com/project-openwrt/openwrt/trunk/package/ntlf9t/luci-app-smartdns ../luci-app-smartdns
 
 # Add OpenAppFilter
 git clone https://github.com/destan19/OpenAppFilter
@@ -69,5 +69,18 @@ rm -rf libssh
 svn co https://github.com/openwrt/packages/trunk/libs/libssh
 popd
 
-# Add local opkg sources
-sed -i "/https/a\sed -i 's/https:\\\/\\\/openwrt.proxy.ustclug.org\\\/snapshots\\\/targets/http:\\\/\\\/127.0.0.1\\\/snapshots\\\/targets/g' \/etc\/opkg\/distfeeds.conf" package/lean/default-settings/files/zzz-default-settings
+# Mod default-settings
+pushd package/lean/default-settings/files
+sed -i 's/exit 0//g' zzz-default-settings
+cat <<EOT >> zzz-default-settings
+sed -i 's/https:\/\/openwrt.proxy.ustclug.org\/snapshots\/targets/http:\/\/127.0.0.1\/snapshots\/targets/g' /etc/opkg/distfeeds.conf
+sed -i 's/openwrt.proxy.ustclug.org/mirrors.zju.edu.cn\/openwrt/g' /etc/opkg/distfeeds.conf
+mv www/snapshots/ipkg-make-index.sh www/snapshots/targets/*/*/packages
+cd www/snapshots/targets/*/*/packages
+chmod +x ipkg-make-index.sh
+./ipkg-make-index.sh . > Packages
+gzip -c Packages > Packages.gz
+sed -i 's/option check_signature//g' /etc/opkg.conf
+exit 0
+EOT
+popd

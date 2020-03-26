@@ -6,7 +6,7 @@
 # Blog: https://p3terx.com
 #=================================================
 
-name: Build Raspberry Pi 4 Lean's OpenWrt
+name: Build Raspberry Pi 3 Offical OpenWrt
 
 on: 
   release:
@@ -15,22 +15,22 @@ on:
     branches: 
       - master
     paths:
-      - 'config/rpi4-lean-openwrt.config'
+      - 'config/rpi3-offical-openwrt.config'
   schedule:
     - cron: 0 18 * * *
   watch:
     types: [started]
 
 env:
-  REPO_URL: https://github.com/coolsnowwolf/lede
+  REPO_URL: https://github.com/openwrt/openwrt
   REPO_BRANCH: master
-  CONFIG_FILE: config/rpi4-lean-openwrt.config
-  DIY_SH: scripts/lean-openwrt.sh
+  CONFIG_FILE: config/rpi3-offical-openwrt.config
+  DIY_SH: scripts/offical-openwrt.sh
   DOWNLOAD_URL_FILE: Tmp-Link-Url.txt
   TZ: Asia/Shanghai
   TARGET: bcm27xx
-  SUBTARGET: bcm2711
-  DEVICE: openwrt-bcm27xx-bcm2711-rpi-4
+  SUBTARGET: bcm2710
+  DEVICE: openwrt-bcm27xx-bcm2710-rpi-3
   FREE_UP_DISK: true
   SSH_ACTIONS: false
   UPLOAD_EXT4_IMAGES: true
@@ -75,7 +75,6 @@ jobs:
     - name: Update Feeds
       run: |
        cd openwrt
-       echo "src-git lienol https://github.com/Lienol/openwrt-package" >> feeds.conf.default
        ./scripts/feeds update -a
 
     - name: Install Feeds
@@ -86,10 +85,8 @@ jobs:
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         chmod +x $DIY_SH
-        chmod +x scripts/enable-rpi4-wifi.sh
         cd openwrt
         ../$DIY_SH
-        ../scripts/enable-rpi4-wifi.sh
         make defconfig
 
     - name: Bind Folders
@@ -156,8 +153,8 @@ jobs:
       uses: actions/upload-artifact@master
       if: steps.compile.outputs.status == 'success'
       with:
-        name: config.seed
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/config.seed
+        name: config.buildinfo
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/config.buildinfo
         
     - name: Upload Packages
       uses: actions/upload-artifact@master
