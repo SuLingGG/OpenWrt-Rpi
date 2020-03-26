@@ -75,11 +75,12 @@ sed -i 's/exit 0//g' zzz-default-settings
 cat <<EOT >> zzz-default-settings
 sed -i 's/https:\/\/openwrt.proxy.ustclug.org\/snapshots\/targets/http:\/\/127.0.0.1\/snapshots\/targets/g' /etc/opkg/distfeeds.conf
 sed -i 's/openwrt.proxy.ustclug.org/mirrors.zju.edu.cn\/openwrt/g' /etc/opkg/distfeeds.conf
-mv www/snapshots/ipkg-make-index.sh www/snapshots/targets/*/*/packages
-cd www/snapshots/targets/*/*/packages
+mv /www/snapshots/ipkg-make-index.sh /www/snapshots/targets/*/*/packages
+cd /www/snapshots/targets/*/*/packages
 chmod +x ipkg-make-index.sh
 ./ipkg-make-index.sh . > Packages
 gzip -c Packages > Packages.gz
+rm ipkg-make-index.sh
 sed -i 's/option check_signature//g' /etc/opkg.conf
 exit 0
 EOT
