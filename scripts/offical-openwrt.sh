@@ -76,6 +76,14 @@ git clone --depth=1 https://github.com/jerrykuku/luci-theme-argon
 svn co https://github.com/pymumu/smartdns/trunk/package/openwrt ../smartdns
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ntlf9t/luci-app-smartdns ../luci-app-smartdns
 
+# Add udptools
+git clone https://github.com/bao3/openwrt-udp2raw
+git clone https://github.com/bao3/openwrt-udpspeeder
+git clone https://github.com/bao3/luci-udptools
+
+# Add Home Assistant
+git clone https://github.com/SuLingGG/OpenWrt-HomeAssistant
+
 # luci-app-dockerman
 mkdir luci-lib-docker
 wget https://raw.githubusercontent.com/lisaac/luci-lib-docker/master/Makefile -O luci-lib-docker/Makefile
