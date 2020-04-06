@@ -18,8 +18,8 @@ on:
       - 'config/rpi4-lean-openwrt.config'
   schedule:
     - cron: 0 18 * * *
-  watch:
-    types: [started]
+#  watch:
+#    types: [started]
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -37,6 +37,7 @@ env:
   UPLOAD_SQUASHFS_IMAGES: true
   UPLOAD_ROOTFS: true
   UPLOAD_TMP_LINK: true
+  UPLOAD_COWTRANSFER: true
 
 
 jobs:
@@ -222,7 +223,7 @@ jobs:
         name: sha256sums
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/sha256sums
         
-    - name: Upload Files To Tmp.Link
+    - name: Upload Firmwares To Tmp.Link
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_TMP_LINK == 'true'
       run: |
         cd openwrt/bin/targets/$TARGET/$SUBTARGET/
@@ -234,10 +235,13 @@ jobs:
         sed -i '/^Upload.*/d' $DOWNLOAD_URL_FILE
         sed -i '/^Thank.*/d' $DOWNLOAD_URL_FILE
         sed -i '/Download/G' $DOWNLOAD_URL_FILE
+        cat $DOWNLOAD_URL_FILE
 
-    - name: Upload Download Url File
-      uses: actions/upload-artifact@master
-      if: steps.compile.outputs.status == 'success' && env.UPLOAD_TMP_LINK == 'true'
-      with:
-        name: ${{ env.DOWNLOAD_URL_FILE }}
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DOWNLOAD_URL_FILE }}
+    - name: Upload Firmwares To Cowtransfer
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
+      run: |
+        cd openwrt/bin/targets/$TARGET/$SUBTARGET/
+        rm -rf packages pre-packages-server pre-snapshots
+        cd ..
+        curl -sL https://git.io/cowtransfer | sh
+        ./cowtransfer-uploader -b 2621440 -s -p 99 -t 3 --hash $SUBTARGET
