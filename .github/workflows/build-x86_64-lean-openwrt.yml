@@ -31,7 +31,6 @@ env:
   TARGET: x86
   SUBTARGET: 64
   DEVICE: openwrt-x86-64
-  FREE_UP_DISK: true
   SSH_ACTIONS: false
   UPLOAD_TMP_LINK: true
   UPLOAD_COWTRANSFER: true
@@ -51,21 +50,10 @@ jobs:
         DEBIAN_FRONTEND: noninteractive
       run: |
         sudo swapoff /swapfile
-        sudo rm -rf /swapfile /etc/apt/sources.list.d/*
+        sudo rm -rf /swapfile /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
         sudo -E apt-get -qq update
         sudo -E apt-get -qq install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler gperf antlr3
         curl -fsSL https://raw.githubusercontent.com/P3TERX/dotfiles/master/.bashrc >> ~/.bashrc
-
-    - name: Free Up Disk Space
-      if: env.FREE_UP_DISK == 'true'
-      env:
-        DEBIAN_FRONTEND: noninteractive
-      run: |
-        sudo rm -rf /usr/share/dotnet
-        docker rmi `docker images -q`
-        sudo -E apt-get -q purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* mysql* php*
-        sudo -E apt-get -qq autoremove --purge
-        sudo -E apt-get -qq clean
 
     - name: Clone Source Code
       run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
@@ -116,22 +104,6 @@ jobs:
         echo -e "$(nproc) thread compile"
         make -j$(nproc) IGNORE_ERRORS=1 || make -j1 V=s IGNORE_ERRORS=1
         echo "::set-output name=status::success"
-
-    - name: Extract Gz Files
-      if: steps.compile.outputs.status == 'success'
-      run: |
-        cd openwrt/bin/targets/$TARGET/$SUBTARGET
-        gzip -qdc $DEVICE-squashfs-factory.img.gz > $DEVICE-squashfs-factory.img || true
-        gzip -qdc $DEVICE-squashfs-sysupgrade.img.gz > $DEVICE-squashfs-sysupgrade.img || true
-        gzip -qdc $DEVICE-ext4-factory.img.gz > $DEVICE-ext4-factory.img || true
-        gzip -qdc $DEVICE-ext4-sysupgrade.img.gz > $DEVICE-ext4-sysupgrade.img || true
-        
-    - name: Generate Sha256sum File For Images
-      if: steps.compile.outputs.status == 'success'
-      run: |
-        cd openwrt/bin/targets/$TARGET/$SUBTARGET
-        mv sha256sums sha256sums.orig
-        sha256sum *.img > sha256sums
         
     - name: Arrange Packages
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_TMP_LINK == 'true'
@@ -225,12 +197,12 @@ jobs:
         name: ${{ env.DEVICE }}-combined-squashfs.vmdk
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-combined-squashfs.vmdk
         
-#    - name: Upload Combined Hyper-V Image
-#      uses: actions/upload-artifact@master
-#      if: steps.compile.outputs.status == 'success'
-#      with:
-#        name: ${{ env.DEVICE }}-combined-squashfs.vhdx
-#        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-combined-squashfs.vhdx
+    - name: Upload Combined Hyper-V Image
+      uses: actions/upload-artifact@master
+      if: steps.compile.outputs.status == 'success'
+      with:
+        name: ${{ env.DEVICE }}-combined-squashfs.vhdx
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-combined-squashfs.vhdx
 
     - name: Upload GPT DVD Image
       uses: actions/upload-artifact@master
@@ -260,12 +232,12 @@ jobs:
         name: ${{ env.DEVICE }}-uefi-gpt-squashfs.vmdk
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-uefi-gpt-squashfs.vmdk
         
-#    - name: Upload GPT Hyper-V Image
-#      uses: actions/upload-artifact@master
-#      if: steps.compile.outputs.status == 'success'
-#      with:
-#        name: ${{ env.DEVICE }}-uefi-gpt-squashfs.vhdx
-#        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-uefi-gpt-squashfs.vhdx
+    - name: Upload GPT Hyper-V Image
+      uses: actions/upload-artifact@master
+      if: steps.compile.outputs.status == 'success'
+      with:
+        name: ${{ env.DEVICE }}-uefi-gpt-squashfs.vhdx
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-uefi-gpt-squashfs.vhdx
 
     - name: Upload Images Sha256sums
       uses: actions/upload-artifact@master
@@ -278,9 +250,6 @@ jobs:
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_TMP_LINK == 'true'
       run: |
         cd openwrt/bin/targets/$TARGET/$SUBTARGET/
-        rm -f *.img
-        rm sha256sums
-        mv sha256sums.orig sha256sums
         find . -maxdepth 1 ! -name "$DOWNLOAD_URL_FILE" -type f -exec echo {} >> $DOWNLOAD_URL_FILE \; -exec curl -k -F "file=@{}" -F "token=${{ secrets.TMP_LINK_TOKEN }}" -F "model=3" -X POST "https://connect.tmp.link/api_v2/cli_uploader" -s >> $DOWNLOAD_URL_FILE \;
         sed -i 's/\.\///g' $DOWNLOAD_URL_FILE
         sed -i '/^Upload.*/d' $DOWNLOAD_URL_FILE
@@ -288,11 +257,34 @@ jobs:
         sed -i '/Download/G' $DOWNLOAD_URL_FILE
         cat $DOWNLOAD_URL_FILE
 
-    - name: Upload Firmwares To Cowtransfer
+    - name: Organize Files
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
       run: |
         cd openwrt/bin/targets/$TARGET/$SUBTARGET/
+        gzip *.img
         rm -rf packages pre-packages-server pre-snapshots
-        cd ..
+        mkdir -p uefi-images
+        mkdir -p combined-images
+        mkdir -p other-files
+        mv *uefi* uefi-images
+        mv *combined* combined-images
+        mv * other-files
         curl -sL https://git.io/cowtransfer | sh
-        ./cowtransfer-uploader -b 2621440 -s -p 99 -t 3 --hash $SUBTARGET
+        
+    - name: Upload UEFI Firmwares To Cowtransfer
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
+      run: |
+        cd openwrt/bin/targets/$TARGET/$SUBTARGET/
+        ./cowtransfer-uploader -b 2621440 -s -p 99 -t 3 --hash ./uefi-images
+
+    - name: Upload Combined Firmwares To Cowtransfer
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
+      run: |
+        cd openwrt/bin/targets/$TARGET/$SUBTARGET/
+        ./cowtransfer-uploader -b 2621440 -s -p 99 -t 3 --hash ./combined-images
+        
+    - name: Upload Other Files To Cowtransfer
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
+      run: |
+        cd openwrt/bin/targets/$TARGET/$SUBTARGET/
+        ./cowtransfer-uploader -b 2621440 -s -p 99 -t 3 --hash ./other-files
