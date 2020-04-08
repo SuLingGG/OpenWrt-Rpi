@@ -256,6 +256,7 @@ jobs:
         sed -i '/^Thank.*/d' $DOWNLOAD_URL_FILE
         sed -i '/Download/G' $DOWNLOAD_URL_FILE
         cat $DOWNLOAD_URL_FILE
+        rm $DOWNLOAD_URL_FILE
 
     - name: Organize Files
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
@@ -275,16 +276,16 @@ jobs:
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
       run: |
         cd openwrt/bin/targets/$TARGET/$SUBTARGET/
-        ./cowtransfer-uploader -b 2621440 -s -p 99 -t 3 --hash ./uefi-images
+        ./cowtransfer-uploader -b 2621440 -s -p 99 -t 3 --hash --silent ./uefi-images
 
     - name: Upload Combined Firmwares To Cowtransfer
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
       run: |
         cd openwrt/bin/targets/$TARGET/$SUBTARGET/
-        ./cowtransfer-uploader -b 2621440 -s -p 99 -t 3 --hash ./combined-images
+        ./cowtransfer-uploader -b 2621440 -s -p 99 -t 3 --hash --silent ./combined-images
         
     - name: Upload Other Files To Cowtransfer
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
       run: |
         cd openwrt/bin/targets/$TARGET/$SUBTARGET/
-        ./cowtransfer-uploader -b 2621440 -s -p 99 -t 3 --hash ./other-files
+        ./cowtransfer-uploader -b 2621440 -s -p 99 -t 3 --hash --silent ./other-files
