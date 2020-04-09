@@ -83,9 +83,9 @@ git clone https://github.com/bao3/luci-udptools
 
 # luci-app-dockerman
 mkdir luci-lib-docker
-curl -sO https://raw.githubusercontent.com/lisaac/luci-lib-docker/master/Makefile -O luci-lib-docker/Makefile
+wget https://raw.githubusercontent.com/lisaac/luci-lib-docker/master/Makefile -O luci-lib-docker/Makefile
 mkdir luci-app-dockerman
-curl -sO https://raw.githubusercontent.com/lisaac/luci-app-dockerman/master/Makefile -O luci-app-dockerman/Makefile
+wget https://raw.githubusercontent.com/lisaac/luci-app-dockerman/master/Makefile -O luci-app-dockerman/Makefile
 
 # Add tmate
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/tmate
