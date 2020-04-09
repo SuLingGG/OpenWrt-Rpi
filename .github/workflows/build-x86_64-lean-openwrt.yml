@@ -265,7 +265,7 @@ jobs:
         gzip *.img
         rm -rf packages pre-packages-server pre-snapshots
         mkdir -p uefi-images
-        mkdir -p combined-images
+        mkdir -p legacy-images
         mkdir -p other-files
         mv *gpt* uefi-images
         mv *combined* legacy-images
