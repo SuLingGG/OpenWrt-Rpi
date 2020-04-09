@@ -34,7 +34,7 @@ mkdir package/community
 pushd package/community
 
 # Add Lienol's Packages (From CTCGFW's repositories)
-svn co https://github.com/project-openwrt/openwrt/branches/openwrt-19.07/trunk/package/lienol
+svn co https://github.com/project-openwrt/openwrt/branches/openwrt-19.07/package/lienol
 
 # Add luci-app-pptp-vpnserver-manyusers
 svn co https://github.com/Lienol/openwrt-package/trunk/lienol/luci-app-pptp-vpnserver-manyusers lienol/luci-app-pptp-vpnserver-manyusers
