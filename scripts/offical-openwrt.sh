@@ -34,7 +34,7 @@ mkdir package/community
 pushd package/community
 
 # Add Lienol's Packages (From CTCGFW's repositories)
-svn co https://github.com/project-openwrt/openwrt-19.07/trunk/package/lienol
+svn co https://github.com/project-openwrt/openwrt/branches/openwrt-19.07/trunk/package/lienol
 
 # Add luci-app-pptp-vpnserver-manyusers
 svn co https://github.com/Lienol/openwrt-package/trunk/lienol/luci-app-pptp-vpnserver-manyusers lienol/luci-app-pptp-vpnserver-manyusers
@@ -83,9 +83,9 @@ git clone https://github.com/bao3/luci-udptools
 
 # luci-app-dockerman
 mkdir luci-lib-docker
-wget https://raw.githubusercontent.com/lisaac/luci-lib-docker/master/Makefile -O luci-lib-docker/Makefile
+curl -sO https://raw.githubusercontent.com/lisaac/luci-lib-docker/master/Makefile -O luci-lib-docker/Makefile
 mkdir luci-app-dockerman
-wget https://raw.githubusercontent.com/lisaac/luci-app-dockerman/master/Makefile -O luci-app-dockerman/Makefile
+curl -sO https://raw.githubusercontent.com/lisaac/luci-app-dockerman/master/Makefile -O luci-app-dockerman/Makefile
 
 # Add tmate
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/tmate
@@ -98,13 +98,6 @@ svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/gotop
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/subconverter
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/jpcre2
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/rapidjson
-popd
-
-# luci-app-ssr-plus
-pushd package/lean
-sed -i 's,mux = 1,mux = 0,g' luci-app-ssr-plus/root/usr/share/shadowsocksr/subscribe.lua
-sed -i "s,'uci','luci.model.uci',g" luci-app-ssr-plus/root/usr/share/shadowsocksr/subscribe.lua
-sed -i 's,local ucic = uci.cursor(),local ucic = luci.model.uci.cursor(),g' luci-app-ssr-plus/root/usr/share/shadowsocksr/subscribe.lua
 popd
 
 # Remove orig kcptun

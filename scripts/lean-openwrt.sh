@@ -13,34 +13,40 @@ mkdir package/community
 pushd package/community
 
 # Add mentohust & luci-app-mentohust.
-git clone https://github.com/BoringCat/luci-app-mentohust
-git clone https://github.com/KyleRicardo/MentoHUST-OpenWrt-ipk
+git clone --depth=1 https://github.com/BoringCat/luci-app-mentohust
+git clone --depth=1 https://github.com/KyleRicardo/MentoHUST-OpenWrt-ipk
 
 # Add ServerChan
-git clone https://github.com/tty228/luci-app-serverchan
+git clone --depth=1 https://github.com/tty228/luci-app-serverchan
 
 # Add OpenClash
-git clone https://github.com/vernesong/OpenClash
+git clone --depth=1 https://github.com/vernesong/OpenClash
 
 # Add luci-app-koolproxyR
-git clone https://github.com/jefferymvp/luci-app-koolproxyR
+git clone --depth=1 https://github.com/jefferymvp/luci-app-koolproxyR
 
 # Add luci-app-onliner (need luci-app-nlbwmon)
-git clone https://github.com/rufengsuixing/luci-app-onliner
+git clone --depth=1 https://github.com/rufengsuixing/luci-app-onliner
 
 # Add luci-app-adguardhome
-git clone https://github.com/rufengsuixing/luci-app-adguardhome
+git clone --depth=1 https://github.com/rufengsuixing/luci-app-adguardhome
 
 # Add Rclone-OpenWrt
-git clone https://github.com/ElonH/Rclone-OpenWrt
+git clone --depth=1 https://github.com/ElonH/Rclone-OpenWrt
 
 # Add luci-app-diskman
-git clone https://github.com/lisaac/luci-app-diskman
+git clone --depth=1 https://github.com/lisaac/luci-app-diskman
 mkdir parted
 cp luci-app-diskman/Parted.Makefile parted/Makefile
 
+# Add luci-app-dockerman
+git clone --depth=1 https://github.com/KFERMercer/luci-app-dockerman
+mkdir luci-lib-docker
+curl -s -o ./luci-lib-docker/Makefile https://raw.githubusercontent.com/lisaac/luci-lib-docker/master/Makefile
+rm -rf ../lean/luci-app-dockerman
+
 # Add luci-theme-argon
-git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon
+git clone --depth=1 -b 18.06 https://github.com/jerrykuku/luci-theme-argon
 rm -rf ../lean/luci-theme-argon
 
 # Add tmate
@@ -60,12 +66,12 @@ svn co https://github.com/pymumu/smartdns/trunk/package/openwrt ../smartdns
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ntlf9t/luci-app-smartdns ../luci-app-smartdns
 
 # Add udptools
-git clone https://github.com/bao3/openwrt-udp2raw
-git clone https://github.com/bao3/openwrt-udpspeeder
-git clone https://github.com/bao3/luci-udptools
+git clone --depth=1 https://github.com/bao3/openwrt-udp2raw
+git clone --depth=1 https://github.com/bao3/openwrt-udpspeeder
+git clone --depth=1 https://github.com/bao3/luci-udptools
 
 # Add OpenAppFilter
-git clone https://github.com/destan19/OpenAppFilter
+git clone --depth=1 https://github.com/destan19/OpenAppFilter
 popd
 
 # Fix libssh

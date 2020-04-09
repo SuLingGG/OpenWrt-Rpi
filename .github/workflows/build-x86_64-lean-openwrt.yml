@@ -267,22 +267,22 @@ jobs:
         mkdir -p uefi-images
         mkdir -p combined-images
         mkdir -p other-files
-        mv *uefi* uefi-images
-        mv *combined* combined-images
+        mv *gpt* uefi-images
+        mv *combined* legacy-images
         mv * other-files
         curl -sL https://git.io/cowtransfer | sh
         
-    - name: Upload UEFI Firmwares To Cowtransfer
+    - name: Upload Uefi Firmwares To Cowtransfer
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
       run: |
         cd openwrt/bin/targets/$TARGET/$SUBTARGET/
         ./cowtransfer-uploader -b 2621440 -s -p 99 -t 3 --hash --silent ./uefi-images
 
-    - name: Upload Combined Firmwares To Cowtransfer
+    - name: Upload Legacy Firmwares To Cowtransfer
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
       run: |
         cd openwrt/bin/targets/$TARGET/$SUBTARGET/
-        ./cowtransfer-uploader -b 2621440 -s -p 99 -t 3 --hash --silent ./combined-images
+        ./cowtransfer-uploader -b 2621440 -s -p 99 -t 3 --hash --silent ./legacy-images
         
     - name: Upload Other Files To Cowtransfer
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
