@@ -261,31 +261,32 @@ jobs:
     - name: Organize Files
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
       run: |
-        cd openwrt/bin/targets/$TARGET/$SUBTARGET/
+        cd openwrt/bin/targets/$TARGET/$SUBTARGET
         gzip *.img
         rm -rf packages pre-packages-server pre-snapshots
+        cd ..
         mkdir -p uefi-images
         mkdir -p legacy-images
         mkdir -p other-files
-        mv *gpt* uefi-images
-        mv *combined* legacy-images
-        mv * other-files
+        mv $SUBTARGET/*gpt* uefi-images
+        mv $SUBTARGET/*combined* legacy-images
+        mv $SUBTARGET/* other-files
         curl -sL https://git.io/cowtransfer | sh
         
     - name: Upload Uefi Firmwares To Cowtransfer
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
       run: |
-        cd openwrt/bin/targets/$TARGET/$SUBTARGET/
+        cd openwrt/bin/targets/$TARGET
         ./cowtransfer-uploader -b 2621440 -s -p 99 -t 3 --hash --silent ./uefi-images
 
     - name: Upload Legacy Firmwares To Cowtransfer
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
       run: |
-        cd openwrt/bin/targets/$TARGET/$SUBTARGET/
+        cd openwrt/bin/targets/$TARGET/
         ./cowtransfer-uploader -b 2621440 -s -p 99 -t 3 --hash --silent ./legacy-images
         
     - name: Upload Other Files To Cowtransfer
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
       run: |
-        cd openwrt/bin/targets/$TARGET/$SUBTARGET/
+        cd openwrt/bin/targets/$TARGET/
         ./cowtransfer-uploader -b 2621440 -s -p 99 -t 3 --hash --silent ./other-files
