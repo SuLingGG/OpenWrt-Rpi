@@ -93,7 +93,7 @@ jobs:
       run: |
         cd openwrt
         echo -e "$(nproc) thread compile"
-        make -j$(nproc) || make -j1 V=s
+        make -j$(nproc) IGNORE_ERRORS=1 || make -j1 V=s IGNORE_ERRORS=1
         echo "::set-output name=status::success"
         
     - name: Arrange Packages
