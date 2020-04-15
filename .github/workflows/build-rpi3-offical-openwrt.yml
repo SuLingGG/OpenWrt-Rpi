@@ -75,8 +75,10 @@ jobs:
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         chmod +x $DIY_SH
+        chmod +x scripts/checkout-files.sh
         cd openwrt
         ../$DIY_SH
+        ../scripts/checkout-files.sh
         make defconfig
 
     - name: Bind Folders

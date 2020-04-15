@@ -34,13 +34,8 @@ mkdir package/community
 pushd package/community
 
 # Add Lienol's Packages (From CTCGFW's repositories)
-svn co https://github.com/project-openwrt/openwrt/branches/openwrt-19.07/package/lienol
-
-# Add luci-app-pptp-vpnserver-manyusers
-svn co https://github.com/Lienol/openwrt-package/trunk/lienol/luci-app-pptp-vpnserver-manyusers lienol/luci-app-pptp-vpnserver-manyusers
-
-# Add chinadns-ng
-svn co https://github.com/Lienol/openwrt-package/trunk/package/chinadns-ng lienol/chinadns-ng
+git clone --depth=1 https://github.com/Lienol/openwrt-package
+rm -rf openwrt-package/lienol/luci-app-ssr-python-pro-server
 
 # Add mentohust & luci-app-mentohust.
 git clone --depth=1 https://github.com/BoringCat/luci-app-mentohust
@@ -51,9 +46,6 @@ git clone --depth=1 https://github.com/tty228/luci-app-serverchan
 
 # Add OpenClash.
 git clone --depth=1 https://github.com/vernesong/OpenClash
-
-# Add luci-app-koolproxyR.
-git clone --depth=1 https://github.com/project-openwrt/luci-app-koolproxyR
 
 # Add luci-app-onliner. (need luci-app-nlbwmon)
 git clone --depth=1 https://github.com/rufengsuixing/luci-app-onliner
@@ -117,11 +109,11 @@ sed -i 's/odhcpd-ipv6only odhcp6c //g' include/target.mk
 sed -i 's/dnsmasq i/dnsmasq-full i/g' include/target.mk
 
 # Convert Translation
-cp ../scripts/convert_translation.sh .
-chmod +x ./convert_translation.sh
-./convert_translation.sh || true
+cp ../scripts/convert-translation.sh .
+chmod +x ./convert-translation.sh
+./convert-translation.sh || true
 
 # Remove upx
-cp ../scripts/remove_upx.sh .
-chmod +x ./remove_upx.sh
-./remove_upx.sh || true
+cp ../scripts/remove-upx.sh .
+chmod +x ./remove-upx.sh
+./remove-upx.sh || true

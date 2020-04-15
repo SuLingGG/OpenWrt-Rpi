@@ -22,9 +22,6 @@ git clone --depth=1 https://github.com/tty228/luci-app-serverchan
 # Add OpenClash
 git clone --depth=1 https://github.com/vernesong/OpenClash
 
-# Add luci-app-koolproxyR
-git clone --depth=1 https://github.com/project-openwrt/luci-app-koolproxyR
-
 # Add luci-app-onliner (need luci-app-nlbwmon)
 git clone --depth=1 https://github.com/rufengsuixing/luci-app-onliner
 
