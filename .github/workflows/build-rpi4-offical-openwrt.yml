@@ -76,7 +76,6 @@ jobs:
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         chmod +x $DIY_SH
-        chmod +x scripts/checkout-files.sh
         cd openwrt
         ../$DIY_SH
         git checkout f4da28c301890115e5c6b632aa6550fbc59f8e24 package/libs/elfutils
