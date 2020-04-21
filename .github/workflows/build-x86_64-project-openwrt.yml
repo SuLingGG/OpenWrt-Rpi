@@ -16,8 +16,8 @@ on:
       - master
     paths:
       - 'config/x86_64-project-openwrt.config'
-#  schedule:
-#    - cron: 0 18 * * *
+  schedule:
+    - cron: 0 18 * * *
 #  watch:
 #    types: [started]
 
