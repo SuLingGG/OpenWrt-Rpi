@@ -6,7 +6,7 @@
 # Blog: https://p3terx.com
 #=================================================
 
-name: Build Raspberry Pi 4 Offical OpenWrt
+name: Build Raspberry Pi 1 Project OpenWrt
 
 on: 
   release:
@@ -15,22 +15,21 @@ on:
     branches: 
       - master
     paths:
-      - 'config/rpi4-offical-openwrt.config'
-  schedule:
-    - cron: 0 18 * * *
+      - 'config/rpi1-project-openwrt.config'
+#  schedule:
+#    - cron: 0 18 * * *
 #  watch:
 #    types: [started]
 
 env:
-  REPO_URL: https://github.com/openwrt/openwrt
-  REPO_BRANCH: master
-  CONFIG_FILE: config/rpi4-offical-openwrt.config
-  DIY_SH: scripts/offical-openwrt.sh
-  DOWNLOAD_URL_FILE: Tmp-Link-Url.txt
+  REPO_URL: https://github.com/project-openwrt/openwrt
+  REPO_BRANCH: 18.06-kernel5.4
+  CONFIG_FILE: config/rpi1-project-openwrt.config
+  DIY_SH: scripts/lean-openwrt.sh
   TZ: Asia/Shanghai
   TARGET: bcm27xx
-  SUBTARGET: bcm2711
-  DEVICE: openwrt-bcm27xx-bcm2711-rpi-4
+  SUBTARGET: bcm2708
+  DEVICE: openwrt-bcm27xx-bcm2708-rpi
   SSH_ACTIONS: false
   UPLOAD_EXT4_IMAGES: true
   UPLOAD_SQUASHFS_IMAGES: true
@@ -59,13 +58,11 @@ jobs:
         curl -fsSL https://raw.githubusercontent.com/P3TERX/dotfiles/master/.bashrc >> ~/.bashrc
 
     - name: Clone Source Code
-      run: |
-        git clone $REPO_URL -b $REPO_BRANCH openwrt
-        
+      run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
+
     - name: Update Feeds
       run: |
        cd openwrt
-       sed -i 's/luci.git/luci.git\;openwrt-19.07/g' feeds.conf.default
        ./scripts/feeds update -a
 
     - name: Install Feeds
@@ -144,8 +141,8 @@ jobs:
       uses: actions/upload-artifact@master
       if: steps.compile.outputs.status == 'success'
       with:
-        name: config.buildinfo
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/config.buildinfo
+        name: config.seed
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/config.seed
         
     - name: Upload Packages
       uses: actions/upload-artifact@master
@@ -233,4 +230,3 @@ jobs:
         curl -fsSL git.io/file-transfer | sh
         ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
         echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
-
