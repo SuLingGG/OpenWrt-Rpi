@@ -2,28 +2,26 @@
 
 ## 支持设备与编译状态：
 
-点击下表 “支持设备” 中相应设备名称 (蓝色字体) 即可跳转到该设备固件下载页面。
+点击下表中蓝色 “√” 即可跳转到该设备固件下载页面。
 
-|                           支持设备                           |  版本   |                           编译状态                           |
-| :----------------------------------------------------------: | :-----: | :----------------------------------------------------------: |
-| [x86_64](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+x86_64+Lean%27s+OpenWrt%22) |  Lean   | ![Build x86_64 Lean's OpenWrt](https://github.com/SuLingGG/OpenWrt-Rpi/workflows/Build%20x86_64%20Lean's%20OpenWrt/badge.svg) |
-| [竞斗云(128M)](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+G-Dock+Lean%27s+OpenWrt%22) |  Lean   | ![Build G-Dock Lean's OpenWrt](https://github.com/SuLingGG/OpenWrt-Rpi/workflows/Build%20G-Dock%20Lean's%20OpenWrt/badge.svg) |
-| [树莓派 1B](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+1+Lean%27s+OpenWrt%22) |  Lean   | ![Build Raspberry Pi 1 Lean's OpenWrt](https://github.com/SuLingGG/OpenWrt-Rpi/workflows/Build%20Raspberry%20Pi%201%20Lean's%20OpenWrt/badge.svg) |
-| [树莓派 1B](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+1+Offical+OpenWrt%22) | Offical | ![Build Raspberry Pi 1 Offical OpenWrt](https://github.com/SuLingGG/OpenWrt-Rpi/workflows/Build%20Raspberry%20Pi%201%20Offical%20OpenWrt/badge.svg) |
-| [树莓派 2B](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+2+Lean%27s+OpenWrt%22) |  Lean   | ![Build Raspberry Pi 2 Lean's OpenWrt](https://github.com/SuLingGG/OpenWrt-Rpi/workflows/Build%20Raspberry%20Pi%202%20Lean's%20OpenWrt/badge.svg) |
-| [树莓派 2B](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+2+Offical+OpenWrt%22) | Offical | ![Build Raspberry Pi 2 Offical OpenWrt](https://github.com/SuLingGG/OpenWrt-Rpi/workflows/Build%20Raspberry%20Pi%202%20Offical%20OpenWrt/badge.svg) |
-| [树莓派 3B/3B+](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+3+Lean%27s+OpenWrt%22) |  Lean   | ![Build Raspberry Pi 3 Lean's OpenWrt](https://github.com/SuLingGG/OpenWrt-Rpi/workflows/Build%20Raspberry%20Pi%203%20Lean's%20OpenWrt/badge.svg) |
-| [树莓派 3B/3B+](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+3+Offical+OpenWrt%22) | Offical | ![Build Raspberry Pi 3 Offical OpenWrt](https://github.com/SuLingGG/OpenWrt-Rpi/workflows/Build%20Raspberry%20Pi%203%20Offical%20OpenWrt/badge.svg) |
-| [树莓派 4B](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+4+Lean%27s+OpenWrt%22) |  Lean   | ![Build Raspberry Pi 4 Lean's OpenWrt](https://github.com/SuLingGG/OpenWrt-Rpi/workflows/Build%20Raspberry%20Pi%204%20Lean's%20OpenWrt/badge.svg) |
-| [树莓派 4B](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+4+Offical+OpenWrt%22) | Offical | ![Build Raspberry Pi 4 Offical OpenWrt](https://github.com/SuLingGG/OpenWrt-Rpi/workflows/Build%20Raspberry%20Pi%204%20Offical%20OpenWrt/badge.svg) |
+| 支持设备/版本(内核) |                          Lean (4.x)                          |                        Offical (5.4)                         |                         CTCGFW (5.4)                         |
+| :-----------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+|      树莓派 1B      | [√](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+1+Lean%27s+OpenWrt%22) | [√](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+1+Offical+OpenWrt%22) | [√](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+1+Project+OpenWrt%22) |
+|      树莓派 2B      | [√](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+2+Lean%27s+OpenWrt%22) | [√](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+2+Offical+OpenWrt%22) | [√](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+2+Project+OpenWrt%22) |
+|    树莓派 3B/3B+    | [√](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+3+Lean%27s+OpenWrt%22) | [√](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+3+Offical+OpenWrt%22) | [√](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+3+Project+OpenWrt%22) |
+|      树莓派 4B      | [√](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+4+Lean%27s+OpenWrt%22) | [√](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+4+Offical+OpenWrt%22) | [√](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+4+Project+OpenWrt%22) |
+|       竞斗云        | [√](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+G-Dock+Lean%27s+OpenWrt%22) |                              ×                               | [√](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+G-Dock+Project+OpenWrt%22) |
+|       x86_64        | [√](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+x86_64+Lean%27s+OpenWrt%22) |                              ×                               | [√](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+x86_64+Project+OpenWrt%22) |
 
 其中：
 
-版本为 Lean 的为基于 [Lean 大源码](https://github.com/coolsnowwolf/lede) 编译的固件，
+版本为 Lean 为基于 [Lean 大源码](https://github.com/coolsnowwolf/lede) 编译的固件 (Luci 采用 Lean 版 Luci 18.06 )；
 
-版本为 Offical 的为基于 [OpenWrt 官方源码](https://github.com/openwrt/openwrt/tree/master) Master 分支编译的固件 (Luci 采用 19.07 版本)。
+版本为 Offical 为基于 [OpenWrt 官方源码](https://github.com/openwrt/openwrt/tree/master) Master 分支编译的固件 (Luci 采用官方版 Luci 19.07)；
 
-树莓派 2B 的固件通用于树莓派 2B、3B、3B+、4B，但板载无线功能不可用。
+版本为 CTCGFW 为基于 [Project-OpenWrt 源码](https://github.com/project-openwrt/openwrt/tree/18.06-kernel5.4) 18.06-kernel5.4 分支编译的固件 (Luci 采用 Lean 版 Luci 18.06 )。
+
+树莓派 2B 的固件通用于树莓派 2B、3B、3B+、4B，但板载无线功能可能不可用。
 
 **请不要直接 Fork 此项目**，如果你想使用本项目编译 OpenWrt 固件，请前往：
 
@@ -33,7 +31,7 @@
 
 ## 注意事项：
 
-1. 点击上表 “支持设备” 中相应设备名称 (蓝色字体) 即可跳转到该设备固件下载页面。
+1. 点击上表中蓝色 “√” 即可跳转到该设备固件下载页面。
 2. 在固件编译完成后，会上传一份副本到 WeTransfer 和 奶牛快传，对于国内网络用户，为提高下载体验，可下载存放于这两个网站中的固件副本，副本下载地址在固件列表下的 Annotations 提示框内。在极少数情况下，因网络原因这两份副本可能会上传失败，如果遇到这种情况，就只能下载存放在 Github Action 里的固件了:
 3. 如果需要下载存放于 Github Action 上的固件，由于众所周知的原因，请尽量使用科学上网方式下载固件，固件下载完成后，请下载 `sha256sums` 文件或使用压缩软件的 "测试压缩文件" 功能来验证固件的完整性；
 4. 由于 Github Action 限制，需要登录 Github 账号才可下载存放于 Github Action 中的固件 (未登录时固件链接不可被点击)，但 WeTransfer 和 奶牛快传 的固件下载链接在未登录状态下可正常查看，不受影响；
