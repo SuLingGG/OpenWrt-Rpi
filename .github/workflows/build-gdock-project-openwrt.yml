@@ -25,7 +25,7 @@ env:
   REPO_URL: https://github.com/project-openwrt/openwrt
   REPO_BRANCH: 18.06-kernel5.4
   CONFIG_FILE: config/gdock-project-openwrt.config
-  DIY_SH: scripts/lean-openwrt.sh
+  DIY_SH: scripts/project-openwrt.sh
   TZ: Asia/Shanghai
   TARGET: ipq40xx
   SUBTARGET: generic
