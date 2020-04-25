@@ -172,14 +172,14 @@ jobs:
       if: steps.compile.outputs.status == 'success'
       with:
         name: ${{ env.DEVICE }}-rootfs-squashfs.img
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-rootfs-squashfs.img
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-rootfs-squashfs.img.gz
 
     - name: Upload Combined DVD Image
       uses: actions/upload-artifact@master
       if: steps.compile.outputs.status == 'success'
       with:
-        name: ${{ env.DEVICE }}-combined-squashfs.img
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-combined-squashfs.img
+        name: ${{ env.DEVICE }}-combined-squashfs.img.gz
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-combined-squashfs.img.gz
         
     - name: Upload Combined PVE/KVM Image
       uses: actions/upload-artifact@master
@@ -202,19 +202,19 @@ jobs:
         name: ${{ env.DEVICE }}-combined-squashfs.vmdk
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-combined-squashfs.vmdk
         
-    - name: Upload Combined Hyper-V Image
-      uses: actions/upload-artifact@master
-      if: steps.compile.outputs.status == 'success'
-      with:
-        name: ${{ env.DEVICE }}-combined-squashfs.vhdx
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-combined-squashfs.vhdx
+#    - name: Upload Combined Hyper-V Image
+#      uses: actions/upload-artifact@master
+#      if: steps.compile.outputs.status == 'success'
+#      with:
+#        name: ${{ env.DEVICE }}-combined-squashfs.vhdx
+#        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-combined-squashfs.vhdx
 
     - name: Upload GPT DVD Image
       uses: actions/upload-artifact@master
       if: steps.compile.outputs.status == 'success'
       with:
-        name: ${{ env.DEVICE }}-uefi-gpt-squashfs.img
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-uefi-gpt-squashfs.img
+        name: ${{ env.DEVICE }}-uefi-gpt-squashfs.img.gz
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-uefi-gpt-squashfs.img.gz
         
     - name: Upload GPT PVE/KVM Image
       uses: actions/upload-artifact@master
@@ -237,21 +237,19 @@ jobs:
         name: ${{ env.DEVICE }}-uefi-gpt-squashfs.vmdk
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-uefi-gpt-squashfs.vmdk
         
-    - name: Upload GPT Hyper-V Image
-      uses: actions/upload-artifact@master
-      if: steps.compile.outputs.status == 'success'
-      with:
-        name: ${{ env.DEVICE }}-uefi-gpt-squashfs.vhdx
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-uefi-gpt-squashfs.vhdx
+#    - name: Upload GPT Hyper-V Image
+#      uses: actions/upload-artifact@master
+#      if: steps.compile.outputs.status == 'success'
+#      with:
+#        name: ${{ env.DEVICE }}-uefi-gpt-squashfs.vhdx
+#        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-uefi-gpt-squashfs.vhdx
 
     - name: Organize Files
       id: organize
       if: steps.compile.outputs.status == 'success' && !cancelled()
       run: |
         cd openwrt/bin/targets/$TARGET/$SUBTARGET
-        gzip *.img
         rm -rf packages pre-packages-server pre-snapshots
-        rm -f *.img
         cd ..
         mkdir -p uefi-images
         mkdir -p legacy-images
