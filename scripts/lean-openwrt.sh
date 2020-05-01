@@ -17,6 +17,9 @@ popd
 mkdir package/community
 pushd package/community
 
+# Add Lienol's Packages
+git clone --depth=1 https://github.com/SuLingGG/openwrt-package
+
 # Add mentohust & luci-app-mentohust.
 git clone --depth=1 https://github.com/BoringCat/luci-app-mentohust
 git clone --depth=1 https://github.com/KyleRicardo/MentoHUST-OpenWrt-ipk

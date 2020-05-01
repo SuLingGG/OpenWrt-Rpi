@@ -36,7 +36,7 @@ popd
 mkdir package/community
 pushd package/community
 
-# Add Lienol's Packages (From CTCGFW's repositories)
+# Add Lienol's Packages
 git clone --depth=1 https://github.com/SuLingGG/openwrt-package
 rm -rf openwrt-package/lienol/luci-app-ssr-python-pro-server
 
