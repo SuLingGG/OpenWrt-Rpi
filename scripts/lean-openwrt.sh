@@ -44,6 +44,9 @@ mkdir luci-lib-docker
 curl -s -o ./luci-lib-docker/Makefile https://raw.githubusercontent.com/lisaac/luci-lib-docker/master/Makefile
 rm -rf ../lean/luci-app-dockerman
 
+# Add luci-app-gowebdav
+git clone --depth=1 https://github.com/project-openwrt/openwrt-gowebdav
+
 # Add luci-theme-argon
 git clone --depth=1 -b 18.06 https://github.com/jerrykuku/luci-theme-argon
 rm -rf ../lean/luci-theme-argon
