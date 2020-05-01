@@ -67,7 +67,7 @@ Project 版固件使用 Project-OpenWrt 源码 18.06-kernel5.4 分支编译，�
 
 竞斗云固件插件内置情况与树莓派基本相同，但未内置 Docker 及其相关组件 (ROM 大小以及设备性能限制)；
 
-Project 版固件与 Lean 版固件 **不支持** 在 LuCI 中跨版本(跨 )通刷，**如果有跨版本需求，需要在 OpBoot 中刷入 ubi 固件**。
+Project 版固件与 Lean 版固件 **不支持** 在 LuCI 中跨版本 (指 Project 版与 Lean 版) 通刷，**如果有跨版本需求，需要在 OpBoot 中刷入 ubi 固件**。
 
 ### x86_64:
 
