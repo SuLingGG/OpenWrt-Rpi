@@ -29,7 +29,7 @@ env:
   DEVICE: openwrt-ipq40xx-p2w_r619ac
   DIY_SH: scripts/project-openwrt.sh
   SSH_ACTIONS: false
-  KMODS_IN_FIRMWARE: true
+  KMODS_IN_FIRMWARE: false
   UPLOAD_WETRANSFER: true
   UPLOAD_COWTRANSFER: true
   TZ: Asia/Shanghai
