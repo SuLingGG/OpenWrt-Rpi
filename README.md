@@ -41,7 +41,7 @@
 6. 固件下载页面标注固件大小为解压 zip 文件后的大小，并非文件下载真实大小。例如，某文件在 Github Action 上标明的文件大小为 1.01G，但在下载过程中可能只会下载不到 300M 的一个 zip 压缩文件，解压后得到的文件大小才为标注的 1.01G；
 7. 固件在每天凌晨 02:00 拉取 OpenWrt 源码和第三方软件包项目自动编译，默认情况下固件每日编译一次 (config 文件更新时除外)，未逐一经过实机测试，故 **不保证 100% 可靠性**；
 8. 固件 (功能性) 更新内容可前往 Telegram 频道: [Beautiful Apps Channel](https://t.me/beautifulapps) 查看。
-9. QQ 群: [397251040](https://jq.qq.com/?_wv=1027&k=5RkQisS) Telegram群组: https://t.me/joinchat/Fc-MpxcaH3mEPA4yOMtJPQ
+9. 其他联系方式: QQ 群: [397251040](https://jq.qq.com/?_wv=1027&k=5RkQisS) / Telegram群组: https://t.me/joinchat/Fc-MpxcaH3mEPA4yOMtJPQ
 
 ## 各版固件区别:
 
