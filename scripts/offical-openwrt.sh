@@ -98,6 +98,9 @@ svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/jpcre2
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/rapidjson
 popd
 
+# Fix default-settings for local opkg sources
+sed -i '/http/d' package/lean/default-settings/files/zzz-default-settings
+
 # Remove orig kcptun
 rm -rf ./feeds/packages/net/kcptun
 

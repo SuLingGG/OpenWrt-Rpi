@@ -79,6 +79,9 @@ git clone --depth=1 https://github.com/bao3/luci-udptools
 git clone --depth=1 https://github.com/destan19/OpenAppFilter
 popd
 
+# Fix default-settings for local opkg sources
+sed -i '/http/d' package/lean/default-settings/files/zzz-default-settings
+
 # Fix libssh
 pushd feeds/packages/libs
 rm -rf libssh
