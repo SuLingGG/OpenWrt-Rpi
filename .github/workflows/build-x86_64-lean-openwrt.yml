@@ -284,20 +284,59 @@ jobs:
       id: organize
       if: steps.generate.outputs.status == 'success' && !cancelled()
       run: |
-        cd openwrt/bin/targets/$TARGET/$SUBTARGET
-        rm -rf packages pre-packages-server
+        cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
+        gzip *.img
+        rm -rf packages pre-packages-server sha256sums
+        mv sha256sums.orig sha256sums
+        rm -f *.img
+        cd $OPENWRTROOT/bin/targets/$TARGET/
+        mkdir -p uefi-images
+        mkdir -p legacy-images
+        mkdir -p other-files
+        mv $SUBTARGET/*gpt* uefi-images
+        mv $SUBTARGET/*combined* legacy-images
+        mv $SUBTARGET/* other-files
+        curl -fsSL git.io/file-transfer | sh
         echo "::set-output name=status::success"
 
-    - name: Upload Firmware To CowTransfer
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
+    - name: Upload Uefi Firmwares To Cowtransfer
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
       run: |
-        curl -fsSL git.io/file-transfer | sh
-        ./transfer cow --block 2621440 -s -p 64 --no-progress ${FIRMWARE} 2>&1 | tee cowtransfer.log
-        echo "::warning file=cowtransfer.com::$(cat cowtransfer.log | grep https)"
-
-    - name: Upload Firmware To WeTransfer
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
+        cd $OPENWRTROOT/bin/targets/$TARGET
+        ./transfer cow --block 2621440 -s -p 64 --no-progress ./uefi-images 2>&1 | tee cowtransfer-uefi.log
+        echo "::warning file=cowtransfer-uefi::$(cat cowtransfer-uefi.log | grep https)"
+        
+    - name: Upload Legacy Firmwares To Cowtransfer
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
       run: |
-        curl -fsSL git.io/file-transfer | sh
-        ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
-        echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
+        cd $OPENWRTROOT/bin/targets/$TARGET/
+        ./transfer cow --block 2621440 -s -p 64 --no-progress ./legacy-images 2>&1 | tee cowtransfer-legacy.log
+        echo "::warning file=cowtransfer-legacy::$(cat cowtransfer-legacy.log | grep https)"
+        
+    - name: Upload Other Files To Cowtransfer
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
+      run: |
+        cd $OPENWRTROOT/bin/targets/$TARGET/
+        ./transfer cow --block 2621440 -s -p 64 --no-progress ./other-files 2>&1 | tee cowtransfer-other.log
+        echo "::warning file=cowtransfer-other::$(cat cowtransfer-other.log | grep https)"
+        
+    - name: Upload Uefi Firmwares To WeTransfer
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true'
+      run: |
+        cd $OPENWRTROOT/bin/targets/$TARGET
+        ./transfer wet -s -p 16 --no-progress ./uefi-images 2>&1 | tee wetransfer-uefi.log
+        echo "::warning file=wetransfer-uefi::$(cat wetransfer-uefi.log | grep https)"
+        
+    - name: Upload Legacy Firmwares To WeTransfer
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true'
+      run: |
+        cd $OPENWRTROOT/bin/targets/$TARGET/
+        ./transfer wet -s -p 16 --no-progress ./legacy-images 2>&1 | tee wetransfer-legacy.log
+        echo "::warning file=wetransfer-legacy::$(cat wetransfer-legacy.log | grep https)"
+        
+    - name: Upload Other Files To WeTransfer
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true'
+      run: |
+        cd $OPENWRTROOT/bin/targets/$TARGET/
+        ./transfer wet -s -p 16 --no-progress ./other-files 2>&1 | tee wetransfer-other.log
+        echo "::warning file=wetransfer-other::$(cat wetransfer-other.log | grep https)"
