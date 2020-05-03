@@ -117,6 +117,12 @@ sed -i 's/odhcpd-ipv6only odhcp6c //g' include/target.mk
 # Change dnsmasq to dnsmasq-full
 sed -i 's/dnsmasq i/dnsmasq-full i/g' include/target.mk
 
+# Add po2lmo
+git clone https://github.com/openwrt-dev/po2lmo.git
+pushd po2lmo
+make && sudo make install
+popd
+
 # Convert Translation
 cp ../scripts/convert-translation.sh .
 chmod +x ./convert-translation.sh

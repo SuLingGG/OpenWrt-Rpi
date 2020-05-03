@@ -10,3 +10,9 @@
 
 # Remove r8168 driver
 rm -rf package/ctcgfw/r8168
+
+# Add po2lmo
+git clone https://github.com/openwrt-dev/po2lmo.git
+pushd po2lmo
+make && sudo make install
+popd
