@@ -286,8 +286,7 @@ jobs:
       run: |
         cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
         gzip *.img
-        rm -rf packages pre-packages-server sha256sums
-        rm -f *.img
+        rm -rf packages pre-packages-server
         cd $OPENWRTROOT/bin/targets/$TARGET/
         mkdir -p uefi-images
         mkdir -p legacy-images
