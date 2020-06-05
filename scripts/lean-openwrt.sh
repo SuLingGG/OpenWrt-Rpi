@@ -28,7 +28,7 @@ git clone --depth=1 https://github.com/KyleRicardo/MentoHUST-OpenWrt-ipk
 git clone --depth=1 https://github.com/tty228/luci-app-serverchan
 
 # Add OpenClash
-git clone --depth=1 https://github.com/vernesong/OpenClash
+git clone --depth=1 -b master https://github.com/vernesong/OpenClash
 
 # Add luci-app-onliner (need luci-app-nlbwmon)
 git clone --depth=1 https://github.com/rufengsuixing/luci-app-onliner
@@ -45,7 +45,7 @@ cp luci-app-diskman/Parted.Makefile parted/Makefile
 git clone --depth=1 https://github.com/KFERMercer/luci-app-dockerman
 mkdir luci-lib-docker
 curl -s -o ./luci-lib-docker/Makefile https://raw.githubusercontent.com/lisaac/luci-lib-docker/master/Makefile
-rm -rf ../lean/luci-app-dockerman
+rm -rf ../lean/luci-app-docker
 
 # Add luci-app-gowebdav
 git clone --depth=1 https://github.com/project-openwrt/openwrt-gowebdav
