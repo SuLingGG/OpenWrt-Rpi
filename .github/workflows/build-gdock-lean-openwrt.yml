@@ -53,17 +53,12 @@ jobs:
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
         sudo timedatectl set-timezone "$TZ"
-        sudo mkdir -p /workdir
-        sudo chown $USER:$GROUPS /workdir
-
 
     - name: Clone Source Code
       working-directory: /workdir
       run: |
         df -hT $PWD
         git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
-        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
-
 
     - name: Update Feeds
       run: |
@@ -82,7 +77,7 @@ jobs:
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
         chmod +x $DIY_SH
         cd $OPENWRTROOT
-        $GITHUB_WORKSPACE/$DIY_SH
+        ../$DIY_SH
 
     - name: SSH Connection To Actions
       uses: P3TERX/debugger-action@master
