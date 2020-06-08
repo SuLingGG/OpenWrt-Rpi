@@ -58,7 +58,6 @@ jobs:
         sudo timedatectl set-timezone "$TZ"
 
     - name: Clone Source Code
-      working-directory: /workdir
       run: |
         df -hT $PWD
         git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
