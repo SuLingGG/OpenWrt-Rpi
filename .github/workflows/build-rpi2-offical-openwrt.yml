@@ -56,10 +56,17 @@ jobs:
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
         sudo timedatectl set-timezone "$TZ"
-        curl -fsSL https://raw.githubusercontent.com/P3TERX/dotfiles/master/.bashrc >> ~/.bashrc
+        sudo mkdir -p /workdir
+        sudo chown $USER:$GROUPS /workdir
+
 
     - name: Clone Source Code
-      run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
+      working-directory: /workdir
+      run: |
+        df -hT $PWD
+        git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
+        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+
 
     - name: Update Feeds
       run: |
@@ -79,10 +86,10 @@ jobs:
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
         chmod +x $DIY_SH
         cd $OPENWRTROOT
-        ../$DIY_SH
+        $GITHUB_WORKSPACE/$DIY_SH
         ## If your device is Raspberrt Pi 4B:
-        # chmod +x ../scripts/enable-rpi4-wifi.sh
-        # ../scripts/enable-rpi4-wifi.sh
+        # chmod +x $GITHUB_WORKSPACE/scripts/enable-rpi4-wifi.sh
+        # $GITHUB_WORKSPACE/scripts/enable-rpi4-wifi.sh
 
     - name: SSH Connection To Actions
       uses: P3TERX/debugger-action@master
