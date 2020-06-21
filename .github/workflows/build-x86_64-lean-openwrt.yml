@@ -284,6 +284,8 @@ jobs:
       id: organize
       if: steps.generate.outputs.status == 'success' && !cancelled()
       run: |
+        cd $OPENWRTROOT
+        zip -r $FIRMWARE/dl.zip dl
         cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
         gzip *.img
         rm -rf packages pre-packages-server

@@ -218,7 +218,9 @@ jobs:
       id: organize
       if: steps.generate.outputs.status == 'success' && !cancelled()
       run: |
-        cd openwrt/bin/targets/$TARGET/$SUBTARGET
+        cd $OPENWRTROOT
+        zip -r $FIRMWARE/dl.zip dl
+        cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
         rm -rf packages pre-packages-server
         echo "::set-output name=status::success"
 
