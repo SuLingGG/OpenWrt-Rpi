@@ -339,3 +339,15 @@ jobs:
         cd $OPENWRTROOT/bin/targets/$TARGET/
         ./transfer wet -s -p 16 --no-progress ./other-files 2>&1 | tee wetransfer-other.log
         echo "::warning file=wetransfer-other::$(cat wetransfer-other.log | grep https)"
+        
+    - name: Upload DL To CowTransfer
+      if: steps.organize.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
+      run: |
+        ./transfer cow --block 2621440 -s -p 64 --no-progress $OPENWRTROOT/dl.zip 2>&1 | tee cowtransfer-dl.log
+        echo "::warning file=DL-cowtransfer.com::$(cat cowtransfer-dl.log | grep https)"
+        
+    - name: Upload DL To WeTransfer
+      if: steps.organize.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
+      run: |
+        ./transfer wet -s -p 16 --no-progress $OPENWRTROOT/dl.zip 2>&1 | tee wetransfer-dl.log
+        echo "::warning file=DL-wetransfer.com::$(cat wetransfer-dl.log | grep https)"
