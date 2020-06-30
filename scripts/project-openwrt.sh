@@ -11,6 +11,15 @@
 # Remove r8168 driver
 rm -rf package/ctcgfw/r8168
 
+# Clone community packages to package/community
+mkdir package/community
+pushd package/community
+
+# Add luci-app-jd-dailybonus
+git clone --depth=1 https://github.com/jerrykuku/node-request
+git clone --depth=1 https://github.com/jerrykuku/luci-app-jd-dailybonus
+popd
+
 # Add po2lmo
 git clone https://github.com/openwrt-dev/po2lmo.git
 pushd po2lmo
