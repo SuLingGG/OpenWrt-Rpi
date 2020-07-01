@@ -111,6 +111,7 @@ x86_64 固件同时提供 Legacy 启动与 UEFI 启动版本，另外额外提�
 1. OpenWrt Image Builder
 2. OpenWrt SDK
 3. OpenWrt Tool Chain
+4. dl 文件夹压缩归档文件 (其中包含此次编译过程中下载到 dl 文件夹的源码包)
 
 以上文件可按需下载。
 

@@ -252,7 +252,7 @@ jobs:
       if: steps.generate.outputs.status == 'success' && !cancelled()
       run: |
         cd $OPENWRTROOT
-        zip -r dl.zip dl
+        zip -qr dl.zip dl
         cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
         rm -rf *.img packages pre-packages-server sha256sums
         mv sha256sums.orig sha256sums
