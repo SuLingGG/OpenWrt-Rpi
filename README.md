@@ -18,9 +18,9 @@
 
 **并且因此我也不会对你在任何平台发送的回复或 Issues 提供支持。**
 
-## 支持设备与编译状态：
+## 支持设备与固件下载：
 
-点击下表中蓝色 “√” 即可跳转到该设备固件下载页面。
+**点击下表中蓝色 “√” 即可跳转到该设备固件下载页面。**
 
 | 支持设备/版本(内核) |                          Lean (4.x)                          |                        Offical (5.4)                         |                        Project (5.4)                         |
 | :-----------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
@@ -37,7 +37,7 @@
 
 版本为 Offical 为基于 [OpenWrt 官方源码](https://github.com/openwrt/openwrt/tree/master) Master 分支编译的固件 (Luci 采用官方版 Luci 19.07)；
 
-版本为 Project 为基于 [Project-OpenWrt 源码](https://github.com/project-openwrt/openwrt/tree/18.06-kernel5.4) 18.06-kernel5.4 分支编译的固件，目前在仍处于测试阶段 (Luci 采用 Lean 版 Luci 18.06 )。
+版本为 Project 为基于 [Project-OpenWrt 源码](https://github.com/project-openwrt/openwrt/tree/18.06-kernel5.4) 18.06-kernel5.4 分支编译的固件 (Luci 采用 Lean 版 Luci 18.06 )。
 
 树莓派 2B 的固件通用于树莓派 2B、3B、3B+、4B，但板载无线功能可能不可用。
 
