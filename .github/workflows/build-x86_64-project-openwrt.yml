@@ -288,6 +288,7 @@ jobs:
         zip -qr dl.zip dl
         cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
         rm -rf packages pre-packages-server
+        tree -L 1
         cd $OPENWRTROOT/bin/targets/$TARGET/
         mkdir -p uefi-images
         mkdir -p legacy-images

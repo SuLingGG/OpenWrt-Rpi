@@ -184,8 +184,8 @@ jobs:
       uses: actions/upload-artifact@master
       if: steps.generate.outputs.status == 'success'
       with:
-        name: config.seed
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/config.seed
+        name: config.buildinfo
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/config.buildinfo
         
     - name: Upload Packages-Server
       uses: actions/upload-artifact@master
