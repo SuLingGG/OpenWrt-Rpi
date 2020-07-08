@@ -104,6 +104,7 @@ svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/gotop
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/subconverter
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/jpcre2
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/rapidjson
+svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/duktape
 popd
 
 # Fix default-settings for local opkg sources
