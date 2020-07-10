@@ -20,10 +20,10 @@ git clone --depth=1 https://github.com/jerrykuku/node-request
 git clone --depth=1 https://github.com/jerrykuku/luci-app-jd-dailybonus
 popd
 
-# Use Lean's baidupcs-web
-pushd package/lean
-rm -rf baidupcs-web
-svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/baidupcs-web
+# Use latest luci-theme-argon
+pushd package/ctcgfw
+rm -rf luci-theme*
+git clone -b 18.06 --depth=1 https://github.com/jerrykuku/luci-theme-argon
 popd
 
 # Add po2lmo
