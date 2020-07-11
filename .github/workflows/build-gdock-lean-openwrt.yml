@@ -26,7 +26,7 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   CONFIG_FILE: config/lean/gdock-lean-openwrt.config
-  DEVICE: openwrt-ipq40xx-p2w_r619ac-128m
+  DEVICE: openwrt-ipq40xx-generic-p2w_r619ac-128m
   DIY_SH: scripts/lean-openwrt.sh
   SSH_ACTIONS: false
   KMODS_IN_FIRMWARE: false
@@ -162,8 +162,8 @@ jobs:
       uses: actions/upload-artifact@master
       if: steps.generate.outputs.status == 'success'
       with:
-        name: config.seed
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/config.seed
+        name: config.buildinfo
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/config.buildinfo
         
     - name: Upload Packages-Server
       uses: actions/upload-artifact@master
@@ -222,6 +222,7 @@ jobs:
         zip -qr dl.zip dl
         cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
         rm -rf packages pre-packages-server
+        tree -L 1
         echo "::set-output name=status::success"
 
     - name: Upload Firmware To CowTransfer

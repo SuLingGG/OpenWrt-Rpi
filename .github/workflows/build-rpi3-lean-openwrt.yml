@@ -252,6 +252,7 @@ jobs:
         cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
         rm -rf *.img packages pre-packages-server sha256sums
         mv sha256sums.orig sha256sums
+        tree -L 1
         echo "::set-output name=status::success"
 
     - name: Upload Firmware To CowTransfer

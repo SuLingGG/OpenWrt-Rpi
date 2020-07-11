@@ -222,6 +222,7 @@ jobs:
         zip -qr dl.zip dl
         cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
         rm -rf packages pre-packages-server
+        tree -L 1
         echo "::set-output name=status::success"
 
     - name: Upload Firmware To CowTransfer
