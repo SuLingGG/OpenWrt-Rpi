@@ -179,8 +179,8 @@ jobs:
       uses: actions/upload-artifact@master
       if: steps.generate.outputs.status == 'success'
       with:
-        name: ${{ env.DEVICE }}-generic.manifest
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-generic.manifest
+        name: ${{ env.DEVICE }}.manifest
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}.manifest
         
     - name: Upload Kernel Packages
       uses: actions/upload-artifact@master
@@ -194,84 +194,49 @@ jobs:
       if: steps.generate.outputs.status == 'success'
       with:
         name: ${{ env.DEVICE }}-generic-rootfs.tar.gz
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-generic-rootfs.tar.gz
-
-    - name: Upload Generic SquashFS Image
-      uses: actions/upload-artifact@master
-      if: steps.generate.outputs.status == 'success'
-      with:
-        name: ${{ env.DEVICE }}-rootfs-squashfs.img
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-rootfs-squashfs.img
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-rootfs.tar.gz
 
     - name: Upload Combined DVD Image
       uses: actions/upload-artifact@master
       if: steps.generate.outputs.status == 'success'
       with:
-        name: ${{ env.DEVICE }}-combined-squashfs.img
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-combined-squashfs.img
-        
-    - name: Upload Combined PVE/KVM Image
-      uses: actions/upload-artifact@master
-      if: steps.generate.outputs.status == 'success'
-      with:
-        name: ${{ env.DEVICE }}-combined-squashfs.qcow2
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-combined-squashfs.qcow2
+        name: ${{ env.DEVICE }}-squashfs-combined.img.gz
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-combined.img.gz
         
     - name: Upload Combined VirtualBox Image
       uses: actions/upload-artifact@master
       if: steps.generate.outputs.status == 'success'
       with:
-        name: ${{ env.DEVICE }}-combined-squashfs.vdi
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-combined-squashfs.vdi
+        name: ${{ env.DEVICE }}-squashfs-combined.vdi
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-combined.vdi
         
     - name: Upload Combined VMware Image
       uses: actions/upload-artifact@master
       if: steps.generate.outputs.status == 'success'
       with:
-        name: ${{ env.DEVICE }}-combined-squashfs.vmdk
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-combined-squashfs.vmdk
-        
-    - name: Upload Combined Hyper-V Image
-      uses: actions/upload-artifact@master
-      if: steps.generate.outputs.status == 'success'
-      with:
-        name: ${{ env.DEVICE }}-combined-squashfs.vhdx
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-combined-squashfs.vhdx
+        name: ${{ env.DEVICE }}-squashfs-combined.vmdk
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-combined.vmdk
 
     - name: Upload GPT DVD Image
       uses: actions/upload-artifact@master
       if: steps.generate.outputs.status == 'success'
       with:
-        name: ${{ env.DEVICE }}-uefi-gpt-squashfs.img
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-uefi-gpt-squashfs.img
-        
-    - name: Upload GPT PVE/KVM Image
-      uses: actions/upload-artifact@master
-      if: steps.generate.outputs.status == 'success'
-      with:
-        name: ${{ env.DEVICE }}-uefi-gpt-squashfs.qcow2
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-uefi-gpt-squashfs.qcow2
+        name: ${{ env.DEVICE }}-squashfs-combined-efi.img.gz
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-combined-efi.img.gz
         
     - name: Upload GPT VirtualBox Image
       uses: actions/upload-artifact@master
       if: steps.generate.outputs.status == 'success'
       with:
-        name: ${{ env.DEVICE }}-uefi-gpt-squashfs.vdi
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-uefi-gpt-squashfs.vdi
+        name: ${{ env.DEVICE }}-squashfs-combined-efi.vdi
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-combined-efi.vdi
         
     - name: Upload GPT VMware Image
       uses: actions/upload-artifact@master
       if: steps.generate.outputs.status == 'success'
       with:
-        name: ${{ env.DEVICE }}-uefi-gpt-squashfs.vmdk
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-uefi-gpt-squashfs.vmdk
-        
-    - name: Upload GPT Hyper-V Image
-      uses: actions/upload-artifact@master
-      if: steps.generate.outputs.status == 'success'
-      with:
-        name: ${{ env.DEVICE }}-uefi-gpt-squashfs.vhdx
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-uefi-gpt-squashfs.vhdx
+        name: ${{ env.DEVICE }}-squashfs-combined-efi.vmdk
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-combined-efi.vmdk
 
     - name: Upload Images Sha256sums
       uses: actions/upload-artifact@master
@@ -294,7 +259,7 @@ jobs:
         mkdir -p uefi-images
         mkdir -p legacy-images
         mkdir -p other-files
-        mv $SUBTARGET/*gpt* uefi-images
+        mv $SUBTARGET/*combined-efi* uefi-images
         mv $SUBTARGET/*combined* legacy-images
         mv $SUBTARGET/* other-files
         curl -fsSL git.io/file-transfer | sh
