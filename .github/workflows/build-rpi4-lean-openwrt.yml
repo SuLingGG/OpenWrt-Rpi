@@ -78,10 +78,8 @@ jobs:
         [ -e files ] && mv files $OPENWRTROOT/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
         chmod +x $DIY_SH
-        chmod +x scripts/enable-rpi4-wifi.sh
         cd $OPENWRTROOT
         ../$DIY_SH
-        ../scripts/enable-rpi4-wifi.sh
 
     - name: SSH Connection To Actions
       uses: P3TERX/debugger-action@master
