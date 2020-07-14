@@ -200,8 +200,8 @@ jobs:
       uses: actions/upload-artifact@master
       if: steps.generate.outputs.status == 'success'
       with:
-        name: ${{ env.DEVICE }}-squashfs-combined.img.gz
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-combined.img.gz
+        name: ${{ env.DEVICE }}-squashfs-combined.img
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-combined.img
         
     - name: Upload Combined VirtualBox Image
       uses: actions/upload-artifact@master
@@ -221,8 +221,8 @@ jobs:
       uses: actions/upload-artifact@master
       if: steps.generate.outputs.status == 'success'
       with:
-        name: ${{ env.DEVICE }}-squashfs-combined-efi.img.gz
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-combined-efi.img.gz
+        name: ${{ env.DEVICE }}-squashfs-combined-efi.img
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-combined-efi.img
         
     - name: Upload GPT VirtualBox Image
       uses: actions/upload-artifact@master
@@ -252,9 +252,9 @@ jobs:
         cd $OPENWRTROOT
         zip -qr dl.zip dl
         cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
-        gzip *.img
         rm -rf packages pre-packages-server
         tree -L 1
+        gzip *.img
         cd $OPENWRTROOT/bin/targets/$TARGET/
         mkdir -p uefi-images
         mkdir -p legacy-images
