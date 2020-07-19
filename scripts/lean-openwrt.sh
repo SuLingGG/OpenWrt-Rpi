@@ -88,7 +88,8 @@ git clone --depth=1 https://github.com/bao3/luci-udptools
 git clone --depth=1 https://github.com/destan19/OpenAppFilter
 popd
 
-# Fix default-settings for local opkg sources
+# Mod zzz-default-settings
+sed -i "/commit luci/i\uci set luci.main.mediaurlbase='/luci-static/argon'" package/lean/default-settings/files/zzz-default-settings
 sed -i '/http/d' package/lean/default-settings/files/zzz-default-settings
 
 # Fix libssh

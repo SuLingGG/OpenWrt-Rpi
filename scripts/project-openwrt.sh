@@ -26,6 +26,9 @@ rm -rf luci-theme*
 git clone -b 18.06 --depth=1 https://github.com/jerrykuku/luci-theme-argon
 popd
 
+# Mod zzz-default-settings
+sed -i "/commit luci/i\uci set luci.main.mediaurlbase='/luci-static/argon'" package/lean/default-settings/files/zzz-default-settings
+
 # Add po2lmo
 git clone https://github.com/openwrt-dev/po2lmo.git
 pushd po2lmo
