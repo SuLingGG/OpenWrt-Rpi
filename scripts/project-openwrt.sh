@@ -21,8 +21,10 @@ git clone --depth=1 https://github.com/jerrykuku/luci-app-jd-dailybonus
 popd
 
 # Use latest luci-theme-argon
-pushd package/ctcgfw
-rm -rf luci-theme*
+rm -rf package/ctcgfw/luci-theme*
+rm -rf package/lean/luci-theme*
+rm -rf package/lienol/luci-theme*
+pushd package/community
 git clone -b 18.06 --depth=1 https://github.com/jerrykuku/luci-theme-argon
 popd
 
