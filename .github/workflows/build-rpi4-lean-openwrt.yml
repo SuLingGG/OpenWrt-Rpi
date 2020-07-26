@@ -14,7 +14,7 @@ on:
     types: published
   push:
     branches:
-      - master
+      - main
     paths:
       - 'config/lean/rpi4-lean-openwrt.config'
   schedule:

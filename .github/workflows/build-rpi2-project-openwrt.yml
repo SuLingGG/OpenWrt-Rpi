@@ -14,7 +14,7 @@ on:
     types: published
   push:
     branches:
-      - master
+      - main
     paths:
       - 'config/project/rpi2-project-openwrt.config'
   schedule:

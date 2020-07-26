@@ -14,7 +14,7 @@ on:
     types: published
   push:
     branches:
-      - master
+      - main
     paths:
       - 'config/lean/x86_64-lean-openwrt.config'
   schedule:

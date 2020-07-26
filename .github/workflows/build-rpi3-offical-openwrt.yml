@@ -14,7 +14,7 @@ on:
     types: published
   push:
     branches:
-      - master
+      - main
     paths:
       - 'config/offical/rpi3-offical-openwrt.config'
   schedule:

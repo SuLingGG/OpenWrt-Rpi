@@ -14,7 +14,7 @@ on:
     types: published
   push:
     branches:
-      - master
+      - main
     paths:
       - 'config/lean/gdock-lean-openwrt.config'
   schedule:
