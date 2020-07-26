@@ -44,7 +44,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@master
+      uses: actions/checkout@main
 
     - name: Initialization Environment
       env:
@@ -82,7 +82,7 @@ jobs:
         ../$DIY_SH
 
     - name: SSH Connection To Actions
-      uses: P3TERX/debugger-action@master
+      uses: P3TERX/debugger-action@main
       if: env.SSH_ACTIONS == 'true' || contains(github.event.action, 'ssh')
 
     - name: Download Package
@@ -181,63 +181,63 @@ jobs:
         sha256sum *.img > sha256sums
         
     - name: Upload Config
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       if: steps.generate.outputs.status == 'success'
       with:
         name: config.seed
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/config.seed
         
     - name: Upload Packages-Server
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       if: steps.generate.outputs.status == 'success'
       with:
         name: packages-server
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/pre-packages-server
         
     - name: Upload Packages Info
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       if: steps.generate.outputs.status == 'success'
       with:
         name: ${{ env.DEVICE }}.manifest
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}.manifest
         
     - name: Upload RootFS Archive
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       if: steps.generate.outputs.status == 'success' && env.UPLOAD_ROOTFS == 'true'
       with:
         name: ${{ env.DEVICE }}-rootfs.tar.gz
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-rootfs.tar.gz
         
     - name: Upload SquashFS Factory Image
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       if: steps.generate.outputs.status == 'success' && env.UPLOAD_SQUASHFS_IMAGES == 'true'
       with:
         name: ${{ env.DEVICE }}-squashfs-factory.img
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-factory.img
         
     - name: Upload SquashFS Sysupgrade Image
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       if: steps.generate.outputs.status == 'success' && env.UPLOAD_SQUASHFS_IMAGES == 'true'
       with:
         name: ${{ env.DEVICE }}-squashfs-sysupgrade.img
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-sysupgrade.img
         
     - name: Upload Ext4 Factory Image
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       if: steps.generate.outputs.status == 'success' && env.UPLOAD_EXT4_IMAGES == 'true'
       with:
         name: ${{ env.DEVICE }}-ext4-factory.img
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-ext4-factory.img
         
     - name: Upload Ext4 Sysupgrade Image
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       if: steps.generate.outputs.status == 'success' && env.UPLOAD_EXT4_IMAGES == 'true'
       with:
         name: ${{ env.DEVICE }}-ext4-sysupgrade.img
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-ext4-sysupgrade.img
 
     - name: Upload Images Sha256sums
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       if: steps.generate.outputs.status == 'success'
       with:
         name: sha256sums

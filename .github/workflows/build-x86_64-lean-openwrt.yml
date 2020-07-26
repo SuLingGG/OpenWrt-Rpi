@@ -41,7 +41,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@master
+      uses: actions/checkout@main
 
     - name: Initialization Environment
       env:
@@ -79,7 +79,7 @@ jobs:
         ../$DIY_SH
 
     - name: SSH Connection To Actions
-      uses: P3TERX/debugger-action@master
+      uses: P3TERX/debugger-action@main
       if: env.SSH_ACTIONS == 'true' || contains(github.event.action, 'ssh')
 
     - name: Download Package
@@ -162,84 +162,84 @@ jobs:
         zip -q -r packages-server.zip pre-packages-server/server
         
     - name: Upload Config
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       if: steps.generate.outputs.status == 'success'
       with:
         name: config.buildinfo
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/config.buildinfo
         
     - name: Upload Packages-Server
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       if: steps.generate.outputs.status == 'success'
       with:
         name: packages-server
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/pre-packages-server
         
     - name: Upload Packages Info
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       if: steps.generate.outputs.status == 'success'
       with:
         name: ${{ env.DEVICE }}.manifest
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}.manifest
         
     - name: Upload Kernel Packages
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       if: steps.generate.outputs.status == 'success'
       with:
         name: kernel-packages
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/packages/
         
     - name: Upload RootFS Archive
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       if: steps.generate.outputs.status == 'success'
       with:
         name: ${{ env.DEVICE }}-generic-rootfs.tar.gz
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-rootfs.tar.gz
 
     - name: Upload Combined DVD Image
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       if: steps.generate.outputs.status == 'success'
       with:
         name: ${{ env.DEVICE }}-squashfs-combined.img
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-combined.img
         
     - name: Upload Combined VirtualBox Image
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       if: steps.generate.outputs.status == 'success'
       with:
         name: ${{ env.DEVICE }}-squashfs-combined.vdi
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-combined.vdi
         
     - name: Upload Combined VMware Image
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       if: steps.generate.outputs.status == 'success'
       with:
         name: ${{ env.DEVICE }}-squashfs-combined.vmdk
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-combined.vmdk
 
     - name: Upload GPT DVD Image
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       if: steps.generate.outputs.status == 'success'
       with:
         name: ${{ env.DEVICE }}-squashfs-combined-efi.img
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-combined-efi.img
         
     - name: Upload GPT VirtualBox Image
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       if: steps.generate.outputs.status == 'success'
       with:
         name: ${{ env.DEVICE }}-squashfs-combined-efi.vdi
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-combined-efi.vdi
         
     - name: Upload GPT VMware Image
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       if: steps.generate.outputs.status == 'success'
       with:
         name: ${{ env.DEVICE }}-squashfs-combined-efi.vmdk
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-combined-efi.vmdk
 
     - name: Upload Images Sha256sums
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@main
       if: steps.generate.outputs.status == 'success'
       with:
         name: sha256sums
