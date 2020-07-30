@@ -38,7 +38,7 @@ git clone --depth=1 -b master https://github.com/vernesong/OpenClash
 git clone --depth=1 https://github.com/rufengsuixing/luci-app-onliner
 
 # Add luci-app-adguardhome
-git clone --depth=1 https://github.com/rufengsuixing/luci-app-adguardhome
+git clone --depth=1 https://github.com/kongfl888/luci-app-adguardhome
 
 # Add luci-app-diskman
 git clone --depth=1 https://github.com/lisaac/luci-app-diskman
@@ -47,9 +47,7 @@ cp luci-app-diskman/Parted.Makefile parted/Makefile
 
 # Add luci-app-dockerman
 git clone --depth=1 https://github.com/KFERMercer/luci-app-dockerman
-mkdir luci-lib-docker
-curl -s -o ./luci-lib-docker/Makefile https://raw.githubusercontent.com/lisaac/luci-lib-docker/master/Makefile
-rm -rf ../lean/luci-app-docker
+git clone --depth=1 https://github.com/lisaac/luci-lib-docker
 
 # Add luci-app-gowebdav
 git clone --depth=1 https://github.com/project-openwrt/openwrt-gowebdav

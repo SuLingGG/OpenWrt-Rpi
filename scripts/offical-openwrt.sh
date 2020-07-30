@@ -58,7 +58,7 @@ git clone -b master --depth=1 https://github.com/vernesong/OpenClash
 git clone --depth=1 https://github.com/rufengsuixing/luci-app-onliner
 
 # Add luci-app-adguardhome.
-git clone --depth=1 https://github.com/rufengsuixing/luci-app-adguardhome
+git clone --depth=1 https://github.com/kongfl888/luci-app-adguardhome
 
 # Add openwrt-iptvhelper.
 git clone --depth=1 https://github.com/riverscn/openwrt-iptvhelper
@@ -88,10 +88,8 @@ git clone --depth=1 https://github.com/bao3/openwrt-udpspeeder
 git clone --depth=1 https://github.com/bao3/luci-udptools
 
 # luci-app-dockerman
-mkdir luci-lib-docker
-wget https://raw.githubusercontent.com/lisaac/luci-lib-docker/master/Makefile -O luci-lib-docker/Makefile
-mkdir luci-app-dockerman
-wget https://raw.githubusercontent.com/lisaac/luci-app-dockerman/master/Makefile -O luci-app-dockerman/Makefile
+git clone --depth=1 https://github.com/lisaac/luci-app-dockerman
+git clone --depth=1 https://github.com/lisaac/luci-lib-docker
 
 # Add tmate
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/tmate
