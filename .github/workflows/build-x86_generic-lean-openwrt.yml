@@ -6,7 +6,7 @@
 # Blog: https://p3terx.com
 #=================================================
 
-name: Build Raspberry Pi 4 Offical OpenWrt
+name: Build x86_generic Lean's OpenWrt
 
 on:
   repository_dispatch:
@@ -16,26 +16,23 @@ on:
     branches:
       - main
     paths:
-      - 'config/offical/rpi4-offical-openwrt.config'
+      - 'config/lean/x86_generic-lean-openwrt.config'
   schedule:
     - cron: 0 18 * * *
 #  watch:
 #    types: started
 
 env:
-  REPO_URL: https://github.com/openwrt/openwrt
+  REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  CONFIG_FILE: config/offical/rpi4-offical-openwrt.config
-  DEVICE: openwrt-bcm27xx-bcm2711-rpi-4
-  DIY_SH: scripts/offical-openwrt.sh
+  CONFIG_FILE: config/lean/x86_generic-lean-openwrt.config
+  DEVICE: openwrt-x86-generic-generic
+  DIY_SH: scripts/lean-openwrt.sh
   SSH_ACTIONS: false
   IPV6MOD_IN_FIRMWARE: true
   KMODS_IN_FIRMWARE: true
-  UPLOAD_EXT4_IMAGES: true
-  UPLOAD_SQUASHFS_IMAGES: true
-  UPLOAD_ROOTFS: true
-  UPLOAD_WETRANSFER: true
   UPLOAD_COWTRANSFER: true
+  UPLOAD_WETRANSFER: true
   TZ: Asia/Shanghai
 
 jobs:
@@ -67,7 +64,6 @@ jobs:
       run: |
         cd openwrt
         echo "::set-env name=OPENWRTROOT::$PWD"
-        sed -i 's/luci.git/luci.git\;openwrt-19.07/g' feeds.conf.default
         ./scripts/feeds update -a
 
     - name: Install Feeds
@@ -80,10 +76,8 @@ jobs:
         [ -e files ] && mv files $OPENWRTROOT/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
         chmod +x $DIY_SH
-        chmod +x scripts/enable-rpi4-wifi.sh
         cd $OPENWRTROOT
         ../$DIY_SH
-        ../scripts/enable-rpi4-wifi.sh
 
     - name: SSH Connection To Actions
       uses: P3TERX/debugger-action@main
@@ -110,7 +104,7 @@ jobs:
         make tools/compile -j$(nproc) || make tools/compile -j1 V=s
         make toolchain/compile -j$(nproc) || make toolchain/compile -j1 V=s
         make target/compile -j$(nproc) || make target/compile -j1 V=s IGNORE_ERRORS=1
-        make buildinfo
+        make diffconfig
         make package/compile -j$(nproc) IGNORE_ERRORS=1 || make package/compile -j1 V=s IGNORE_ERRORS=1
         make package/index
         echo "::set-output name=status::success"
@@ -139,12 +133,12 @@ jobs:
         then
             mkdir -p files/www/snapshots/targets
             cp -r bin/targets/$TARGET files/www/snapshots/targets
-            cp ../config/opkg/distfeeds-19.07-local.conf files/etc/opkg/distfeeds.conf
+            cp ../config/opkg/distfeeds-18.06-local.conf files/etc/opkg/distfeeds.conf
             sed -i "s/subtarget/$SUBTARGET/g" files/etc/opkg/distfeeds.conf
             sed -i "s/target\//$TARGET\//g" files/etc/opkg/distfeeds.conf
             sed -i "s/platform/$PLATFORM/g" files/etc/opkg/distfeeds.conf
         else
-            cp ../config/opkg/distfeeds-19.07-remote.conf files/etc/opkg/distfeeds.conf
+            cp ../config/opkg/distfeeds-18.06-remote.conf files/etc/opkg/distfeeds.conf
             sed -i "s/subtarget/$SUBTARGET/g" files/etc/opkg/distfeeds.conf
             sed -i "s/target\//$TARGET\//g" files/etc/opkg/distfeeds.conf
             sed -i "s/platform/$PLATFORM/g" files/etc/opkg/distfeeds.conf
@@ -177,22 +171,6 @@ jobs:
         cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
         zip -q -r packages-server.zip pre-packages-server/server
         
-    - name: Extract Gz Files
-      if: steps.generate.outputs.status == 'success'
-      run: |
-        cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
-        gzip -qdc $DEVICE-squashfs-factory.img.gz > $DEVICE-squashfs-factory.img || true
-        gzip -qdc $DEVICE-squashfs-sysupgrade.img.gz > $DEVICE-squashfs-sysupgrade.img || true
-        gzip -qdc $DEVICE-ext4-factory.img.gz > $DEVICE-ext4-factory.img || true
-        gzip -qdc $DEVICE-ext4-sysupgrade.img.gz > $DEVICE-ext4-sysupgrade.img || true
-        
-    - name: Generate Sha256sum File For Images
-      if: steps.generate.outputs.status == 'success'
-      run: |
-        cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
-        mv sha256sums sha256sums.orig
-        sha256sum *.img > sha256sums
-        
     - name: Upload Config
       uses: actions/upload-artifact@main
       if: steps.generate.outputs.status == 'success'
@@ -214,40 +192,61 @@ jobs:
         name: ${{ env.DEVICE }}.manifest
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}.manifest
         
+    - name: Upload Kernel Packages
+      uses: actions/upload-artifact@main
+      if: steps.generate.outputs.status == 'success'
+      with:
+        name: kernel-packages
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/packages/
+        
     - name: Upload RootFS Archive
       uses: actions/upload-artifact@main
-      if: steps.generate.outputs.status == 'success' && env.UPLOAD_ROOTFS == 'true'
+      if: steps.generate.outputs.status == 'success'
       with:
-        name: ${{ env.DEVICE }}-rootfs.tar.gz
+        name: ${{ env.DEVICE }}-generic-rootfs.tar.gz
         path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-rootfs.tar.gz
-        
-    - name: Upload SquashFS Factory Image
+
+    - name: Upload Combined DVD Image
       uses: actions/upload-artifact@main
-      if: steps.generate.outputs.status == 'success' && env.UPLOAD_SQUASHFS_IMAGES == 'true'
+      if: steps.generate.outputs.status == 'success'
       with:
-        name: ${{ env.DEVICE }}-squashfs-factory.img
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-factory.img
+        name: ${{ env.DEVICE }}-squashfs-combined.img
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-combined.img
         
-    - name: Upload SquashFS Sysupgrade Image
+    - name: Upload Combined VirtualBox Image
       uses: actions/upload-artifact@main
-      if: steps.generate.outputs.status == 'success' && env.UPLOAD_SQUASHFS_IMAGES == 'true'
+      if: steps.generate.outputs.status == 'success'
       with:
-        name: ${{ env.DEVICE }}-squashfs-sysupgrade.img
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-sysupgrade.img
+        name: ${{ env.DEVICE }}-squashfs-combined.vdi
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-combined.vdi
         
-    - name: Upload Ext4 Factory Image
+    - name: Upload Combined VMware Image
       uses: actions/upload-artifact@main
-      if: steps.generate.outputs.status == 'success' && env.UPLOAD_EXT4_IMAGES == 'true'
+      if: steps.generate.outputs.status == 'success'
       with:
-        name: ${{ env.DEVICE }}-ext4-factory.img
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-ext4-factory.img
+        name: ${{ env.DEVICE }}-squashfs-combined.vmdk
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-combined.vmdk
+
+    - name: Upload GPT DVD Image
+      uses: actions/upload-artifact@main
+      if: steps.generate.outputs.status == 'success'
+      with:
+        name: ${{ env.DEVICE }}-squashfs-combined-efi.img
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-combined-efi.img
         
-    - name: Upload Ext4 Sysupgrade Image
+    - name: Upload GPT VirtualBox Image
       uses: actions/upload-artifact@main
-      if: steps.generate.outputs.status == 'success' && env.UPLOAD_EXT4_IMAGES == 'true'
+      if: steps.generate.outputs.status == 'success'
       with:
-        name: ${{ env.DEVICE }}-ext4-sysupgrade.img
-        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-ext4-sysupgrade.img
+        name: ${{ env.DEVICE }}-squashfs-combined-efi.vdi
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-combined-efi.vdi
+        
+    - name: Upload GPT VMware Image
+      uses: actions/upload-artifact@main
+      if: steps.generate.outputs.status == 'success'
+      with:
+        name: ${{ env.DEVICE }}-squashfs-combined-efi.vmdk
+        path: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/${{ env.DEVICE }}-squashfs-combined-efi.vmdk
 
     - name: Upload Images Sha256sums
       uses: actions/upload-artifact@main
@@ -263,25 +262,61 @@ jobs:
         cd $OPENWRTROOT
         zip -qr dl.zip dl
         cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
-        rm -rf *.img packages pre-packages-server sha256sums
-        mv sha256sums.orig sha256sums
+        rm -rf packages pre-packages-server
         tree -L 1
+        gzip *.img
+        cd $OPENWRTROOT/bin/targets/$TARGET/
+        mkdir -p uefi-images
+        mkdir -p legacy-images
+        mkdir -p other-files
+        mv $SUBTARGET/*combined-efi* uefi-images
+        mv $SUBTARGET/*combined* legacy-images
+        mv $SUBTARGET/* other-files
+        curl -fsSL git.io/file-transfer | sh
         echo "::set-output name=status::success"
 
-    - name: Upload Firmware To CowTransfer
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
+    - name: Upload Uefi Firmwares To Cowtransfer
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
       run: |
-        curl -fsSL git.io/file-transfer | sh
-        ./transfer cow --block 2621440 -s -p 64 --no-progress ${FIRMWARE} 2>&1 | tee cowtransfer.log
-        echo "::warning file=Firmware-cowtransfer.com::$(cat cowtransfer.log | grep https)"
-
-    - name: Upload Firmware To WeTransfer
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
+        cd $OPENWRTROOT/bin/targets/$TARGET
+        ./transfer cow --block 2621440 -s -p 64 --no-progress ./uefi-images 2>&1 | tee cowtransfer-uefi.log
+        echo "::warning file=cowtransfer-uefi::$(cat cowtransfer-uefi.log | grep https)"
+        
+    - name: Upload Legacy Firmwares To Cowtransfer
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
       run: |
-        curl -fsSL git.io/file-transfer | sh
-        ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
-        echo "::warning file=Firmware-wetransfer.com::$(cat wetransfer.log | grep https)"
-
+        cd $OPENWRTROOT/bin/targets/$TARGET/
+        ./transfer cow --block 2621440 -s -p 64 --no-progress ./legacy-images 2>&1 | tee cowtransfer-legacy.log
+        echo "::warning file=cowtransfer-legacy::$(cat cowtransfer-legacy.log | grep https)"
+        
+    - name: Upload Other Files To Cowtransfer
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
+      run: |
+        cd $OPENWRTROOT/bin/targets/$TARGET/
+        ./transfer cow --block 2621440 -s -p 64 --no-progress ./other-files 2>&1 | tee cowtransfer-other.log
+        echo "::warning file=cowtransfer-other::$(cat cowtransfer-other.log | grep https)"
+        
+    - name: Upload Uefi Firmwares To WeTransfer
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true'
+      run: |
+        cd $OPENWRTROOT/bin/targets/$TARGET
+        ./transfer wet -s -p 16 --no-progress ./uefi-images 2>&1 | tee wetransfer-uefi.log
+        echo "::warning file=wetransfer-uefi::$(cat wetransfer-uefi.log | grep https)"
+        
+    - name: Upload Legacy Firmwares To WeTransfer
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true'
+      run: |
+        cd $OPENWRTROOT/bin/targets/$TARGET/
+        ./transfer wet -s -p 16 --no-progress ./legacy-images 2>&1 | tee wetransfer-legacy.log
+        echo "::warning file=wetransfer-legacy::$(cat wetransfer-legacy.log | grep https)"
+        
+    - name: Upload Other Files To WeTransfer
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true'
+      run: |
+        cd $OPENWRTROOT/bin/targets/$TARGET/
+        ./transfer wet -s -p 16 --no-progress ./other-files 2>&1 | tee wetransfer-other.log
+        echo "::warning file=wetransfer-other::$(cat wetransfer-other.log | grep https)"
+        
     - name: Upload DL To CowTransfer
       if: steps.organize.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
       run: |
