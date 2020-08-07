@@ -29,10 +29,7 @@ env:
   DEVICE: openwrt-x86-generic-generic
   DIY_SH: scripts/lean-openwrt.sh
   SSH_ACTIONS: false
-<<<<<<< HEAD
   IPV6MOD_IN_FIRMWARE: true
-=======
->>>>>>> 808a70a9aaea42a87a259925e6cbeb7d5700f90f
   KMODS_IN_FIRMWARE: true
   UPLOAD_COWTRANSFER: true
   UPLOAD_WETRANSFER: true
