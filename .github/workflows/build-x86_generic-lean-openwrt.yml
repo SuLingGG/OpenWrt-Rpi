@@ -143,7 +143,6 @@ jobs:
             sed -i "s/target\//$TARGET\//g" files/etc/opkg/distfeeds.conf
             sed -i "s/platform/$PLATFORM/g" files/etc/opkg/distfeeds.conf
         fi
-<<<<<<< HEAD
         if "$IPV6MOD_IN_FIRMWARE" = 'true'
         then
             mkdir -p files/www/ipv6-modules
@@ -153,8 +152,6 @@ jobs:
             mkdir -p files/bin
             cp ../scripts/ipv6-helper.sh files/bin/ipv6-helper
         fi
-=======
->>>>>>> 808a70a9aaea42a87a259925e6cbeb7d5700f90f
         make package/install -j$(nproc) || make package/install -j1 V=s
         make target/install -j$(nproc) || make target/install -j1 V=s
         make checksum
