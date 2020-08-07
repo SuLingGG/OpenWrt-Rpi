@@ -58,7 +58,7 @@ git clone -b master --depth=1 https://github.com/vernesong/OpenClash
 git clone --depth=1 https://github.com/rufengsuixing/luci-app-onliner
 
 # Add luci-app-adguardhome.
-git clone --depth=1 https://github.com/kongfl888/luci-app-adguardhome
+svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/luci-app-adguardhome
 
 # Add openwrt-iptvhelper.
 git clone --depth=1 https://github.com/riverscn/openwrt-iptvhelper
@@ -111,6 +111,9 @@ sed -i "/commit luci/i\uci set luci.main.mediaurlbase='/luci-static/argon'" zzz-
 sed -i '/http/d' zzz-default-settings
 sed -i '/exit/i\chmod +x /bin/ipv6-helper' zzz-default-settings
 popd
+
+# Mod ipv6-helper.sh
+sed -i '/filter_aaaa/d;/commit dhcp/d' ../scripts/ipv6-helper.sh
 
 # Remove orig kcptun
 rm -rf ./feeds/packages/net/kcptun

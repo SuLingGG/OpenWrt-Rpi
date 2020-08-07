@@ -42,11 +42,11 @@ if [ $# == 0 ];then
     Welcome
 
 elif [[ $1 = "install" ]]; then
-    echo -e "${Green_font_prefix}\nInstall IPV6 modules...\n${Font_color_suffix}"
+    echo -e "${Green_font_prefix}\nInstalling IPV6 modules...\n${Font_color_suffix}"
     cd /www/ipv6-modules
     opkg install *.ipk
-    echo -e "${Green_font_prefix}\nIPV6 modules install successfull.\n${Font_color_suffix}"
-    echo -e "${Green_font_prefix}Set IPV6 Configurations...\n${Font_color_suffix}"
+    echo -e "${Green_font_prefix}\nIPV6 modules install successfully.\n${Font_color_suffix}"
+    echo -e "${Green_font_prefix}Configuring IPV6...\n${Font_color_suffix}"
     
     uci set dhcp.lan.dhcpv6=hybrid
     uci set dhcp.lan.ndp=hybrid
@@ -63,15 +63,15 @@ elif [[ $1 = "install" ]]; then
     cp /lib/mwan3/mwan3.sh /lib/mwan3/mwan3.sh.orig
     sed -i 's/ip6tables -t manle -w/\/bin\/true/g' /lib/mwan3/mwan3.sh
     
-    echo -e "${Green_font_prefix}IPV6 Configuration is successful.\n${Font_color_suffix}"
+    echo -e "${Green_font_prefix}IPV6 configure successfully.\n${Font_color_suffix}"
     
     RebootConfirm
     
 elif [[ $1 = "remove" ]]; then
     echo -e "${Green_font_prefix}\nRemove IPV6 modules...\n${Font_color_suffix}"
     opkg remove --force-removal-of-dependent-packages ipv6helper kmod-sit odhcp6c luci-proto-ipv6 ip6tables kmod-ipt-nat6 odhcpd-ipv6only kmod-ip6tables-extra
-    echo -e "${Green_font_prefix}\nIPV6 modules remove successfull.\n${Font_color_suffix}"
-    echo -e "${Green_font_prefix}Unset IPV6 Configurations...\n${Font_color_suffix}"
+    echo -e "${Green_font_prefix}\nIPV6 modules remove successfully.\n${Font_color_suffix}"
+    echo -e "${Green_font_prefix}Revert IPV6 configurations...\n${Font_color_suffix}"
     
     uci delete dhcp.lan.dhcpv6
     uci delete dhcp.lan.ndp
@@ -87,14 +87,14 @@ elif [[ $1 = "remove" ]]; then
     
     rm /lib/mwan3/mwan3.sh
     cp /lib/mwan3/mwan3.sh.orig /lib/mwan3/mwan3.sh
-    echo -e "${Green_font_prefix}Remove IPV6 successfully.\n${Font_color_suffix}"
+    echo -e "${Green_font_prefix}IPV6 remove successfully.\n${Font_color_suffix}"
     
     RebootConfirm
     
 elif [[ $1 = "clean" ]]; then
     echo -e "${Green_font_prefix}\nRemove mwan3 modules...\n${Font_color_suffix}"
     opkg remove mwan3 luci-app-mwan3 luci-app-mwan3helper luci-app-syncdial
-    echo -e "${Green_font_prefix}Remove mwan3 modules successfully.\n${Font_color_suffix}"
+    echo -e "${Green_font_prefix}Mwan3 modules remove successfully.\n${Font_color_suffix}"
     
     RebootConfirm
     
