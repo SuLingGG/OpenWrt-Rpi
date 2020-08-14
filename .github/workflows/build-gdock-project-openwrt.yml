@@ -24,7 +24,7 @@ on:
 
 env:
   REPO_URL: https://github.com/project-openwrt/openwrt
-  REPO_BRANCH: 18.06-kernel5.4
+  REPO_BRANCH: openwrt-18.06-k5.4
   CONFIG_FILE: config/project/gdock-project-openwrt.config
   DEVICE: openwrt-ipq40xx-p2w_r619ac
   DIY_SH: scripts/project-openwrt.sh
