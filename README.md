@@ -120,6 +120,43 @@ x86_64 固件同时提供 Legacy 启动与 UEFI 启动版本，另外额外提�
 
 本工具目前处于测试状态，可能存在一些不确定性，请大家多多测试反馈~
 
+## 无线网卡驱动支持情况
+
+目前树莓派 1~4 已集成以下 USB 无线网卡驱动：
+
+kmod-ath6kl-usb、kmod-ath9k-htc、kmod-brcmfmac、kmod-libertas-usb、kmod-mt7601u、kmod-mt7603、kmod-mt7663u、kmod-mt76x0u、kmod-mt76x2u、kmod-net-prism54、kmod-net-rtl8192su、kmod-p54-usb、kmod-rsi91x-usb、kmod-rt2500-usb、kmod-rt2800-usb、kmod-rt73-usb、kmod-rtl8187、kmod-rtl8192cu、kmod-rtl8xxxu、kmod-zd1211rw。
+
+由于固件添加了 kmod-rtl8xxxu 驱动支持，故固件可能对 RealTek 系列: rtl8188eu、rtl8192eu、rtl8723au、rtl8723bu 等网卡也有一定的支持性，但因为 kmod-rtl8xxxu 是一个“替代驱动 (Alternative Driver)”故不保证可以 100% 驱动上述芯片的无线网卡。
+
+虽然固件添加了 kmod-rtl8812au-ct 驱动，但在 Luci 界面控制此网卡时，可能无效 (无法控制)。
+
+## 网卡推荐
+
+**USB 有线网卡 (USB 转网口设备):**
+
+推荐使用基于 AX88179 或基于 RTL8153 芯片的 USB 有线网卡设备。
+
+**USB 无线网卡:**
+
+推荐使用基于雷凌: RT3070(150Mbps)RT5370(150Mbps)/RT5572(300Mbps+600Mbps) 芯片;
+
+或基于 MT7612U(300Mbps+867Mbps) 芯片的 USB 无线网卡设备 (例如华硕 AC55、网件 A6210 等)。
+
+**Ps:** 
+
+1. 以上网卡推荐仅适用于本项目固件，此项目之外的其他固件不一定支持上述网卡。
+2. 另外，商品说明中的“免驱”一般仅限于 Windows 设备可“即插即用”，如果商品介绍中没有额外说明，并不对 Linux 或 OpenWrt 的“即插即用”特性做出保证，故“免驱”网卡在 OpenWrt 上不一定可用。
+
+**Q&A:**
+
+1. 为什么在 Windows/主流 Linux 发行版上可用的网卡在 OpenWrt 上不可用？
+
+   因为在 Windows 上可用的网卡驱动在 Linux 上不一定有人适配和维护，而在某些主流 Linux 发行版上可用的网卡驱动在 OpenWrt 上不一定有人适配和维护。
+
+2. 能否适配 xxx 网卡？
+
+   能力/精力有限，如确有需要，建议购买上文推荐的网卡。
+
 ## 文件说明:
 
 除提供已编译好的固件外，本项目还提供以下文件:
