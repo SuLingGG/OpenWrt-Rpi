@@ -48,11 +48,6 @@ elif [[ $1 = "install" ]]; then
     echo -e "${Green_font_prefix}\nIPV6 modules install successfully.\n${Font_color_suffix}"
     echo -e "${Green_font_prefix}Configuring IPV6...\n${Font_color_suffix}"
     
-    # Add wan6 interface
-    uci set network.wan6=interface
-    uci set network.wan6.ifname=eth0
-    uci set network.wan6.proto=dhcpv6
-    
     # Set hybird to lan
     uci set dhcp.lan.dhcpv6=hybrid
     uci set dhcp.lan.ndp=hybrid
@@ -90,9 +85,6 @@ elif [[ $1 = "remove" ]]; then
     opkg remove --force-removal-of-dependent-packages ipv6helper kmod-sit odhcp6c luci-proto-ipv6 ip6tables kmod-ipt-nat6 odhcpd-ipv6only kmod-ip6tables-extra
     echo -e "${Green_font_prefix}\nIPV6 modules remove successfully.\n${Font_color_suffix}"
     echo -e "${Green_font_prefix}Revert IPV6 configurations...\n${Font_color_suffix}"
-    
-    # Delete wan6 interface
-    uci delete network.wan6
     
     # Delete wan6 dhcp configurations
     uci delete dhcp.wan6
