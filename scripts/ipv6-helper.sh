@@ -48,18 +48,36 @@ elif [[ $1 = "install" ]]; then
     echo -e "${Green_font_prefix}\nIPV6 modules install successfully.\n${Font_color_suffix}"
     echo -e "${Green_font_prefix}Configuring IPV6...\n${Font_color_suffix}"
     
+    # Add wan6 interface
+    uci set network.wan6=interface
+    uci set network.wan6.ifname=eth0
+    uci set network.wan6.proto=dhcpv6
+    
+    # Set hybird to lan
     uci set dhcp.lan.dhcpv6=hybrid
     uci set dhcp.lan.ndp=hybrid
     uci set dhcp.lan.ra=hybrid
     uci set dhcp.lan.ra_management=1
-    uci commit dhcp.lan
     
+    # Set hybird to wan6
+    uci set dhcp.wan6.ra=hybrid
+    uci set dhcp.wan6.dhcpv6=hybrid
+    uci set dhcp.wan6.ndp=hybrid
+    uci set dhcp.wan6.master=1
+    
+    # Delete IPV6 ula prefix
+    uci delete network.globals.ula_prefix
+    
+    # Enable IPV6 dns resolution
     uci delete dhcp.@dnsmasq[0].filter_aaaa
-    uci commit dhcp
     
+    # Set mwan3 balance strategy to default
     uci set mwan3.balanced.last_resort=default
-    uci commit mwan3.balanced
-
+    
+    # Commit changes
+    uci commit
+    
+    # Remove mwan3 ip6tables rules
     cp /lib/mwan3/mwan3.sh /lib/mwan3/mwan3.sh.orig
     sed -i 's/ip6tables -t manle -w/\/bin\/true/g' /lib/mwan3/mwan3.sh
     
@@ -73,18 +91,28 @@ elif [[ $1 = "remove" ]]; then
     echo -e "${Green_font_prefix}\nIPV6 modules remove successfully.\n${Font_color_suffix}"
     echo -e "${Green_font_prefix}Revert IPV6 configurations...\n${Font_color_suffix}"
     
+    # Delete wan6 interface
+    uci delete network.wan6
+    
+    # Delete wan6 dhcp configurations
+    uci delete dhcp.wan6
+    
+    # Revert IPV6 settings for lan
     uci delete dhcp.lan.dhcpv6
     uci delete dhcp.lan.ndp
     uci delete dhcp.lan.ra
     uci delete dhcp.lan.ra_management
-    uci commit dhcp.lan
-
+    
+    # Disable IPV6 dns resolution
     uci set dhcp.@dnsmasq[0].filter_aaaa=1
-    uci commit dhcp
     
+    # Restore mwan3 balance strategy
     uci set mwan3.balanced.last_resort=unreachable
-    uci commit mwan3.balanced
     
+    # Commit changes
+    uci commit
+    
+    # Restore mwan3 ip6tables rules
     rm /lib/mwan3/mwan3.sh
     cp /lib/mwan3/mwan3.sh.orig /lib/mwan3/mwan3.sh
     echo -e "${Green_font_prefix}IPV6 remove successfully.\n${Font_color_suffix}"
