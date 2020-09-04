@@ -86,10 +86,12 @@ elif [[ $1 = "remove" ]]; then
     echo -e "${Green_font_prefix}\nIPV6 modules remove successfully.\n${Font_color_suffix}"
     echo -e "${Green_font_prefix}Revert IPV6 configurations...\n${Font_color_suffix}"
     
-    # Delete wan6 dhcp configurations
-    uci delete dhcp.wan6
+    # Remove wan6 dhcp configurations
+    uci delete dhcp.wan6.ra
+    uci delete dhcp.wan6.dhcpv6
+    uci delete dhcp.wan6.ndp
     
-    # Revert IPV6 settings for lan
+    # Remove lan dhcp configurations
     uci delete dhcp.lan.dhcpv6
     uci delete dhcp.lan.ndp
     uci delete dhcp.lan.ra
