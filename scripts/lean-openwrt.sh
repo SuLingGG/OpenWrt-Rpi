@@ -95,6 +95,12 @@ rm -rf libssh
 svn co https://github.com/openwrt/packages/trunk/libs/libssh
 popd
 
+# Fix mt76 wireless driver
+pushd package/kernel/mt76
+rm -f Makefile
+wget https://raw.githubusercontent.com/openwrt/openwrt/master/package/kernel/mt76/Makefile
+popd
+
 # Add po2lmo
 git clone https://github.com/openwrt-dev/po2lmo.git
 pushd po2lmo
