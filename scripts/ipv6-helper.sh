@@ -23,12 +23,16 @@ Welcome(){
     echo -e "ipv6-helper sub-command"
     echo -e "Example:"
     echo -e "\tipv6-helper install: Install ipv6-helper & IPV6 modules"
-    echo -e "\tipv6-helper remove: Remove ipv6-helper & IPV6 modules"
+    echo -e "\tipv6-helper remove: Remove ipv6-helper & IPV6 modules\n"
+    echo -e "Optional Usage:"
+    echo -e "\tipv6-helper server: Set IPV6 configure to server mode"
+    echo -e "\tipv6-helper relay Set IPV6 configure to relay mode"
+    echo -e "\tipv6-helper hybird: Set IPV6 configure to hybird mode"
     echo -e "\tipv6-helper clean: Remove mwan3 modules (Optional)\n"
 }
 
 RebootConfirm(){
-    echo -n -e "${Green_font_prefix}Need reboot, reboot now [Y/N] (default N)? ${Font_color_suffix}" 
+    echo -n -e "${Green_font_prefix}Need reboot, reboot now [y/N] (default N)? ${Font_color_suffix}" 
     read answer
         case $answer in
             Y | y)
@@ -53,15 +57,18 @@ elif [[ $1 = "install" ]]; then
     uci set dhcp.lan.ndp=hybrid
     uci set dhcp.lan.ra=hybrid
     uci set dhcp.lan.ra_management=1
+    uci set dhcp.lan.ra_default=1
     
     # Set hybird to wan6
+    uci set dhcp.wan6=dhcp
+    uci set dhcp.wan6.interface=wan
     uci set dhcp.wan6.ra=hybrid
     uci set dhcp.wan6.dhcpv6=hybrid
     uci set dhcp.wan6.ndp=hybrid
     uci set dhcp.wan6.master=1
     
-    # Delete IPV6 ula prefix
-    uci delete network.globals.ula_prefix
+    # Disable IPV6 ula prefix
+    sed -i 's/^[^#].*option ula/#&/' /etc/config/network
     
     # Enable IPV6 dns resolution
     uci delete dhcp.@dnsmasq[0].filter_aaaa
@@ -76,9 +83,100 @@ elif [[ $1 = "install" ]]; then
     cp /lib/mwan3/mwan3.sh /lib/mwan3/mwan3.sh.orig
     sed -i 's/ip6tables -t manle -w/\/bin\/true/g' /lib/mwan3/mwan3.sh
     
+    touch /etc/opkg/ipv6-installed
+    
     echo -e "${Green_font_prefix}IPV6 configure successfully.\n${Font_color_suffix}"
     
     RebootConfirm
+    
+elif [[ $1 = "server" ]]; then
+
+    if [ ! -f "/etc/opkg/ipv6-installed" ];then
+        echo -e "\nYou shoud execute 'ipv6-helper install' first."
+    else
+        echo -e "${Green_font_prefix}\nConfiguring server mode...\n${Font_color_suffix}"
+    
+    # Set server to lan
+    uci set dhcp.lan.dhcpv6=server
+    uci set dhcp.lan.ra=server
+    uci set dhcp.lan.ra_management=1
+    uci set dhcp.lan.ra_default=1
+    uci delete dhcp.lan.ndp
+    
+    # Set server to wan6
+    uci set dhcp.wan6=dhcp
+    uci set dhcp.wan6.interface=wan
+    uci set dhcp.wan6.ra=server
+    uci set dhcp.wan6.dhcpv6=server
+    uci set dhcp.wan6.master=1
+    uci delete dhcp.wan6.ndp
+    
+    # Commit changes
+    uci commit
+    
+    echo -e "${Green_font_prefix}Server mode configure successfully.\n${Font_color_suffix}"
+    
+    RebootConfirm
+    fi
+    
+elif [[ $1 = "relay" ]]; then
+
+    if [ ! -f "/etc/opkg/ipv6-installed" ];then
+        echo -e "\nYou shoud execute 'ipv6-helper install' first."
+    else
+        echo -e "${Green_font_prefix}\nConfiguring relay mode...\n${Font_color_suffix}"
+    
+    # Set relay to lan
+    uci set dhcp.lan.dhcpv6=relay
+    uci set dhcp.lan.ndp=relay
+    uci set dhcp.lan.ra=relay
+    uci delete dhcp.lan.ra_management
+    
+    # Set relay to wan6
+    uci set dhcp.wan6=dhcp
+    uci set dhcp.wan6.interface=wan
+    uci set dhcp.wan6.ra=relay
+    uci set dhcp.wan6.dhcpv6=relay
+    uci set dhcp.wan6.ndp=relay
+    uci set dhcp.wan6.master=1
+    
+    # Commit changes
+    uci commit
+    
+    echo -e "${Green_font_prefix}Relay mode configure successfully.\n${Font_color_suffix}"
+    
+    RebootConfirm
+    fi
+    
+elif [[ $1 = "hybird" ]]; then
+
+    if [ ! -f "/etc/opkg/ipv6-installed" ];then
+        echo -e "\nYou shoud execute 'ipv6-helper install' first."
+    else
+        echo -e "${Green_font_prefix}\nConfiguring hybird mode...\n${Font_color_suffix}"
+    
+    # Set hybird to lan
+    uci set dhcp.lan.dhcpv6=hybird
+    uci set dhcp.lan.ndp=hybird
+    uci set dhcp.lan.ra=hybird
+    uci set dhcp.lan.ra_management=1
+    uci set dhcp.lan.ra_default=1
+    
+    # Set hybird to wan6
+    uci set dhcp.wan6=dhcp
+    uci set dhcp.wan6.interface=wan
+    uci set dhcp.wan6.ra=hybird
+    uci set dhcp.wan6.dhcpv6=hybird
+    uci set dhcp.wan6.ndp=hybird
+    uci set dhcp.wan6.master=1
+    
+    # Commit changes
+    uci commit
+    
+    echo -e "${Green_font_prefix}Hybird mode configure successfully.\n${Font_color_suffix}"
+    
+    RebootConfirm
+    fi
     
 elif [[ $1 = "remove" ]]; then
     echo -e "${Green_font_prefix}\nRemove IPV6 modules...\n${Font_color_suffix}"
@@ -96,6 +194,10 @@ elif [[ $1 = "remove" ]]; then
     uci delete dhcp.lan.ndp
     uci delete dhcp.lan.ra
     uci delete dhcp.lan.ra_management
+    uci delete dhcp.lan.ra_default
+    
+    # Enable IPV6 ula prefix
+    sed -i 's/#.*\toption ula/\toption ula/g' /etc/config/network
     
     # Disable IPV6 dns resolution
     uci set dhcp.@dnsmasq[0].filter_aaaa=1
@@ -109,6 +211,9 @@ elif [[ $1 = "remove" ]]; then
     # Restore mwan3 ip6tables rules
     rm /lib/mwan3/mwan3.sh
     cp /lib/mwan3/mwan3.sh.orig /lib/mwan3/mwan3.sh
+    
+    rm -f /etc/opkg/ipv6-installed
+    
     echo -e "${Green_font_prefix}IPV6 remove successfully.\n${Font_color_suffix}"
     
     RebootConfirm
