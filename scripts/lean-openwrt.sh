@@ -62,9 +62,14 @@ git clone --depth=1 https://github.com/jerrykuku/luci-app-jd-dailybonus
 git clone --depth=1 -b 18.06 https://github.com/jerrykuku/luci-theme-argon
 rm -rf ../lean/luci-theme-argon
 
+# Add luci-theme-rosy
+svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/luci-theme-rosy
+
 # Add tmate
-svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/tmate
-svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/msgpack-c
+git clone --depth=1 https://github.com/project-openwrt/openwrt-tmate
+
+# Add subconverter
+git clone --depth=1 https://github.com/tindy2013/openwrt-subconverter
 
 # Add gotop
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/gotop
