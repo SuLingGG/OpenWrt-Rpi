@@ -28,7 +28,7 @@ Welcome(){
     echo -e "\tipv6-helper server: Set IPV6 configure to server mode"
     echo -e "\tipv6-helper relay Set IPV6 configure to relay mode"
     echo -e "\tipv6-helper hybird: Set IPV6 configure to hybird mode"
-    echo -e "\tipv6-helper clean: Remove mwan3 modules (Optional)\n"
+    echo -e "\tipv6-helper clean: Remove mwan3 modules\n"
 }
 
 RebootConfirm(){
@@ -40,6 +40,14 @@ RebootConfirm(){
             *)
             echo -e "You can reboot later manually.\n";;
         esac
+}
+
+CheckInstall(){
+    if [ ! -f "/etc/opkg/ipv6-installed" ];then
+        echo -e "${Green_font_prefix}\nYou shoud execute 'ipv6-helper install' first.\n${Green_font_prefix}"
+    else
+        echo -e "${Green_font_prefix}\nConfiguring...\n${Font_color_suffix}"
+    fi
 }
 
 if [ $# == 0 ];then
@@ -90,11 +98,7 @@ elif [[ $1 = "install" ]]; then
     RebootConfirm
     
 elif [[ $1 = "server" ]]; then
-
-    if [ ! -f "/etc/opkg/ipv6-installed" ];then
-        echo -e "\nYou shoud execute 'ipv6-helper install' first."
-    else
-        echo -e "${Green_font_prefix}\nConfiguring server mode...\n${Font_color_suffix}"
+    CheckInstall
     
     # Set server to lan
     uci set dhcp.lan.dhcpv6=server
@@ -117,14 +121,9 @@ elif [[ $1 = "server" ]]; then
     echo -e "${Green_font_prefix}Server mode configure successfully.\n${Font_color_suffix}"
     
     RebootConfirm
-    fi
     
 elif [[ $1 = "relay" ]]; then
-
-    if [ ! -f "/etc/opkg/ipv6-installed" ];then
-        echo -e "\nYou shoud execute 'ipv6-helper install' first."
-    else
-        echo -e "${Green_font_prefix}\nConfiguring relay mode...\n${Font_color_suffix}"
+    CheckInstall
     
     # Set relay to lan
     uci set dhcp.lan.dhcpv6=relay
@@ -146,14 +145,9 @@ elif [[ $1 = "relay" ]]; then
     echo -e "${Green_font_prefix}Relay mode configure successfully.\n${Font_color_suffix}"
     
     RebootConfirm
-    fi
     
 elif [[ $1 = "hybird" ]]; then
-
-    if [ ! -f "/etc/opkg/ipv6-installed" ];then
-        echo -e "\nYou shoud execute 'ipv6-helper install' first."
-    else
-        echo -e "${Green_font_prefix}\nConfiguring hybird mode...\n${Font_color_suffix}"
+    CheckInstall
     
     # Set hybird to lan
     uci set dhcp.lan.dhcpv6=hybird
@@ -176,7 +170,6 @@ elif [[ $1 = "hybird" ]]; then
     echo -e "${Green_font_prefix}Hybird mode configure successfully.\n${Font_color_suffix}"
     
     RebootConfirm
-    fi
     
 elif [[ $1 = "remove" ]]; then
     echo -e "${Green_font_prefix}\nRemove IPV6 modules...\n${Font_color_suffix}"
