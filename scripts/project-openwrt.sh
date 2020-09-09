@@ -26,6 +26,7 @@ rm -rf package/lean/luci-theme*
 rm -rf package/lienol/luci-theme*
 pushd package/community
 git clone -b 18.06 --depth=1 https://github.com/jerrykuku/luci-theme-argon
+git clone --depth=1 https://github.com/jerrykuku/luci-app-argon-config
 popd
 
 # Mod zzz-default-settings

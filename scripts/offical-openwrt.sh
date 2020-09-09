@@ -78,6 +78,7 @@ git clone --depth=1 https://github.com/jerrykuku/luci-app-jd-dailybonus
 
 # Add luci-theme-argon
 git clone --depth=1 https://github.com/jerrykuku/luci-theme-argon
+git clone --depth=1 https://github.com/jerrykuku/luci-app-argon-config
 
 # Add smartdns
 svn co https://github.com/pymumu/smartdns/trunk/package/openwrt ../smartdns
