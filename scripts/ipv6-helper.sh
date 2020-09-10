@@ -60,19 +60,17 @@ elif [[ $1 = "install" ]]; then
     echo -e "${Green_font_prefix}\nIPV6 modules install successfully.\n${Font_color_suffix}"
     echo -e "${Green_font_prefix}Configuring IPV6...\n${Font_color_suffix}"
     
-    # Set hybird to lan
-    uci set dhcp.lan.dhcpv6=hybrid
-    uci set dhcp.lan.ndp=hybrid
-    uci set dhcp.lan.ra=hybrid
+    # Set server to lan
+    uci set dhcp.lan.dhcpv6=server
+    uci set dhcp.lan.ra=server
     uci set dhcp.lan.ra_management=1
     uci set dhcp.lan.ra_default=1
     
-    # Set hybird to wan6
+    # Set server to wan6
     uci set dhcp.wan6=dhcp
     uci set dhcp.wan6.interface=wan
-    uci set dhcp.wan6.ra=hybrid
-    uci set dhcp.wan6.dhcpv6=hybrid
-    uci set dhcp.wan6.ndp=hybrid
+    uci set dhcp.wan6.ra=server
+    uci set dhcp.wan6.dhcpv6=server
     uci set dhcp.wan6.master=1
     
     # Disable IPV6 ula prefix
