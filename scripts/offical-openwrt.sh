@@ -133,6 +133,11 @@ pushd po2lmo
 make && sudo make install
 popd
 
+# Fix mt76 wireless driver
+pushd package/kernel/mt76
+sed -i '/mt7662u_rom_patch.bin/a\\techo mt76-usb disable_usb_sg=1 > $\(1\)\/etc\/modules.d\/mt76-usb' Makefile
+popd
+
 # Convert Translation
 cp ../scripts/convert-translation.sh .
 chmod +x ./convert-translation.sh
