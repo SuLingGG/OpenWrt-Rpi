@@ -25,7 +25,7 @@ git clone --depth=1 https://github.com/SuLingGG/default-settings
 
 # Add Project OpenWrt's autocore
 rm -rf autocore
-svn co https://github.com/project-openwrt/openwrt/branches/18.06-kernel5.4/package/lean/autocore
+svn co https://github.com/project-openwrt/openwrt/branches/master/package/lean/autocore
 
 # Add luci-app-ssr-plus
 git clone --depth=1 https://github.com/fw876/helloworld

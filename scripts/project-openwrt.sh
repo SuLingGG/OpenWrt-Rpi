@@ -15,11 +15,6 @@ rm -rf package/ctcgfw/r8168
 mkdir package/community
 pushd package/community
 
-# Add luci-app-jd-dailybonus
-git clone --depth=1 https://github.com/jerrykuku/node-request
-git clone --depth=1 https://github.com/jerrykuku/luci-app-jd-dailybonus
-popd
-
 # Use latest luci-theme-argon
 rm -rf package/ctcgfw/luci-theme*
 rm -rf package/lean/luci-theme*
