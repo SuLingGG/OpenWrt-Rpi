@@ -15,15 +15,6 @@ rm -rf package/ctcgfw/r8168
 mkdir package/community
 pushd package/community
 
-# Use latest luci-theme-argon
-rm -rf package/ctcgfw/luci-theme*
-rm -rf package/lean/luci-theme*
-rm -rf package/lienol/luci-theme*
-pushd package/community
-git clone -b 18.06 --depth=1 https://github.com/jerrykuku/luci-theme-argon
-git clone --depth=1 https://github.com/jerrykuku/luci-app-argon-config
-popd
-
 # Mod zzz-default-settings
 sed -i "/commit luci/i\uci set luci.main.mediaurlbase='/luci-static/argon'" package/lean/default-settings/files/zzz-default-settings
 
