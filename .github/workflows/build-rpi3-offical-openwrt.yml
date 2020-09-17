@@ -82,6 +82,7 @@ jobs:
         chmod +x $DIY_SH
         cd $OPENWRTROOT
         ../$DIY_SH
+        rm -f package/lean/helloworld/luci-app-ssr-plus/po/zh_Hans
         ## If your device is Raspberrt Pi 4B:
         # chmod +x ../scripts/enable-rpi4-wifi.sh
         # ../scripts/enable-rpi4-wifi.sh
