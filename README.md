@@ -29,6 +29,7 @@
 |      树莓派 2B      | [⬇️](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+2+Lean%27s+OpenWrt%22) | [⬇️](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+2+Offical+OpenWrt%22) |                              -                               |
 |    树莓派 3B/3B+    | [⬇️](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+3+Lean%27s+OpenWrt%22) | [⬇️](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+3+Offical+OpenWrt%22) |                              -                               |
 |      树莓派 4B      | [⬇️](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+4+Lean%27s+OpenWrt%22) | [⬇️](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+Raspberry+Pi+4+Offical+OpenWrt%22) |                              -                               |
+|  NanoPi R2S (Beta)  | [⬇️](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build%20NanoPi%20R2S%20Lean's%20OpenWrt%22) |                                                              |                                                              |
 |    x86_64 (64位)    | [⬇️](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+x86_64+Lean%27s+OpenWrt%22) |                              -                               |                              -                               |
 | x86_generic (32位)  | [⬇️](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+x86_generic+Lean%27s+OpenWrt%22) |                              -                               |                              -                               |
 
@@ -74,7 +75,7 @@
 
 **Offical 版固件：**
 
-使用官方 Snapshot 源码 + 官方 LuCI 19.07 源码编译，源码处于 **高度活跃开发状态**。Offical 版固件添加了大多数 Lean 版源码中的插件，但插件数量少于 Lean 版 (未集成的插件即为不支持)，对官方源的兼容性较好，**如果你有从软件源中安装软件包的需求，可以考虑使用此版。**
+使用官方 Snapshot 源码 + 官方 LuCI 19.07 源码编译，源码处于 **高度活跃开发状态 (可能会带来一些不稳定因素)**。Offical 版固件添加了大多数 Lean 版源码中的插件，但插件数量少于 Lean 版 (未集成的插件即为不支持)，对官方源的兼容性较好，**如果你有 OpenWrt 使用经验，并且有从软件源中安装软件包的需求，可以考虑使用此版，否则请使用 Lean 版。**
 
 ### 竞斗云:
 
