@@ -12,9 +12,13 @@
 pushd package/lean
 git clone --depth=1 https://github.com/fw876/helloworld
 
-# Add Project OpenWrt's autocore
-rm -rf autocore
-svn co https://github.com/project-openwrt/openwrt/trunk/package/lean/autocore
+# Fix v2ray's Makefile
+sed -i 's/PKG_HASH.*/PKG_HASH:=f289d8d85ab0851851a6e3c101226e77bed0052fd60f9185df8852b601e657f8/g' v2ray/Makefile
+sed -i 's/PKG_VERSION.*/PKG_VERSION:=4.27.5/g' v2ray/Makefile
+
+## Add Project OpenWrt's autocore
+# rm -rf autocore
+# svn co https://github.com/project-openwrt/openwrt/trunk/package/lean/autocore
 popd
 
 # Clone community packages to package/community
@@ -55,7 +59,6 @@ git clone --depth=1 https://github.com/lisaac/luci-lib-docker
 git clone --depth=1 https://github.com/project-openwrt/openwrt-gowebdav
 
 # Add luci-app-jd-dailybonus
-git clone --depth=1 https://github.com/jerrykuku/node-request
 git clone --depth=1 https://github.com/jerrykuku/luci-app-jd-dailybonus
 
 # Add luci-theme-argon
@@ -110,3 +113,6 @@ git clone https://github.com/openwrt-dev/po2lmo.git
 pushd po2lmo
 make && sudo make install
 popd
+
+# Change default shell to zsh
+sed -i 's/\/bin\/ash/\/usr\/bin\/zsh/g' package/base-files/files/etc/passwd

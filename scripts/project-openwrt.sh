@@ -11,10 +11,6 @@
 # Remove r8168 driver
 rm -rf package/ctcgfw/r8168
 
-# Clone community packages to package/community
-mkdir package/community
-pushd package/community
-
 # Mod zzz-default-settings
 sed -i "/commit luci/i\uci set luci.main.mediaurlbase='/luci-static/argon'" package/lean/default-settings/files/zzz-default-settings
 
@@ -23,3 +19,6 @@ git clone https://github.com/openwrt-dev/po2lmo.git
 pushd po2lmo
 make && sudo make install
 popd
+
+# Change default shell to zsh
+sed -i 's/\/bin\/ash/\/usr\/bin\/zsh/g' package/base-files/files/etc/passwd

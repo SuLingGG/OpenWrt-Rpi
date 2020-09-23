@@ -16,7 +16,7 @@ on:
     branches:
       - main
     paths:
-      - 'config/lean/x86_generic-lean-openwrt.config'
+      - 'config/lean/x86/x86-lean-extra.config'
   schedule:
     - cron: 0 18 * * *
 #  watch:
@@ -25,7 +25,7 @@ on:
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  CONFIG_FILE: config/lean/x86_generic-lean-openwrt.config
+  CONFIG_FILE: config/lean/x86/x86_generic-lean-target.config
   DEVICE: openwrt-x86-generic-generic
   DIY_SH: scripts/lean-openwrt.sh
   SSH_ACTIONS: false
@@ -75,13 +75,12 @@ jobs:
       run: |
         [ -e files ] && mv files $OPENWRTROOT/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
-        chmod +x $DIY_SH
+        cat config/lean/x86/x86-lean-extra.config >> $OPENWRTROOT/.config
+        chmod +x scripts/*.sh
         cd $OPENWRTROOT
         ../$DIY_SH
-
-    - name: SSH Connection To Actions
-      uses: P3TERX/debugger-action@main
-      if: env.SSH_ACTIONS == 'true' || contains(github.event.action, 'ssh')
+        ../scripts/preset-clash-core.sh 386
+        ../scripts/preset-terminal-tools.sh
 
     - name: Download Package
       id: package
@@ -107,11 +106,6 @@ jobs:
         make diffconfig
         make package/compile -j$(nproc) IGNORE_ERRORS=1 || make package/compile -j1 V=s IGNORE_ERRORS=1
         make package/index
-        echo "::set-output name=status::success"
-
-    - name: Set Environment Variable
-      if: steps.compile.outputs.status == 'success'
-      run: |
         cd $OPENWRTROOT/bin/packages/*
         PLATFORM=$(basename `pwd`)
         echo "::set-env name=PLATFORM::$PLATFORM"
@@ -122,6 +116,7 @@ jobs:
         SUBTARGET=$(basename `pwd`)
         echo "::set-env name=SUBTARGET::$SUBTARGET"
         echo "::set-env name=FIRMWARE::$PWD"
+        echo "::set-output name=status::success"
 
     - name: Generate Firmware
       if: steps.compile.outputs.status == 'success'
@@ -155,9 +150,6 @@ jobs:
         make package/install -j$(nproc) || make package/install -j1 V=s
         make target/install -j$(nproc) || make target/install -j1 V=s
         make checksum
-        grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
-        [ -s DEVICE_NAME ] && echo "::set-env name=DEVICE_NAME::_$(cat DEVICE_NAME)"
-        echo "::set-env name=FILE_DATE::_$(date +"%Y%m%d%H%M")"
         echo "::set-output name=status::success"
         
     - name: Deploy Packages-Server
@@ -260,7 +252,7 @@ jobs:
       if: steps.generate.outputs.status == 'success' && !cancelled()
       run: |
         cd $OPENWRTROOT
-        zip -qr dl.zip dl
+        zip -qr DL.zip dl
         cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
         rm -rf packages pre-packages-server
         tree -L 1
@@ -273,6 +265,7 @@ jobs:
         mv $SUBTARGET/*combined* legacy-images
         mv $SUBTARGET/* other-files
         curl -fsSL git.io/file-transfer | sh
+        df -hT $PWD
         echo "::set-output name=status::success"
 
     - name: Upload Uefi Firmwares To Cowtransfer
@@ -280,51 +273,50 @@ jobs:
       run: |
         cd $OPENWRTROOT/bin/targets/$TARGET
         ./transfer cow --block 2621440 -s -p 64 --no-progress ./uefi-images 2>&1 | tee cowtransfer-uefi.log
-        echo "::warning file=cowtransfer-uefi::$(cat cowtransfer-uefi.log | grep https)"
+        echo "::warning file=Cowtransfer-UEFI::$(cat cowtransfer-uefi.log | grep https)"
         
     - name: Upload Legacy Firmwares To Cowtransfer
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
       run: |
         cd $OPENWRTROOT/bin/targets/$TARGET/
         ./transfer cow --block 2621440 -s -p 64 --no-progress ./legacy-images 2>&1 | tee cowtransfer-legacy.log
-        echo "::warning file=cowtransfer-legacy::$(cat cowtransfer-legacy.log | grep https)"
+        echo "::warning file=Cowtransfer-Legacy::$(cat cowtransfer-legacy.log | grep https)"
         
     - name: Upload Other Files To Cowtransfer
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true'
       run: |
         cd $OPENWRTROOT/bin/targets/$TARGET/
         ./transfer cow --block 2621440 -s -p 64 --no-progress ./other-files 2>&1 | tee cowtransfer-other.log
-        echo "::warning file=cowtransfer-other::$(cat cowtransfer-other.log | grep https)"
+        echo "::warning file=Cowtransfer-OtherFiles::$(cat cowtransfer-other.log | grep https)"
         
     - name: Upload Uefi Firmwares To WeTransfer
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true'
       run: |
         cd $OPENWRTROOT/bin/targets/$TARGET
         ./transfer wet -s -p 16 --no-progress ./uefi-images 2>&1 | tee wetransfer-uefi.log
-        echo "::warning file=wetransfer-uefi::$(cat wetransfer-uefi.log | grep https)"
+        echo "::warning file=Wetransfer-UEFI::$(cat wetransfer-uefi.log | grep https)"
         
     - name: Upload Legacy Firmwares To WeTransfer
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true'
       run: |
         cd $OPENWRTROOT/bin/targets/$TARGET/
         ./transfer wet -s -p 16 --no-progress ./legacy-images 2>&1 | tee wetransfer-legacy.log
-        echo "::warning file=wetransfer-legacy::$(cat wetransfer-legacy.log | grep https)"
+        echo "::warning file=Wetransfer-Legacy::$(cat wetransfer-legacy.log | grep https)"
         
     - name: Upload Other Files To WeTransfer
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true'
       run: |
         cd $OPENWRTROOT/bin/targets/$TARGET/
         ./transfer wet -s -p 16 --no-progress ./other-files 2>&1 | tee wetransfer-other.log
-        echo "::warning file=wetransfer-other::$(cat wetransfer-other.log | grep https)"
+        echo "::warning file=Wetransfer-OtherFiles::$(cat wetransfer-other.log | grep https)"
         
     - name: Upload DL To CowTransfer
       if: steps.organize.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
       run: |
         ./transfer cow --block 2621440 -s -p 64 --no-progress ${OPENWRTROOT}/dl.zip 2>&1 | tee cowtransfer-dl.log
-        echo "::warning file=DL-cowtransfer.com::$(cat cowtransfer-dl.log | grep https)"
         
     - name: Upload DL To WeTransfer
       if: steps.organize.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
       run: |
         ./transfer wet -s -p 16 --no-progress ${OPENWRTROOT}/dl.zip 2>&1 | tee wetransfer-dl.log
-        echo "::warning file=DL-wetransfer.com::$(cat wetransfer-dl.log | grep https)"
+

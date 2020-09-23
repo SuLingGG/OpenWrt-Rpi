@@ -29,6 +29,12 @@ svn co https://github.com/project-openwrt/openwrt/branches/master/package/lean/a
 
 # Add luci-app-ssr-plus
 git clone --depth=1 https://github.com/fw876/helloworld
+rm -rf helloworld/luci-app-ssr-plus/po/zh_Hans
+
+# Fix v2ray's Makefile
+sed -i 's/PKG_HASH.*/PKG_HASH:=f289d8d85ab0851851a6e3c101226e77bed0052fd60f9185df8852b601e657f8/g' v2ray/Makefile
+sed -i 's/PKG_VERSION.*/PKG_VERSION:=4.27.5/g' v2ray/Makefile
+
 popd
 
 # Clean Lean's code
@@ -73,7 +79,6 @@ cp luci-app-diskman/Parted.Makefile parted/Makefile
 git clone --depth=1 https://github.com/project-openwrt/openwrt-gowebdav
 
 # Add luci-app-jd-dailybonus
-git clone --depth=1 https://github.com/jerrykuku/node-request
 git clone --depth=1 https://github.com/jerrykuku/luci-app-jd-dailybonus
 
 # Add luci-theme-argon
@@ -114,9 +119,6 @@ sed -i '/filter_aaaa/d;/commit dhcp/d' ../scripts/ipv6-helper.sh
 # Remove orig kcptun
 rm -rf ./feeds/packages/net/kcptun
 
-# Enable irqbalance
-sed -i 's/0/1/g' feeds/packages/utils/irqbalance/files/irqbalance.config
-
 # Max connections
 sed -i 's/16384/65536/g' package/kernel/linux/files/sysctl-nf-conntrack.conf
 
@@ -137,6 +139,9 @@ popd
 pushd package/kernel/mt76
 sed -i '/mt7662u_rom_patch.bin/a\\techo mt76-usb disable_usb_sg=1 > $\(1\)\/etc\/modules.d\/mt76-usb' Makefile
 popd
+
+# Change default shell to zsh
+sed -i 's/\/bin\/ash/\/usr\/bin\/zsh/g' package/base-files/files/etc/passwd
 
 # Convert Translation
 cp ../scripts/convert-translation.sh .

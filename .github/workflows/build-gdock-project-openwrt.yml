@@ -16,7 +16,7 @@ on:
     branches:
       - main
     paths:
-      - 'config/project/gdock-project-openwrt.config'
+      - 'config/project/ipq40xx/gdock-project-openwrt.config'
   schedule:
     - cron: 0 18 * * *
 #  watch:
@@ -25,7 +25,7 @@ on:
 env:
   REPO_URL: https://github.com/project-openwrt/openwrt
   REPO_BRANCH: openwrt-18.06-k5.4
-  CONFIG_FILE: config/project/gdock-project-openwrt.config
+  CONFIG_FILE: config/project/ipq40xx/gdock-project-openwrt.config
   DEVICE: openwrt-ipq40xx-p2w_r619ac
   DIY_SH: scripts/project-openwrt.sh
   SSH_ACTIONS: false
@@ -74,13 +74,11 @@ jobs:
       run: |
         [ -e files ] && mv files $OPENWRTROOT/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
-        chmod +x $DIY_SH
+        chmod +x scripts/*.sh
         cd $OPENWRTROOT
         ../$DIY_SH
-
-    - name: SSH Connection To Actions
-      uses: P3TERX/debugger-action@main
-      if: env.SSH_ACTIONS == 'true' || contains(github.event.action, 'ssh')
+        ../scripts/preset-clash-core.sh armv7
+        ../scripts/preset-terminal-tools.sh
 
     - name: Download Package
       id: package
@@ -106,11 +104,6 @@ jobs:
         make diffconfig
         make package/compile -j$(nproc) IGNORE_ERRORS=1 || make package/compile -j1 V=s IGNORE_ERRORS=1
         make package/index
-        echo "::set-output name=status::success"
-
-    - name: Set Environment Variable
-      if: steps.compile.outputs.status == 'success'
-      run: |
         cd $OPENWRTROOT/bin/packages/*
         PLATFORM=$(basename `pwd`)
         echo "::set-env name=PLATFORM::$PLATFORM"
@@ -121,6 +114,7 @@ jobs:
         SUBTARGET=$(basename `pwd`)
         echo "::set-env name=SUBTARGET::$SUBTARGET"
         echo "::set-env name=FIRMWARE::$PWD"
+        echo "::set-output name=status::success"
 
     - name: Generate Firmware
       if: steps.compile.outputs.status == 'success'
@@ -219,10 +213,11 @@ jobs:
       if: steps.generate.outputs.status == 'success' && !cancelled()
       run: |
         cd $OPENWRTROOT
-        zip -qr dl.zip dl
+        zip -qr DL.zip dl
         cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
         rm -rf packages pre-packages-server
         tree -L 1
+        df -hT $PWD
         echo "::set-output name=status::success"
 
     - name: Upload Firmware To CowTransfer
@@ -230,23 +225,22 @@ jobs:
       run: |
         curl -fsSL git.io/file-transfer | sh
         ./transfer cow --block 2621440 -s -p 64 --no-progress ${FIRMWARE} 2>&1 | tee cowtransfer.log
-        echo "::warning file=Firmware-cowtransfer.com::$(cat cowtransfer.log | grep https)"
+        echo "::warning file=Firmware-Cowtransfer.com::$(cat cowtransfer.log | grep https)"
 
     - name: Upload Firmware To WeTransfer
       if: steps.organize.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
       run: |
         curl -fsSL git.io/file-transfer | sh
         ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
-        echo "::warning file=Firmware-wetransfer.com::$(cat wetransfer.log | grep https)"
+        echo "::warning file=Firmware-Wetransfer.com::$(cat wetransfer.log | grep https)"
 
     - name: Upload DL To CowTransfer
       if: steps.organize.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
       run: |
         ./transfer cow --block 2621440 -s -p 64 --no-progress ${OPENWRTROOT}/dl.zip 2>&1 | tee cowtransfer-dl.log
-        echo "::warning file=DL-cowtransfer.com::$(cat cowtransfer-dl.log | grep https)"
         
     - name: Upload DL To WeTransfer
       if: steps.organize.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
       run: |
         ./transfer wet -s -p 16 --no-progress ${OPENWRTROOT}/dl.zip 2>&1 | tee wetransfer-dl.log
-        echo "::warning file=DL-wetransfer.com::$(cat wetransfer-dl.log | grep https)"
+
