@@ -12,10 +12,6 @@
 pushd package/lean
 git clone --depth=1 https://github.com/fw876/helloworld
 
-# Fix v2ray's Makefile
-sed -i 's/PKG_HASH.*/PKG_HASH:=f289d8d85ab0851851a6e3c101226e77bed0052fd60f9185df8852b601e657f8/g' v2ray/Makefile
-sed -i 's/PKG_VERSION.*/PKG_VERSION:=4.27.5/g' v2ray/Makefile
-
 ## Add Project OpenWrt's autocore
 # rm -rf autocore
 # svn co https://github.com/project-openwrt/openwrt/trunk/package/lean/autocore
