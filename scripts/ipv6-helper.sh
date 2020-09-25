@@ -25,9 +25,9 @@ Welcome(){
     echo -e "\tipv6-helper install: Install ipv6-helper & IPV6 modules"
     echo -e "\tipv6-helper remove: Remove ipv6-helper & IPV6 modules\n"
     echo -e "Optional Usage:"
-    echo -e "\tipv6-helper server: Set IPV6 configure to server mode"
-    echo -e "\tipv6-helper relay Set IPV6 configure to relay mode"
-    echo -e "\tipv6-helper hybird: Set IPV6 configure to hybird mode"
+    echo -e "\tipv6-helper server: Set IPV6 configuration to server mode"
+    echo -e "\tipv6-helper relay Set IPV6 configuration to relay mode"
+    echo -e "\tipv6-helper hybird: Set IPV6 configuration to hybird mode"
     echo -e "\tipv6-helper clean: Remove mwan3 modules\n"
 }
 
