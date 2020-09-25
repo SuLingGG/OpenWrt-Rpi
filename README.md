@@ -5,8 +5,7 @@
 * 集成绝大多数有线、无线、3G/4G 网卡驱动，无需另外安装
 * 预置最新版 Clash 核心、预置 oh-my-zsh 以最大程度减少预配置成本
 * 预置所有 kmod ipk 软件包于固件内，预配置本地 opkg 软件源，远离 kmod 冲突
-* 比较全面的 IPV6 支持，固件内置 IPV6 CLI 配
-* 置工具，可快速 安装/卸载/变更 IPV6 模式
+* 比较全面的 IPV6 支持，固件内置 IPV6 CLI 配置工具，可快速 安装/卸载/变更 IPV6 模式
 * 每日凌晨 2:00 拉取最新 OpenWrt 源码及社区插件源码编译并提供分流下载，确保始终获得最新体验
 * 提供 packages-server (包含 WEB 服务器的软件包归档)，可在 Windows 下快速建立局域网软件源
 * 对于高级用户，提供 OpenWrt Image Builder、OpenWrt SDK、OpenWrt Tool Chain、dl 归档文件
