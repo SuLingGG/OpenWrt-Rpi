@@ -82,10 +82,6 @@ jobs:
         ../scripts/preset-clash-core.sh amd64
         ../scripts/preset-terminal-tools.sh
 
-    - name: SSH Connection To Actions
-      uses: P3TERX/debugger-action@main
-      if: env.SSH_ACTIONS == 'true' || contains(github.event.action, 'ssh')
-
     - name: Download Package
       id: package
       run: |
@@ -317,10 +313,12 @@ jobs:
     - name: Upload DL To CowTransfer
       if: steps.organize.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
       run: |
+        cd $OPENWRTROOT/bin/targets/$TARGET/
         ./transfer cow --block 2621440 -s -p 64 --no-progress ${OPENWRTROOT}/DL.zip 2>&1 | tee cowtransfer-dl.log
         
     - name: Upload DL To WeTransfer
       if: steps.organize.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
       run: |
+        cd $OPENWRTROOT/bin/targets/$TARGET/
         ./transfer wet -s -p 16 --no-progress ${OPENWRTROOT}/DL.zip 2>&1 | tee wetransfer-dl.log
 
