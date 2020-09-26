@@ -3,13 +3,13 @@
 * 本项目提供适配于 树莓派全系设备 (1~4)、NanoPi R2S (Beta)、竞斗云 2.0 以及 x86 平台的 OpenWrt 固件
 * 包含丰富的 OpenWrt 原版 LuCI 插件及社区 LuCI 插件
 * 集成绝大多数有线、无线、3G/4G 网卡驱动，无需另外安装
-* 预置最新版 Clash 核心、预置 oh-my-zsh 以最大程度减少预配置成本
+* 预置最新版 Clash 核心、预置 oh-my-zsh 以最大程度减少配置成本
 * 预置所有 kmod ipk 软件包于固件内，预配置本地 opkg 软件源，远离 kmod 冲突
-* 比较全面的 IPV6 支持，固件内置 IPV6 CLI 配置工具，可快速 安装/卸载/变更 IPV6 模式
+* 比较全面的 IPV6 支持，固件内置 IPV6 CLI 配置工具，可快速安装/卸载/配置 IPV6
 * 每日凌晨 2:00 拉取最新 OpenWrt 源码及社区插件源码编译并提供分流下载，确保始终获得最新体验
 * 提供 packages-server (包含 WEB 服务器的软件包归档)，可在 Windows 下快速建立局域网软件源
 * 对于高级用户，提供 OpenWrt Image Builder、OpenWrt SDK、OpenWrt Tool Chain、dl 归档文件
-* 若在使用过程中遇到任何功能问题，请先查阅 [Wiki](https://github.com/SuLingGG/OpenWrt-Rpi/wiki)，如仍没有得到满意答案，可以提交 Issues 或通过以下联系方式咨询:
+* 若在使用过程中遇到任何功能问题，请先查阅 [Wiki](https://github.com/SuLingGG/OpenWrt-Rpi/wiki)，若仍没有得到满意答案，可以提交 Issues 或通过以下方式咨询:
 * 联系方式: [QQ 群](https://jq.qq.com/?_wv=1027&k=5RkQisS) / [Telegram 群组](https://t.me/joinchat/Fc-MpxcaH3mEPA4yOMtJPQ) / [Telegram 频道](https://t.me/beautifulapps)
 <hr>
 
