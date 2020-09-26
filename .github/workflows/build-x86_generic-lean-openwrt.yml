@@ -28,7 +28,6 @@ env:
   CONFIG_FILE: config/lean/x86/x86_generic-lean-target.config
   DEVICE: openwrt-x86-generic-generic
   DIY_SH: scripts/lean-openwrt.sh
-  SSH_ACTIONS: false
   IPV6MOD_IN_FIRMWARE: true
   KMODS_IN_FIRMWARE: true
   UPLOAD_COWTRANSFER: true

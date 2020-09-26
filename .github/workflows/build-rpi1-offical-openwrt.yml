@@ -28,7 +28,6 @@ env:
   CONFIG_FILE: config/offical/bcm27xx/rpi1-offical-target.config
   DEVICE: openwrt-bcm27xx-bcm2708-rpi
   DIY_SH: scripts/offical-openwrt.sh
-  SSH_ACTIONS: false
   IPV6MOD_IN_FIRMWARE: true
   KMODS_IN_FIRMWARE: true
   UPLOAD_EXT4_IMAGES: true
