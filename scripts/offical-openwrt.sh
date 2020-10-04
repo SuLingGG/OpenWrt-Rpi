@@ -139,6 +139,12 @@ popd
 # Change default shell to zsh
 sed -i 's/\/bin\/ash/\/usr\/bin\/zsh/g' package/base-files/files/etc/passwd
 
+# Use Lean's golang to fix latest v2ray compile errors
+pushd feeds/packages/lang
+rm -rf golang
+svn co https://github.com/coolsnowwolf/packages/trunk/lang/golang
+popd
+
 # Convert Translation
 cp ../scripts/convert-translation.sh .
 chmod +x ./convert-translation.sh
