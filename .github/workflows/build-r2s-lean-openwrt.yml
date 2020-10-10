@@ -17,8 +17,8 @@ on:
       - main
     paths:
       - 'config/lean/rockchip/r2s-lean-openwrt.config'
-  schedule:
-    - cron: 0 18 * * *
+#  schedule:
+#    - cron: 0 18 * * *
 #  watch:
 #    types: started
 
@@ -65,7 +65,7 @@ jobs:
     - name: Update Feeds
       run: |
         cd openwrt
-        echo "::set-env name=OPENWRTROOT::$PWD"
+        echo "OPENWRTROOT=$PWD" >> $GITHUB_ENV
         ./scripts/feeds update -a
 
     - name: Install Feeds
@@ -111,14 +111,14 @@ jobs:
         make package/index
         cd $OPENWRTROOT/bin/packages/*
         PLATFORM=$(basename `pwd`)
-        echo "::set-env name=PLATFORM::$PLATFORM"
+        echo "PLATFORM=$PLATFORM" >> $GITHUB_ENV
         cd $OPENWRTROOT/bin/targets/*
         TARGET=$(basename `pwd`)
-        echo "::set-env name=TARGET::$TARGET"
+        echo "TARGET=$TARGET" >> $GITHUB_ENV
         cd *
         SUBTARGET=$(basename `pwd`)
-        echo "::set-env name=SUBTARGET::$SUBTARGET"
-        echo "::set-env name=FIRMWARE::$PWD"
+        echo "SUBTARGET=$SUBTARGET" >> $GITHUB_ENV
+        echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
     - name: Generate Firmware
