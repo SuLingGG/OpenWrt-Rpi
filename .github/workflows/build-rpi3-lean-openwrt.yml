@@ -17,8 +17,8 @@ on:
       - main
     paths:
       - 'config/lean/bcm27xx/rpi-lean-extra.config'
-#  schedule:
-#    - cron: 0 18 * * *
+  schedule:
+    - cron: 0 18 * * *
 #  watch:
 #    types: started
 

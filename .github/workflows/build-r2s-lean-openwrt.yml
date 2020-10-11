@@ -17,8 +17,8 @@ on:
       - main
     paths:
       - 'config/lean/rockchip/r2s-lean-openwrt.config'
-#  schedule:
-#    - cron: 0 18 * * *
+  schedule:
+    - cron: 0 18 * * *
 #  watch:
 #    types: started
 

@@ -17,8 +17,8 @@ on:
       - main
     paths:
       - 'config/offical/bcm27xx/rpi-offical-extra.config'
-#  schedule:
-#    - cron: 0 18 * * *
+  schedule:
+    - cron: 0 18 * * *
 #  watch:
 #    types: started
 
