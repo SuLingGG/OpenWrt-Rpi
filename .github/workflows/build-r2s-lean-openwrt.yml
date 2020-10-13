@@ -83,7 +83,6 @@ jobs:
         ../$DIY_SH
         ../scripts/preset-clash-core.sh armv8
         ../scripts/preset-terminal-tools.sh
-        git apply enable-autocore.diff
 
     - name: Download Package
       id: package

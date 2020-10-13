@@ -11,10 +11,6 @@
 # Add luci-app-ssr-plus
 pushd package/lean
 git clone --depth=1 https://github.com/fw876/helloworld
-
-## Add Project OpenWrt's autocore
-# rm -rf autocore
-# svn co https://github.com/project-openwrt/openwrt/trunk/package/lean/autocore
 popd
 
 # Clone community packages to package/community
