@@ -79,7 +79,6 @@ jobs:
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
         cat config/lean/bcm27xx/rpi-lean-extra.config >> $OPENWRTROOT/.config
         chmod +x scripts/*.sh
-        mv patch/enable-autocore.diff $OPENWRTROOT
         cd $OPENWRTROOT
         ../$DIY_SH
         ../scripts/preset-clash-core.sh armv6

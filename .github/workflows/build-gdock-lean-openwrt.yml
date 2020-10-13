@@ -75,7 +75,6 @@ jobs:
         [ -e files ] && mv files $OPENWRTROOT/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
         chmod +x scripts/*.sh
-        mv patch/enable-autocore.diff $OPENWRTROOT
         cd $OPENWRTROOT
         ../$DIY_SH
         ../scripts/preset-clash-core.sh armv7
