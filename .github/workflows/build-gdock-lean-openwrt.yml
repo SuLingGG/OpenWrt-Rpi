@@ -10,13 +10,10 @@ name: Build G-Dock Lean's OpenWrt
 
 on:
   repository_dispatch:
+    types: [lean, gdock]
+  workflow_dispatch:
   release:
     types: published
-  push:
-    branches:
-      - main
-    paths:
-      - 'config/lean/ipq40xx/gdock-lean-openwrt.config'
   schedule:
     - cron: 0 18 * * *
 #  watch:

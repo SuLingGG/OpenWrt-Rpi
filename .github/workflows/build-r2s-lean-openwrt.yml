@@ -10,13 +10,10 @@ name: Build NanoPi R2S Lean's OpenWrt
 
 on:
   repository_dispatch:
+    types: [lean, r2s]
+  workflow_dispatch:
   release:
     types: published
-  push:
-    branches:
-      - main
-    paths:
-      - 'config/lean/rockchip/r2s-lean-openwrt.config'
   schedule:
     - cron: 0 18 * * *
 #  watch:

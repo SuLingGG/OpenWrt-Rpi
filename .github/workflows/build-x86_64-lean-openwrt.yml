@@ -10,13 +10,10 @@ name: Build x86_64 Lean's OpenWrt
 
 on:
   repository_dispatch:
+    types: [lean, x86_64]
+  workflow_dispatch:
   release:
     types: published
-  push:
-    branches:
-      - main
-    paths:
-      - 'config/lean/x86/x86-lean-extra.config'
   schedule:
     - cron: 0 18 * * *
 #  watch:

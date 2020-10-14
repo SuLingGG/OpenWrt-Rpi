@@ -10,13 +10,10 @@ name: Build Raspberry Pi 3 Offical OpenWrt
 
 on:
   repository_dispatch:
+    types: [offical, rpi3]
+  workflow_dispatch:
   release:
     types: published
-  push:
-    branches:
-      - main
-    paths:
-      - 'config/offical/bcm27xx/rpi-offical-extra.config'
   schedule:
     - cron: 0 18 * * *
 #  watch:

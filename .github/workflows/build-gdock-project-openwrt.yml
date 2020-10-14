@@ -10,13 +10,10 @@ name: Build G-Dock Project OpenWrt
 
 on:
   repository_dispatch:
+    types: [project, gdock]
+  workflow_dispatch:
   release:
     types: published
-  push:
-    branches:
-      - main
-    paths:
-      - 'config/project/ipq40xx/gdock-project-openwrt.config'
   schedule:
     - cron: 0 18 * * *
 #  watch:
