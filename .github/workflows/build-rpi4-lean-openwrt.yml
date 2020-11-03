@@ -12,8 +12,6 @@ on:
   repository_dispatch:
     types: [lean, rpi4]
   workflow_dispatch:
-  release:
-    types: published
   schedule:
     - cron: 0 18 * * *
 #  watch:
@@ -121,22 +119,20 @@ jobs:
       if: steps.compile.outputs.status == 'success'
       id: generate
       run: |
+        cd config/opkg
+        sed -i "s/subtarget/$SUBTARGET/g" distfeeds*.conf
+        sed -i "s/target\//$TARGET\//g" distfeeds*.conf
+        sed -i "s/platform/$PLATFORM/g" distfeeds*.conf
         cd $OPENWRTROOT
         mkdir -p files/etc/opkg
-        cp ../config/opkg/distfeeds-packages-server.conf files/etc/opkg
+        cp ../config/opkg/distfeeds-packages-server.conf files/etc/opkg/distfeeds.conf.server
         if "$KMODS_IN_FIRMWARE" = 'true'
         then
-            mkdir -p files/www/snapshots/targets
-            cp -r bin/targets/$TARGET files/www/snapshots/targets
+            mkdir -p files/www/snapshots
+            cp -r bin/targets files/www/snapshots
             cp ../config/opkg/distfeeds-18.06-local.conf files/etc/opkg/distfeeds.conf
-            sed -i "s/subtarget/$SUBTARGET/g" files/etc/opkg/distfeeds*.conf
-            sed -i "s/target\//$TARGET\//g" files/etc/opkg/distfeeds*.conf
-            sed -i "s/platform/$PLATFORM/g" files/etc/opkg/distfeeds*.conf
         else
             cp ../config/opkg/distfeeds-18.06-remote.conf files/etc/opkg/distfeeds.conf
-            sed -i "s/subtarget/$SUBTARGET/g" files/etc/opkg/distfeeds*.conf
-            sed -i "s/target\//$TARGET\//g" files/etc/opkg/distfeeds*.conf
-            sed -i "s/platform/$PLATFORM/g" files/etc/opkg/distfeeds*.conf
         fi
         if "$IPV6MOD_IN_FIRMWARE" = 'true'
         then
