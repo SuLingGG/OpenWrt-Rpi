@@ -8,19 +8,13 @@ on:
         description: 'Number of days.'
         required: true
         default: 7
-      minimum_runs:
-        description: 'The minimum runs to keep for each workflow.'
-        required: true
-        default: 5
 
 jobs:
   del_runs:
     runs-on: ubuntu-latest
     steps:
       - name: Delete workflow runs
-        uses: ActionsRML/delete-workflow-runs@main
+        uses: ActionsRML/delete-workflow-runs@v1.2.1
         with:
-          token: ${{ secrets.AUTH_PAT }}
           repository: ${{ github.repository }}
           retain_days: ${{ github.event.inputs.days }}
-          keep_minimum_runs: ${{ github.event.inputs.minimum_runs }}
