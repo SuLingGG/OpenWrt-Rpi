@@ -22,6 +22,7 @@ git clone --depth=1 https://github.com/Lienol/openwrt-package
 
 # Add luci-app-vssr <M>
 git clone --depth=1 https://github.com/jerrykuku/luci-app-vssr
+git clone --depth=1 https://github.com/jerrykuku/lua-maxminddb
 
 # Add mentohust & luci-app-mentohust
 git clone --depth=1 https://github.com/BoringCat/luci-app-mentohust
