@@ -107,10 +107,14 @@ rm -rf https-dns-proxy
 svn co https://github.com/Lienol/openwrt-packages/trunk/net/https-dns-proxy
 popd
 
-# Use snapshots syncthing package
+# Use snapshots package
 pushd feeds/packages/utils
 rm -rf syncthing
 svn co https://github.com/openwrt/packages/trunk/utils/syncthing
+popd
+pushd feeds/packages/net
+rm -rf zerotier
+svn co https://github.com/openwrt/packages/trunk/net/zerotier
 popd
 
 # Fix mt76 wireless driver
