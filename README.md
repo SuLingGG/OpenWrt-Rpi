@@ -3,27 +3,16 @@
 ## 固件特色
 
 - 本项目提供适配于 树莓派全系设备 (1~4)、NanoPi R2S (Beta)、竞斗云 2.0 以及 x86 平台的 OpenWrt 固件
-
 - 包含丰富的 OpenWrt 原版 LuCI 插件及社区 LuCI 插件
-
 - 集成绝大多数有线、无线、3G/4G 网卡驱动，无需另外安装
-
 - 预置最新版 Clash 核心、预置 oh-my-zsh 以最大程度减少配置成本
-
 - 预置所有 kmod ipk 软件包于固件内，预配置本地 opkg 软件源，远离 kmod 冲突
-
 - 比较全面的 IPV6 支持，固件内置 IPV6 CLI 配置工具，可快速安装/卸载/配置 IPV6
-
 - 每日凌晨 2:00 拉取最新 OpenWrt 源码及社区插件源码编译并提供分流下载，确保始终获得最新体验
-
 - 提供 packages-server (包含 WEB 服务器的软件包归档)，可在 Windows 下快速建立局域网软件源
-
 - 对于高级用户，提供 OpenWrt Image Builder、OpenWrt SDK、OpenWrt Tool Chain、dl 归档文件
-
 - 若在固件使用前与使用过程中遇到任何功能问题，请先查阅本文所述内容，若仍没有得到满意答案，可以在此项目中提交 Issues 或通过以下方式咨询:
-
-- 联系方式: [QQ 群](https://jq.qq.com/?_wv=1027&k=5RkQisS) / [Telegram 群组](https://t.me/joinchat/Fc-MpxcaH3mEPA4yOMtJPQ) / [Telegram 频道](https://t.me/beautifulapps)
-
+- 联系方式: [QQ 群](https://jq.qq.com/?_wv=1027&k=5RkQisS) / [Telegram 群组](https://t.me/joinchat/Fc-MpxcaH3mEPA4yOMtJPQ) / [Telegram 频道](https://t.me/beautifulapps) (加群前请务必仔细阅读文档)
 - (其中 QQ 群为主力联系方式，Telegram 群组为备用联系方式，Telegram 频道将推送一些固件及文章更新内容的通知)
 
 ## 设备支持情况
@@ -41,11 +30,9 @@
 
 ## 固件特性
 
-由于内容过多，为增加可读性，现将各板块内容分拆为单独文章加以介绍:
+由于内容过多，为增加可读性，现将各板块内容分拆为文档分篇加以介绍:
 
 [**固件特性**](https://mlapp.cn/1001.html): 分类别简要介绍固件内包含的插件和功能
-
-[**功能概览**](https://mlapp.cn/1002.html): 以展开图结构罗列固件内置功能，快速了解固件基本情况
 
 [**版本区别**](https://mlapp.cn/1003.html): 包含 Lean、Offical、Project 三个版本之间的区别
 

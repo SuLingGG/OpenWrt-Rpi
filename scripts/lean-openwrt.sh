@@ -21,8 +21,8 @@ pushd package/community
 git clone --depth=1 https://github.com/Lienol/openwrt-package
 
 # Add luci-app-vssr <M>
+git clone --depth=1 https://github.com/jerrykuku/lua-maxminddb.git
 git clone --depth=1 https://github.com/jerrykuku/luci-app-vssr
-git clone --depth=1 https://github.com/jerrykuku/lua-maxminddb
 
 # Add mentohust & luci-app-mentohust
 git clone --depth=1 https://github.com/BoringCat/luci-app-mentohust
@@ -107,14 +107,10 @@ rm -rf https-dns-proxy
 svn co https://github.com/Lienol/openwrt-packages/trunk/net/https-dns-proxy
 popd
 
-# Use snapshots package
+# Use snapshots syncthing package
 pushd feeds/packages/utils
 rm -rf syncthing
 svn co https://github.com/openwrt/packages/trunk/utils/syncthing
-popd
-pushd feeds/packages/net
-rm -rf zerotier
-svn co https://github.com/openwrt/packages/trunk/net/zerotier
 popd
 
 # Fix mt76 wireless driver
