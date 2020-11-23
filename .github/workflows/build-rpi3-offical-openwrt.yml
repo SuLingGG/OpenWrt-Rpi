@@ -22,8 +22,8 @@ env:
   REPO_BRANCH: master
   CONFIG_FILE: config/offical/bcm27xx/rpi3-offical-target.config
   DIY_SH: scripts/offical-openwrt.sh
-  IPV6MOD_IN_FIRMWARE: false
-  KMODS_IN_FIRMWARE: false
+  IPV6MOD_IN_FIRMWARE: true
+  KMODS_IN_FIRMWARE: true
   UPLOAD_DL: true
   UPLOAD_RCLONE: true
   UPLOAD_WETRANSFER: true
