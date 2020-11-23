@@ -12,8 +12,8 @@ on:
   repository_dispatch:
     types: [lean, rpi4]
   workflow_dispatch:
-#  schedule:
-#    - cron: 0 18 * * *
+  schedule:
+    - cron: 0 18 * * *
 #  watch:
 #    types: started
 
@@ -145,6 +145,8 @@ jobs:
         else
             cp ../config/opkg/distfeeds-18.06-remote.conf files/etc/opkg/distfeeds.conf
         fi
+        cp distfeeds.conf.server distfeeds.conf.mirror
+        sed -i "s/http:\/\/192.168.123.100:2345\/snapshots/https:\/\/openwrt.cc\/snapshots\/$(date +"%Y-%m-%d")\/lean/g" distfeeds.conf.mirror
         if "$IPV6MOD_IN_FIRMWARE" = 'true'
         then
             mkdir -p files/www/ipv6-modules
