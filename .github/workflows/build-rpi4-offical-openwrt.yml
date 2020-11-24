@@ -214,13 +214,6 @@ jobs:
           name: dl-archive
           path: openwrt
 
-      - name: Decompress Bin Folder Archive
-        if: env.GENERATE_STATUS == 'success'
-        run: |
-          cd $OPENWRTROOT
-          unzip -qo bin-archive.zip
-          rm -f bin-archive.zip
-
       - name: Configure Rclone
         env:
           RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
