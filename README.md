@@ -85,3 +85,7 @@ P3TERX 大佬的 Actions-OpenWrt 项目：
 <https://github.com/P3TERX/Actions-OpenWrt>
 
 除这些项目之外，也特别感谢所有为 OpenWrt 项目作出贡献以及开发 OpenWrt 第三方包项目的朋友们~
+
+详细贡献列表参见:
+
+[CONTRIBUTED.md](https://github.com/SuLingGG/OpenWrt-Rpi/blob/main/CONTRIBUTED.md)
