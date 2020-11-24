@@ -98,9 +98,9 @@
   
 - luci-app-vssr \<M\>:
   
-  https://github.com/jerrykuku/lua-maxminddb.git
-
   https://github.com/jerrykuku/luci-app-vssr
+  
+  https://github.com/jerrykuku/lua-maxminddb
   
 - luci-theme-argon:
   
