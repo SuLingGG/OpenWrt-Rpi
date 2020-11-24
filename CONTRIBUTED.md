@@ -30,9 +30,9 @@
 
 - luci-app-adguardhome:
   
-  https://github.com/Lienol/openwrt/trunk/package/diy/luci-app-adguardhome
+  https://github.com/Lienol/openwrt/tree/19.07/package/diy/luci-app-adguardhome
 
-  https://github.com/Lienol/openwrt/trunk/package/diy/adguardhome
+  https://github.com/Lienol/openwrt/tree/19.07/package/diy/adguardhome
   
 - luci-app-diskman:
   
@@ -62,15 +62,13 @@
 
   https://github.com/BoringCat/luci-app-mentohust
 
-
 - luci-proto-minieap:
   
   https://github.com/ysc3839/luci-proto-minieap
   
 - minieap:
 
-  https://github.com/project-openwrt/openwrt/trunk/package/ntlf9t/minieap
-
+  https://github.com/project-openwrt/openwrt/tree/openwrt-18.06/package/ntlf9t/minieap
 
 - luci-app-oaf \<N\>:
   
@@ -90,9 +88,9 @@
   
 - luci-app-smartdns:
   
-  https://github.com/pymumu/smartdns/trunk/package/openwrt
+  https://github.com/pymumu/smartdns/tree/master/package/openwrt
 
-  https://github.com/project-openwrt/openwrt/trunk/package/ntlf9t/luci-app-smartdns
+  https://github.com/project-openwrt/openwrt/tree/openwrt-18.06/package/ntlf9t/luci-app-smartdns
   
 - luci-app-ssr-plus
   
@@ -112,7 +110,6 @@
 
   https://github.com/jerrykuku/luci-app-argon-config
 
-
 - luci-udptools:
   
   https://github.com/bao3/openwrt-udp2raw
@@ -123,11 +120,11 @@
   
 - gotop:
   
-  https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/gotop
+  https://github.com/project-openwrt/openwrt/tree/openwrt-18.06/package/ctcgfw/gotop
   
 - https-dns-proxy:
   
-  https://github.com/Lienol/openwrt-packages/trunk/net/https-dns-proxy
+  https://github.com/Lienol/openwrt-packages/tree/19.07/net/https-dns-proxy
   
 - subconverter \<N\>:
   
