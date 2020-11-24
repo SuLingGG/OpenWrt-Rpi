@@ -147,19 +147,17 @@
   
   https://github.com/robbyrussell/oh-my-zsh
   
-- Zsh-autosuggestions:
+  Zsh-autosuggestions:
   
   https://github.com/zsh-users/zsh-autosuggestions 
   
-- Zsh-syntax-highlighting:
+  Zsh-syntax-highlighting:
 
   https://github.com/zsh-users/zsh-syntax-highlighting
 
-
-- Zsh-completions:
+  Zsh-completions:
 
   https://github.com/zsh-users/zsh-completions
-
 
 - OpenClash cores:
   
