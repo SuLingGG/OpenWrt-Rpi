@@ -24,10 +24,10 @@ jobs:
         name: my-artifact
         path: /home/runner/.config/rclone/rclone.conf
         
-      - name: Upload Targets File To Rclone
-        run: |
-          cd /home/runner/
-          rclone copy /home/runner/.config/rclone/rclone.conf ${{ secrets.RCLONE_REMOTE }}:$(date +"%Y-%m-%d")/lean/targets/$TARGET/$SUBTARGET
+    - name: Upload Targets File To Rclone
+      run: |
+        cd /home/runner/
+        rclone copy /home/runner/.config/rclone/rclone.conf ${{ secrets.RCLONE_REMOTE }}:$(date +"%Y-%m-%d")/lean/targets/$TARGET/$SUBTARGET
 
   Download:
     needs: [Upload]
