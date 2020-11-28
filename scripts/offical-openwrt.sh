@@ -109,8 +109,8 @@ sed -i '/http/d' zzz-default-settings
 sed -i '/exit/i\chmod +x /bin/ipv6-helper' zzz-default-settings
 popd
 
-# Revert docker-ce to fe48902
-git checkout fe48902bf05131a1cbb86fbf8c01376955f86c12 feeds/packages/utils/docker-ce/
+# Revert docker-ce to a1429eb
+git checkout a1429ebd1b231cc78075a34f766ab66c1d22fb96 feeds/packages/utils/docker-ce/
 
 # Mod ipv6-helper.sh
 sed -i '/filter_aaaa/d;/commit dhcp/d' ../scripts/ipv6-helper.sh
