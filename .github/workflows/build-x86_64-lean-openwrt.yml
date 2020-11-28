@@ -248,7 +248,6 @@ jobs:
         if: env.GENERATE_STATUS == 'success' && !cancelled()
         run: |
           cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
-          tree -L 1
           gzip *.img
           cd $OPENWRTROOT/bin/targets/$TARGET/
           mkdir -p uefi-images
