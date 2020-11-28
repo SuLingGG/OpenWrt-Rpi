@@ -1,5 +1,13 @@
 <h1><center><b><a href="https://github.com/SuLingGG/OpenWrt-Rpi">OpenWrt-Rpi</a></b></center></h1>
 
+## 快速通道
+
+我不想读文档，请将我快速传送到:
+
+[**固件下载说明**](https://mlapp.cn/1007.html) | [**旁路由设置指南**](https://mlapp.cn/1008.html) | [**网卡支持与推荐**](https://mlapp.cn/1009.html) | [**IPV6指南**](https://mlapp.cn/1005.html)
+
+**如果以上四篇内容未能解决你的问题，请认真阅读文档。**
+
 ## 固件特色
 
 - 本项目提供适配于 树莓派全系设备 (1~4)、NanoPi R2S (Beta)、竞斗云 2.0 以及 x86 平台的 OpenWrt 固件
@@ -28,7 +36,7 @@
 |    x86_64 (64位)    | [✅](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+x86_64+Lean%27s+OpenWrt%22) |                              -                               |                              -                               |
 | x86_generic (32位)  | [✅](https://github.com/SuLingGG/OpenWrt-Rpi/actions?query=workflow%3A%22Build+x86_generic+Lean%27s+OpenWrt%22) |                              -                               |                              -                               |
 
-## 固件特性
+## 相关文档
 
 由于内容过多，为增加可读性，现将各板块内容分拆为文档分篇加以介绍:
 
@@ -84,8 +92,8 @@ P3TERX 大佬的 Actions-OpenWrt 项目：
 
 <https://github.com/P3TERX/Actions-OpenWrt>
 
-除这些项目之外，也特别感谢所有为 OpenWrt 项目作出贡献以及开发 OpenWrt 第三方包项目的朋友们~
-
 详细贡献列表参见:
 
 [CONTRIBUTED.md](https://github.com/SuLingGG/OpenWrt-Rpi/blob/main/CONTRIBUTED.md)
+
+除这些项目之外，也特别感谢所有为 OpenWrt 项目及社区作出贡献的朋友们~
