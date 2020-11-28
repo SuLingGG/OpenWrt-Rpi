@@ -297,7 +297,7 @@ jobs:
           echo "::warning file=Wetransfer-Legacy::$(cat wetransfer-legacy.log | grep https)"
           
       - name: Upload Other Files To WeTransfer
-        if: steps.compile.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true'
+        if: steps.organize.outputs.ORGANIZE_STATUS == 'success' && env.UPLOAD_WETRANSFER == 'true'
         run: |
           cd $OPENWRTROOT/bin/targets/$TARGET/
           ./transfer wet -s -p 16 --no-progress ./other-files 2>&1 | tee wetransfer-other.log
