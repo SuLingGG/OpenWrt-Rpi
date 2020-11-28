@@ -245,7 +245,7 @@ jobs:
 
       - name: Organize Files
         id: organize
-        if: steps.generate.outputs.status == 'success' && !cancelled()
+        if: env.GENERATE_STATUS == 'success' && !cancelled()
         run: |
           cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
           tree -L 1
