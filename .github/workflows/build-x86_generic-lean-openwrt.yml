@@ -161,10 +161,12 @@ jobs:
         make checksum
         echo "::set-output name=GENERATE_STATUS::success"
 
-    - name: Compress DL Folder Archive
+    - name: Compress Files
       run: |
         cd $OPENWRTROOT
         zip -qr dl-archive.zip dl
+        cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
+        gzip *.img
 
     - name: Upload Bin Folder
       uses: actions/upload-artifact@main
@@ -247,8 +249,6 @@ jobs:
         id: organize
         if: env.GENERATE_STATUS == 'success' && !cancelled()
         run: |
-          cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
-          gzip *.img
           cd $OPENWRTROOT/bin/targets/$TARGET/
           mkdir -p uefi-images
           mkdir -p legacy-images
