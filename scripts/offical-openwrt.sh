@@ -109,9 +109,10 @@ sed -i '/http/d' zzz-default-settings
 sed -i '/exit/i\chmod +x /bin/ipv6-helper' zzz-default-settings
 popd
 
-# Revert docker-ce to a1429eb
-pushd feeds/packages
-git checkout a1429ebd1b231cc78075a34f766ab66c1d22fb96 utils/docker-ce/
+# Don't check runc's version for docker-ce
+pushd feeds/packages/utils/docker-ce
+sed -i '/runc.installer/s/^/#/g' Makefile
+popd
 
 # Mod ipv6-helper.sh
 sed -i '/filter_aaaa/d;/commit dhcp/d' ../scripts/ipv6-helper.sh
