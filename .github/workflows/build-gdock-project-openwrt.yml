@@ -210,6 +210,16 @@ jobs:
           name: dl-archive
           path: openwrt
 
+      - name: Deploy Packages-Server
+        if: env.GENERATE_STATUS == 'success'
+        run: |
+          mkdir -p server/web/snapshots/targets/$TARGET/$SUBTARGET
+          mv $OPENWRTROOT/bin/packages server/web/snapshots
+          mv $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET/packages server/web/snapshots/targets/$TARGET/$SUBTARGET
+          mv server packages-server
+          zip -qr packages-server.zip packages-server
+          mv packages-server.zip $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
+
       - name: Configure Rclone
         env:
           RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
@@ -229,18 +239,6 @@ jobs:
           rclone copy bin ${{ secrets.RCLONE_REMOTE }}:$(date +"%Y-%m-%d")/project
           rclone copy dl-archive.zip ${{ secrets.RCLONE_REMOTE }}:$(date +"%Y-%m-%d")/project/targets/$TARGET/$SUBTARGET
           echo "::warning file=Firmware-OpenWrt.cc::Download Link: https://openwrt.cc/snapshots/$(date +"%Y-%m-%d")/project/targets/$TARGET/$SUBTARGET"
-
-      - name: Deploy Packages-Server
-        if: env.GENERATE_STATUS == 'success'
-        run: |
-          mkdir -p server/web/snapshots/targets/$TARGET/$SUBTARGET
-          mv $OPENWRTROOT/bin/packages server/web/snapshots
-          mv $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET/packages server/web/snapshots/targets/$TARGET/$SUBTARGET
-          mv server $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET/packages-server
-          cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
-          zip -qr packages-server.zip packages-server
-          rm -rf packages-server
-          rclone copy packages-server.zip ${{ secrets.RCLONE_REMOTE }}:$(date +"%Y-%m-%d")/project/targets/$TARGET/$SUBTARGET
 
       - name: Organize Files
         id: organize
