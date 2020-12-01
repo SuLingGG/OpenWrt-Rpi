@@ -217,10 +217,10 @@ jobs:
         if: env.GENERATE_STATUS == 'success'
         run: |
           mkdir -p server/web/snapshots/targets/$TARGET/$SUBTARGET
-          mv $OPENWRTROOT/bin/packages server/web/snapshots
-          mv $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET/packages server/web/snapshots/targets/$TARGET/$SUBTARGET
+          cp -r $OPENWRTROOT/bin/packages server/web/snapshots
+          cp -r $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET/packages server/web/snapshots/targets/$TARGET/$SUBTARGET
           mv server packages-server
-          zip -qr packages-server.zip packages-server
+          zip -qrm packages-server.zip packages-server
           mv packages-server.zip $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
 
       - name: Configure Rclone
