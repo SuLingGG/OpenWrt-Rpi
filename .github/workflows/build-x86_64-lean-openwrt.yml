@@ -248,6 +248,8 @@ jobs:
         id: organize
         if: env.GENERATE_STATUS == 'success' && !cancelled()
         run: |
+          cd ${FIRMWARE}
+          rm -rf packages
           cd $OPENWRTROOT/bin/targets/$TARGET/
           mkdir -p uefi-images
           mkdir -p legacy-images

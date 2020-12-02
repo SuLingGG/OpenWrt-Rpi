@@ -244,6 +244,8 @@ jobs:
         id: organize
         if: env.GENERATE_STATUS == 'success'
         run: |
+          cd ${FIRMWARE}
+          rm -rf packages
           cd $OPENWRTROOT/bin/targets/$TARGET/
           curl -fsSL git.io/file-transfer | sh
           df -hT $PWD
