@@ -91,6 +91,11 @@ git clone --depth=1 https://github.com/bao3/luci-udptools
 git clone --depth=1 https://github.com/destan19/OpenAppFilter
 popd
 
+# Revert haproxy to c121013
+pushd feeds/packages
+git checkout c12101334f08a6b3b30516bfe4b18a26a25f0e44 net/haproxy
+popd
+
 # Mod zzz-default-settings
 pushd package/lean/default-settings/files
 sed -i "/commit luci/i\uci set luci.main.mediaurlbase='/luci-static/argon'" zzz-default-settings
