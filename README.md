@@ -1,5 +1,9 @@
 <h1><center><b><a href="https://github.com/SuLingGG/OpenWrt-Rpi">OpenWrt-Rpi</a></b></center></h1>
 
+### 固件临时下载地址
+
+https://drive.google.com/drive/u/1/folders/1SkNpJkhmG8veheL3ADVFoVTkvfhWjW0P
+
 ## 快速通道
 
 我不想读文档，请将我快速传送到:
