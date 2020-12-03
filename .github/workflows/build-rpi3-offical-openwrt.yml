@@ -241,7 +241,7 @@ jobs:
           cd $OPENWRTROOT
           rclone copy bin ${{ secrets.RCLONE_REMOTE }}:$(date +"%Y-%m-%d")/offical
           rclone copy dl-archive.zip ${{ secrets.RCLONE_REMOTE }}:$(date +"%Y-%m-%d")/offical/targets/$TARGET/$SUBTARGET
-          echo "::warning file=Firmware-OpenWrt.cc::Download Link: https://openwrt.cc/snapshots/$(date +"%Y-%m-%d")/offical/targets/$TARGET/$SUBTARGET"
+          echo "::warning file=Firmware-GoogleDrive::Download Link: https://drive.google.com/drive/folders/1SkNpJkhmG8veheL3ADVFoVTkvfhWjW0P"
 
       - name: Organize Files
         id: organize
