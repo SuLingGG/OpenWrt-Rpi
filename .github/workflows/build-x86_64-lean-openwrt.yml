@@ -24,7 +24,6 @@ env:
   DIY_SH: scripts/lean-openwrt.sh
   IPV6MOD_IN_FIRMWARE: true
   KMODS_IN_FIRMWARE: true
-  UPLOAD_DL: false
   UPLOAD_RCLONE: true
   UPLOAD_WETRANSFER: true
   UPLOAD_COWTRANSFER: true
@@ -174,13 +173,6 @@ jobs:
         name: bin-archive
         path: openwrt/bin
         
-    - name: Upload DL Folder
-      uses: actions/upload-artifact@main
-      if: steps.generate.outputs.GENERATE_STATUS == 'success' && env.UPLOAD_DL == 'true'
-      with:
-        name: dl-archive
-        path: openwrt/dl
-
   Upload:
     needs: [Build]
     runs-on: ubuntu-18.04
@@ -205,18 +197,6 @@ jobs:
           name: bin-archive
           path: openwrt/bin
           
-      - name: Download DL Folder Archive
-        uses: actions/download-artifact@v2
-        if: env.GENERATE_STATUS == 'success'
-        with:
-          name: dl-archive
-          path: openwrt/dl
-
-      - name: Compress DL Folder Archive
-        run: |
-          cd $OPENWRTROOT
-          zip -qrm dl-archive.zip dl
-
       - name: Deploy Packages-Server
         if: env.GENERATE_STATUS == 'success'
         run: |
@@ -244,7 +224,6 @@ jobs:
         run: |
           cd $OPENWRTROOT
           rclone copy bin ${{ secrets.RCLONE_REMOTE }}:$(date +"%Y-%m-%d")/lean
-          rclone copy dl-archive.zip ${{ secrets.RCLONE_REMOTE }}:$(date +"%Y-%m-%d")/lean/targets/$TARGET/$SUBTARGET
           echo "::warning file=Firmware-GoogleDrive::Download Link: https://drive.google.com/drive/folders/1SkNpJkhmG8veheL3ADVFoVTkvfhWjW0P"
 
       - name: Organize Files
@@ -306,21 +285,8 @@ jobs:
           ./transfer wet -s -p 16 --no-progress ./other-files 2>&1 | tee wetransfer-other.log
           echo "::warning file=Wetransfer-OtherFiles::$(cat wetransfer-other.log | grep https)"
           
-      - name: Upload DL To CowTransfer
-        if: steps.organize.outputs.ORGANIZE_STATUS == 'success' && env.UPLOAD_DL == 'true'
-        run: |
-          cd $OPENWRTROOT/bin/targets/$TARGET/
-          ./transfer cow --block 2621440 -s -p 64 --no-progress ${OPENWRTROOT}/DL.zip 2>&1 | tee cowtransfer-dl.log
-          
-      - name: Upload DL To WeTransfer
-        if: steps.organize.outputs.ORGANIZE_STATUS == 'success' && env.UPLOAD_DL == 'true'
-        run: |
-          cd $OPENWRTROOT/bin/targets/$TARGET/
-          ./transfer wet -s -p 16 --no-progress ${OPENWRTROOT}/DL.zip 2>&1 | tee wetransfer-dl.log
-
       - name: Delete Artifacts
         uses: geekyeggo/delete-artifact@v1
         with:
           name: |
             bin-archive
-            dl-archive
