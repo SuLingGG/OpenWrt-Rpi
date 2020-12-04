@@ -24,7 +24,7 @@ env:
   DIY_SH: scripts/lean-openwrt.sh
   IPV6MOD_IN_FIRMWARE: true
   KMODS_IN_FIRMWARE: true
-  UPLOAD_DL: true
+  UPLOAD_DL: false
   UPLOAD_RCLONE: true
   UPLOAD_WETRANSFER: true
   UPLOAD_COWTRANSFER: true
@@ -170,7 +170,7 @@ jobs:
         
     - name: Upload DL Folder
       uses: actions/upload-artifact@main
-      if: steps.generate.outputs.GENERATE_STATUS == 'success'
+      if: steps.generate.outputs.GENERATE_STATUS == 'success' && env.UPLOAD_DL == 'true'
       with:
         name: dl-archive
         path: openwrt/dl
