@@ -160,11 +160,6 @@ jobs:
         make checksum
         echo "::set-output name=GENERATE_STATUS::success"
 
-    - name: Compress DL Folder Archive
-      run: |
-        cd $OPENWRTROOT
-        zip -qr dl-archive.zip dl
-
     - name: Upload Bin Folder
       uses: actions/upload-artifact@main
       if: steps.generate.outputs.GENERATE_STATUS == 'success'
@@ -172,12 +167,12 @@ jobs:
         name: bin-archive
         path: openwrt/bin
         
-    - name: Upload DL Archive
+    - name: Upload DL Folder
       uses: actions/upload-artifact@main
       if: steps.generate.outputs.GENERATE_STATUS == 'success'
       with:
         name: dl-archive
-        path: openwrt/dl-archive.zip
+        path: openwrt/dl
 
   Upload:
     needs: [Build]
@@ -208,7 +203,12 @@ jobs:
         if: env.GENERATE_STATUS == 'success'
         with:
           name: dl-archive
-          path: openwrt
+          path: openwrt/dl
+
+      - name: Compress DL Folder Archive
+        run: |
+          cd $OPENWRTROOT
+          zip -qrm dl-archive.zip dl
 
       - name: Deploy Packages-Server
         if: env.GENERATE_STATUS == 'success'
