@@ -87,10 +87,13 @@ git clone --depth=1 https://github.com/jerrykuku/luci-app-argon-config
 svn co https://github.com/pymumu/smartdns/trunk/package/openwrt ../smartdns
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ntlf9t/luci-app-smartdns ../luci-app-smartdns
 
-# Add udptools
-git clone --depth=1 https://github.com/bao3/openwrt-udp2raw
-git clone --depth=1 https://github.com/bao3/openwrt-udpspeeder
-git clone --depth=1 https://github.com/bao3/luci-udptools
+# Add luci-app-udp2raw
+svn co https://github.com/project-openwrt/openwrt/trunk/package/ntlf9t/luci-app-udp2raw
+svn co https://github.com/project-openwrt/openwrt/trunk/package/ntlf9t/openwrt-udp2raw
+
+# Add luci-app-speederv2
+svn co https://github.com/project-openwrt/openwrt/trunk/package/ntlf9t/luci-app-speederv2
+svn co https://github.com/project-openwrt/packages/trunk/net/udpspeeder
 
 # luci-app-dockerman
 git clone --depth=1 https://github.com/lisaac/luci-app-dockerman
