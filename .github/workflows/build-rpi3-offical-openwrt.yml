@@ -206,7 +206,7 @@ jobs:
       - name: Configure Rclone
         env:
           RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
-        if: env.GENERATE_STATUS == 'success' && env.UPLOAD_RCLONE == 'true'
+        if: env.GENERATE_STATUS == 'success' && env.UPLOAD_RCLONE == 'true' && env.RCLONE_CONFIG != ''
         run: |
           cd $OPENWRTROOT
           curl https://rclone.org/install.sh | sudo bash
@@ -216,7 +216,9 @@ jobs:
           EOF
 
       - name: Upload Targets File To Rclone
-        if: env.GENERATE_STATUS == 'success' && env.UPLOAD_RCLONE == 'true'
+        env:
+          RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
+        if: env.GENERATE_STATUS == 'success' && env.UPLOAD_RCLONE == 'true' && env.RCLONE_CONFIG != ''
         run: |
           cd $OPENWRTROOT
           rclone copy bin ${{ secrets.RCLONE_REMOTE }}:$(date +"%Y-%m-%d")/offical
