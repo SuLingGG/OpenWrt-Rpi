@@ -213,7 +213,7 @@ jobs:
           curl https://rclone.org/install.sh | sudo bash
           mkdir -p ~/.config/rclone/
           cat << EOF > ~/.config/rclone/rclone.conf
-          $RCLONE_CONFIG
+          ${{ secrets.RCLONE_CONFIG }}
           EOF
 
       - name: Upload Targets File To Rclone
