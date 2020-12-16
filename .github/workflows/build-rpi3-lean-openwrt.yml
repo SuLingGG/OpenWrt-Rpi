@@ -13,9 +13,9 @@ on:
     types: [lean, rpi3]
   workflow_dispatch:
   schedule:
-    - cron: 0 18 * * *
-#  watch:
-#    types: started
+    - cron: 0 18 0 1/7 *
+  watch:
+    types: started
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
