@@ -12,8 +12,8 @@ on:
   repository_dispatch:
     types: [offical, rpi2]
   workflow_dispatch:
-  schedule:
-    - cron: 0 18 * * *
+#  schedule:
+#    - cron: 0 18 * * *
 #  watch:
 #    types: started
 
