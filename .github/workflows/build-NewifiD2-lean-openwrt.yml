@@ -88,6 +88,10 @@ jobs:
         ../scripts/preset-clash-core.sh mips
         ../scripts/preset-terminal-tools.sh
 
+    - name: SSH Connection To Actions
+      uses: P3TERX/debugger-action@main
+      if: env.SSH_ACTIONS == 'true' || contains(github.event.action, 'ssh')
+
     - name: Download Package
       id: package
       run: |
