@@ -84,7 +84,7 @@ jobs:
         chmod +x scripts/*.sh
         cd $OPENWRTROOT
         ../$DIY_SH
-		../$DIFF_SH
+        ../$DIFF_SH
         ../scripts/preset-clash-core.sh mips
         ../scripts/preset-terminal-tools.sh
 
