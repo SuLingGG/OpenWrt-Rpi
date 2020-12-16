@@ -23,6 +23,7 @@ env:
   CONFIG_FILE: config/lean/mips/NewifiD2-lean-targets.config
   DIY_SH: scripts/lean-openwrt.sh
   DIFF_SH: scripts/diff.sh
+  SSH_ACTIONS: false
   IPV6MOD_IN_FIRMWARE: true
   KMODS_IN_FIRMWARE: false
   UPLOAD_RCLONE: true
