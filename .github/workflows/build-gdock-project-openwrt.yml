@@ -200,10 +200,10 @@ jobs:
           zip -qrm packages-server.zip packages-server
           mv packages-server.zip $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
 
-      - name: Configure Rclone
+      - name: Rclone Upload
         env:
-          RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
-        if: env.GENERATE_STATUS == 'success' && env.UPLOAD_RCLONE == 'true' && env.RCLONE_CONFIG != ''
+          RCLONE_REMOTE: ${{ secrets.RCLONE_REMOTE }}
+        if: env.GENERATE_STATUS == 'success' && env.UPLOAD_RCLONE == 'true' && env.RCLONE_REMOTE != ''
         run: |
           cd $OPENWRTROOT
           curl https://rclone.org/install.sh | sudo bash
@@ -211,14 +211,7 @@ jobs:
           cat << EOF > ~/.config/rclone/rclone.conf
           ${{ secrets.RCLONE_CONFIG }}
           EOF
-
-      - name: Upload Targets File To Rclone
-        env:
-          RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
-        if: env.GENERATE_STATUS == 'success' && env.UPLOAD_RCLONE == 'true' && env.RCLONE_CONFIG != ''
-        run: |
-          cd $OPENWRTROOT
-          rclone copy bin ${{ secrets.RCLONE_REMOTE }}:$(date +"%Y-%m-%d")/project
+          rclone copy bin $RCLONE_REMOTE:$(date +"%Y-%m-%d")/project
           echo "::warning file=Firmware-GoogleDrive::Download Link: https://drive.google.com/drive/folders/1SkNpJkhmG8veheL3ADVFoVTkvfhWjW0P"
 
       - name: Organize Files
