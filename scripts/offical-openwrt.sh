@@ -95,9 +95,10 @@ svn co https://github.com/project-openwrt/openwrt/trunk/package/ntlf9t/openwrt-u
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ntlf9t/luci-app-speederv2
 svn co https://github.com/project-openwrt/packages/trunk/net/udpspeeder
 
-# luci-app-dockerman
-svn co https://github.com/openwrt/luci/trunk/applications/luci-app-dockerman
-svn co https://github.com/openwrt/luci/trunk/collections/luci-lib-docker
+# Add luci-app-dockerman
+git clone --depth=1 https://github.com/lisaac/luci-app-dockerman
+sed -i 's/+docker-ce/+docker/g' luci-app-dockerman/applications/luci-app-dockerman/Makefile
+git clone --depth=1 https://github.com/lisaac/luci-lib-docker
 
 # Add tmate
 git clone --depth=1 https://github.com/project-openwrt/openwrt-tmate
@@ -112,11 +113,6 @@ pushd package/lean/default-settings/files
 sed -i "/commit luci/i\uci set luci.main.mediaurlbase='/luci-static/argon'" zzz-default-settings
 sed -i '/http/d' zzz-default-settings
 sed -i '/exit/i\chmod +x /bin/ipv6-helper' zzz-default-settings
-popd
-
-# Don't check runc's version for docker-ce
-pushd feeds/packages/utils/docker-ce
-sed -i '/runc.installer/s/^/#/g' Makefile
 popd
 
 # Mod ipv6-helper.sh
@@ -148,12 +144,6 @@ popd
 
 # Change default shell to zsh
 sed -i 's/\/bin\/ash/\/usr\/bin\/zsh/g' package/base-files/files/etc/passwd
-
-# Use Lean's golang to fix latest v2ray compile errors
-pushd feeds/packages/lang
-rm -rf golang
-svn co https://github.com/coolsnowwolf/packages/trunk/lang/golang
-popd
 
 # Convert Translation
 cp ../scripts/convert-translation.sh .
