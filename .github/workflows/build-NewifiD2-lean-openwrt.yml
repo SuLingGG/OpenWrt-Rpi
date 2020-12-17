@@ -174,7 +174,11 @@ jobs:
       with:
         name: bin-archive
         path: openwrt/bin
-        
+
+    - name: SSH Connection To Actions
+      uses: P3TERX/debugger-action@main
+      if: env.SSH_ACTIONS == 'true' || contains(github.event.action, 'ssh')
+
   Upload:
     needs: [Build]
     runs-on: ubuntu-18.04
