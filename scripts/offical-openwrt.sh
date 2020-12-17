@@ -16,7 +16,7 @@ popd
 # Copy Lean's packages to ./package/lean.
 mkdir package/lean
 pushd package/lede/package/lean
-cp -r {adbyby,automount,baidupcs-web,coremark,ddns-scripts_aliyun,ddns-scripts_dnspod,dns2socks,ipt2socks,ipv6-helper,kcptun,luci-app-adbyby-plus,luci-app-arpbind,luci-app-autoreboot,luci-app-baidupcs-web,luci-app-cifs-mount,luci-app-cpufreq,luci-app-familycloud,luci-app-filetransfer,luci-app-frpc,luci-app-n2n_v2,luci-app-netdata,luci-app-nfs,luci-app-nps,luci-app-ps3netsrv,luci-app-softethervpn,luci-app-usb-printer,luci-app-unblockmusic,luci-app-vsftpd,luci-app-webadmin,luci-app-xlnetacc,luci-lib-fs,microsocks,n2n_v2,npc,pdnsd-alt,proxychains-ng,ps3netsrv,redsocks2,shadowsocksr-libev,simple-obfs,softethervpn5,srelay,tcpping,trojan,UnblockNeteaseMusic,UnblockNeteaseMusicGo,v2ray,v2ray-plugin,vsftpd-alt} "../../../lean"
+cp -r {adbyby,automount,baidupcs-web,coremark,ddns-scripts_aliyun,ddns-scripts_dnspod,dns2socks,ipt2socks,ipv6-helper,kcptun,luci-app-adbyby-plus,luci-app-arpbind,luci-app-autoreboot,luci-app-baidupcs-web,luci-app-cifs-mount,luci-app-cpufreq,luci-app-familycloud,luci-app-filetransfer,luci-app-frpc,luci-app-n2n_v2,luci-app-netdata,luci-app-nfs,luci-app-nps,luci-app-ps3netsrv,luci-app-softethervpn,luci-app-usb-printer,luci-app-unblockmusic,luci-app-verysync,luci-app-vsftpd,luci-app-webadmin,luci-app-xlnetacc,luci-lib-fs,microsocks,n2n_v2,npc,pdnsd-alt,proxychains-ng,ps3netsrv,redsocks2,shadowsocksr-libev,simple-obfs,softethervpn5,srelay,tcpping,trojan,UnblockNeteaseMusic,UnblockNeteaseMusicGo,v2ray,v2ray-plugin,verysync,vsftpd-alt,xray} "../../../lean"
 popd
 
 # Default settings
@@ -69,7 +69,7 @@ svn co https://github.com/Lienol/openwrt/trunk/package/diy/adguardhome
 git clone --depth=1 https://github.com/riverscn/openwrt-iptvhelper
 
 # Add luci-app-diskman.
-git clone --depth=1 https://github.com/lisaac/luci-app-diskman
+git clone --depth=1 https://github.com/SuLingGG/luci-app-diskman
 mkdir parted
 cp luci-app-diskman/Parted.Makefile parted/Makefile
 
@@ -95,8 +95,9 @@ svn co https://github.com/project-openwrt/openwrt/trunk/package/ntlf9t/openwrt-u
 svn co https://github.com/project-openwrt/openwrt/trunk/package/ntlf9t/luci-app-speederv2
 svn co https://github.com/project-openwrt/packages/trunk/net/udpspeeder
 
-# luci-app-dockerman
+# Add luci-app-dockerman
 git clone --depth=1 https://github.com/lisaac/luci-app-dockerman
+sed -i 's/+docker-ce/+docker/g' luci-app-dockerman/applications/luci-app-dockerman/Makefile
 git clone --depth=1 https://github.com/lisaac/luci-lib-docker
 
 # Add tmate
@@ -112,11 +113,6 @@ pushd package/lean/default-settings/files
 sed -i "/commit luci/i\uci set luci.main.mediaurlbase='/luci-static/argon'" zzz-default-settings
 sed -i '/http/d' zzz-default-settings
 sed -i '/exit/i\chmod +x /bin/ipv6-helper' zzz-default-settings
-popd
-
-# Don't check runc's version for docker-ce
-pushd feeds/packages/utils/docker-ce
-sed -i '/runc.installer/s/^/#/g' Makefile
 popd
 
 # Mod ipv6-helper.sh
@@ -148,12 +144,6 @@ popd
 
 # Change default shell to zsh
 sed -i 's/\/bin\/ash/\/usr\/bin\/zsh/g' package/base-files/files/etc/passwd
-
-# Use Lean's golang to fix latest v2ray compile errors
-pushd feeds/packages/lang
-rm -rf golang
-svn co https://github.com/coolsnowwolf/packages/trunk/lang/golang
-popd
 
 # Convert Translation
 cp ../scripts/convert-translation.sh .
