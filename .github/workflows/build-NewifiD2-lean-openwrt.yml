@@ -26,7 +26,7 @@ env:
   SSH_ACTIONS: false
   IPV6MOD_IN_FIRMWARE: true
   KMODS_IN_FIRMWARE: false
-  UPLOAD_RCLONE: true
+  UPLOAD_RCLONE: false
   UPLOAD_WETRANSFER: true
   UPLOAD_COWTRANSFER: true
   TZ: Asia/Shanghai
@@ -81,7 +81,7 @@ jobs:
       run: |
         [ -e files ] && mv files $OPENWRTROOT/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
-        cat config/lean/mips/newifi-lean-extra.config >> $OPENWRTROOT/.config
+#        cat config/lean/mips/newifi-lean-extra.config >> $OPENWRTROOT/.config
         chmod +x scripts/*.sh
         cd $OPENWRTROOT
         ../$DIY_SH
