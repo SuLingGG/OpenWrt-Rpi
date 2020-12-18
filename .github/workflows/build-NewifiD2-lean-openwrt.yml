@@ -111,11 +111,11 @@ jobs:
       run: |
         cd $OPENWRTROOT
         echo -e "$(nproc) thread compile"
-        make tools/compile -j$(nproc) || make tools/compile -j1 V=s
-        make toolchain/compile -j$(nproc) || make toolchain/compile -j1 V=s
-        make target/compile -j$(nproc) || make target/compile -j1 V=s IGNORE_ERRORS=1
+        make tools/compile -j$(nproc) && make tools/compile -j1 V=s
+        make toolchain/compile -j$(nproc) && make toolchain/compile -j1 V=s
+        make target/compile -j$(nproc) && make target/compile -j1 V=s IGNORE_ERRORS=1
         make diffconfig
-        make package/compile -j$(nproc) IGNORE_ERRORS=1 || make package/compile -j1 V=s IGNORE_ERRORS=1
+        make package/compile -j$(nproc) IGNORE_ERRORS=1 && make package/compile -j1 V=s IGNORE_ERRORS=1
         make package/index
         cd $OPENWRTROOT/bin/packages/*
         PLATFORM=$(basename `pwd`)
@@ -163,8 +163,8 @@ jobs:
             mkdir -p files/bin
             cp ../scripts/ipv6-helper.sh files/bin/ipv6-helper
         fi
-        make package/install -j$(nproc) || make package/install -j1 V=s
-        make target/install -j$(nproc) || make target/install -j1 V=s
+        make package/install -j$(nproc) && make package/install -j1 V=s
+        make target/install -j$(nproc) && make target/install -j1 V=s
         make -j$(nproc) && make -j1 V=s
         make checksum
         echo "::set-output name=GENERATE_STATUS::success"
