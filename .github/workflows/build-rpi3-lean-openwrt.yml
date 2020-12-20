@@ -67,7 +67,6 @@ jobs:
         cd openwrt
         echo "OPENWRTROOT=$PWD" >> $GITHUB_ENV
         echo "::set-output name=OPENWRTROOT::$(echo $PWD)"
-        sed -i 's/coolsnowwolf\/luci/Lienol\/openwrt-luci.git;18.06/g' feeds.conf.default
         ./scripts/feeds update -a
 
     - name: Install Feeds
