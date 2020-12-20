@@ -1,0 +1,6 @@
+# Rclone Packages Upload Rule
+- openwrt*
+- sha256sums
+- packages-server.zip
+- *.buildinfo
++ openwrt-keyring*

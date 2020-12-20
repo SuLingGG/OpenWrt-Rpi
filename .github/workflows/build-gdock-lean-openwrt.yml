@@ -129,20 +129,20 @@ jobs:
       if: steps.compile.outputs.COMPILE_STATUS == 'success'
       id: generate
       run: |
-        cd config/opkg
+        cd data/opkg
         sed -i "s/subtarget/$SUBTARGET/g" distfeeds*.conf
         sed -i "s/target\//$TARGET\//g" distfeeds*.conf
         sed -i "s/platform/$PLATFORM/g" distfeeds*.conf
         cd $OPENWRTROOT
         mkdir -p files/etc/opkg
-        cp ../config/opkg/distfeeds-packages-server.conf files/etc/opkg/distfeeds.conf.server
+        cp ../data/opkg/distfeeds-packages-server.conf files/etc/opkg/distfeeds.conf.server
         if "$KMODS_IN_FIRMWARE" = 'true'
         then
             mkdir -p files/www/snapshots
             cp -r bin/targets files/www/snapshots
-            cp ../config/opkg/distfeeds-18.06-local.conf files/etc/opkg/distfeeds.conf
+            cp ../data/opkg/distfeeds-18.06-local.conf files/etc/opkg/distfeeds.conf
         else
-            cp ../config/opkg/distfeeds-18.06-remote.conf files/etc/opkg/distfeeds.conf
+            cp ../data/opkg/distfeeds-18.06-remote.conf files/etc/opkg/distfeeds.conf
         fi
         cp files/etc/opkg/distfeeds.conf.server files/etc/opkg/distfeeds.conf.mirror
         sed -i "s/http:\/\/192.168.123.100:2345\/snapshots/https:\/\/openwrt.cc\/snapshots\/$(date +"%Y-%m-%d")\/lean/g" files/etc/opkg/distfeeds.conf.mirror
@@ -203,8 +203,9 @@ jobs:
 
       - name: Rclone Upload
         env:
-          RCLONE_REMOTE: ${{ secrets.RCLONE_REMOTE }}
-        if: env.GENERATE_STATUS == 'success' && env.UPLOAD_RCLONE == 'true' && env.RCLONE_REMOTE != ''
+          RCLONE_PACKAGE: ${{ secrets.RCLONE_PACKAGE }}
+          RCLONE_FIRMWARE: ${{ secrets.RCLONE_FIRMWARE }}
+        if: env.GENERATE_STATUS == 'success' && env.UPLOAD_RCLONE == 'true' && env.RCLONE_PACKAGE != ''
         run: |
           cd $OPENWRTROOT
           curl https://rclone.org/install.sh | sudo bash
@@ -212,7 +213,8 @@ jobs:
           cat << EOF > ~/.config/rclone/rclone.conf
           ${{ secrets.RCLONE_CONFIG }}
           EOF
-          rclone copy bin/targets/$TARGET/$SUBTARGET $RCLONE_REMOTE:$(date +"%Y-%m-%d")/lean/targets/$TARGET/$SUBTARGET
+          rclone copy bin/targets/$TARGET/$SUBTARGET/packages $RCLONE_PACKAGE:$(date +"%Y-%m-%d")/lean/targets/$TARGET/$SUBTARGET
+          rclone copy bin/targets $RCLONE_FIRMWARE:$(date +"%Y-%m-%d")/lean --exclude "packages/"
           echo "::warning file=Firmware-GoogleDrive::Download Link: https://drive.google.com/drive/folders/1SkNpJkhmG8veheL3ADVFoVTkvfhWjW0P"
 
       - name: Organize Files
