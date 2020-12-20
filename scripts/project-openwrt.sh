@@ -8,6 +8,13 @@
 # Modify default IP
 #sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
 
+mkdir package/community
+pushd package/community
+
+# Add luci-udptools
+git clone --depth=1 https://github.com/zcy85611/openwrt-luci-kcp-udp
+popd
+
 # Remove r8168 driver
 rm -rf package/ctcgfw/r8168
 
