@@ -11,6 +11,10 @@
 # Add luci-app-ssr-plus
 pushd package/lean
 git clone --depth=1 https://github.com/fw876/helloworld
+
+# Use fixed autocore for raspberrypi
+rm -rf autocore
+git clone --depth=1 https://github.com/SuLingGG/autocore
 popd
 
 # Clone community packages to package/community

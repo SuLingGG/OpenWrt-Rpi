@@ -23,9 +23,10 @@ popd
 pushd package/lean
 git clone --depth=1 https://github.com/SuLingGG/default-settings
 
-# Add Project OpenWrt's autocore
+# Use fixed autocore for raspberrypi
 rm -rf autocore
-svn co https://github.com/project-openwrt/openwrt/branches/master/package/lean/autocore
+git clone --depth=1 https://github.com/SuLingGG/autocore
+popd
 
 # Add luci-app-ssr-plus
 git clone --depth=1 https://github.com/fw876/helloworld
