@@ -11,7 +11,7 @@
 # Use fixed autocore for raspberrypi
 pushd package/lean
 rm -rf autocore
-git clone --depth=1 https://github.com/SuLingGG/autocore
+git clone --depth=1 https://github.com/SuLingGG/autocore -b lean
 popd
 
 mkdir package/community

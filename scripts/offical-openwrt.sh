@@ -25,7 +25,7 @@ git clone --depth=1 https://github.com/SuLingGG/default-settings
 
 # Use fixed autocore for raspberrypi
 rm -rf autocore
-git clone --depth=1 https://github.com/SuLingGG/autocore
+git clone --depth=1 https://github.com/SuLingGG/autocore -b master
 popd
 
 # Add luci-app-ssr-plus
