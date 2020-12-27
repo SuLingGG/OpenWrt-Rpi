@@ -84,7 +84,7 @@ jobs:
         ../$DIY_SH
         ../scripts/preset-clash-core.sh armv8
         ../scripts/preset-terminal-tools.sh
-        rm package/lean/autocore/files/arm/sbin
+        rm -f package/lean/autocore/files/arm/sbin/cpuinfo
         cp -f ../data/extra/cpuinfo package/lean/autocore/files/arm/sbin
 
     - name: Download Package
