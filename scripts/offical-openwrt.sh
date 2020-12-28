@@ -92,7 +92,7 @@ git clone --depth=1 https://github.com/zcy85611/openwrt-luci-kcp-udp
 
 # Add luci-app-dockerman
 git clone --depth=1 https://github.com/lisaac/luci-app-dockerman
-sed -i 's/+docker-ce/+docker/g' luci-app-dockerman/applications/luci-app-dockerman/Makefile
+sed -i 's/+docker-ce/+docker \\\n\t+dockerd/g' luci-app-dockerman/applications/luci-app-dockerman/Makefile
 git clone --depth=1 https://github.com/lisaac/luci-lib-docker
 
 # Add tmate
