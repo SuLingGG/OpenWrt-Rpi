@@ -120,11 +120,11 @@ rm -rf ./feeds/packages/net/kcptun
 sed -i 's/16384/65536/g' package/kernel/linux/files/sysctl-nf-conntrack.conf
 
 # Remove IPV6
-sed -i 's/ip6tables //g' include/target.mk
-sed -i 's/odhcpd-ipv6only odhcp6c //g' include/target.mk
+sed -i '/ip6tables/d' include/target.mk
+sed -i '/odhcp/d' include/target.mk
 
 # Change dnsmasq to dnsmasq-full
-sed -i 's/dnsmasq i/dnsmasq-full i/g' include/target.mk
+sed -i 's/dnsmasq/dnsmasq-full/g' include/target.mk
 
 # Add po2lmo
 git clone https://github.com/openwrt-dev/po2lmo.git
