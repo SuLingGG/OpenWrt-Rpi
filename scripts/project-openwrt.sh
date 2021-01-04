@@ -18,9 +18,6 @@ popd
 # Remove r8168 driver
 rm -rf package/ctcgfw/r8168
 
-# Mod zzz-default-settings
-sed -i "/commit luci/i\uci set luci.main.mediaurlbase='/luci-static/argon'" package/lean/default-settings/files/zzz-default-settings
-
 # Add po2lmo
 git clone https://github.com/openwrt-dev/po2lmo.git
 pushd po2lmo
