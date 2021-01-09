@@ -13,6 +13,9 @@ uci set luci.main.mediaurlbase='/luci-static/argon'
 rm -f /etc/rc.d/S98udptools || true
 
 # Try to execute init.sh (if exists)
-[ -e /boot/init.sh ] && bash /boot/init.sh
+
+if [ ! -f "/boot/init.sh" ]; then
+bash /boot/init.sh
+fi
 
 exit 0
