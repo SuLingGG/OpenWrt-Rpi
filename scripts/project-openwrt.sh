@@ -18,6 +18,12 @@ popd
 # Remove r8168 driver
 rm -rf package/ctcgfw/r8168
 
+# Mod zzz-default-settings
+pushd package/lean/default-settings/files
+export orig_version="$(cat "zzz-default-settings" | grep DISTRIB_REVISION= | awk -F "'" '{print $2}')"
+sed -i "s/${orig_version}/${orig_version} ($(date +"%Y-%m-%d"))/g" zzz-default-settings
+popd
+
 # Add po2lmo
 git clone https://github.com/openwrt-dev/po2lmo.git
 pushd po2lmo
