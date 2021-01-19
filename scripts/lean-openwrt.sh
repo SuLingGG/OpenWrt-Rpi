@@ -61,9 +61,6 @@ git clone --depth=1 https://github.com/lisaac/luci-lib-docker
 # Add luci-app-gowebdav
 git clone --depth=1 https://github.com/project-openwrt/openwrt-gowebdav
 
-# Add luci-app-jd-dailybonus
-git clone --depth=1 https://github.com/jerrykuku/luci-app-jd-dailybonus
-
 # Add luci-theme-argon
 git clone --depth=1 -b 18.06 https://github.com/jerrykuku/luci-theme-argon
 git clone --depth=1 https://github.com/jerrykuku/luci-app-argon-config
@@ -116,8 +113,6 @@ popd
 
 # Fix mt76 wireless driver
 pushd package/kernel/mt76
-rm -f Makefile
-wget https://raw.githubusercontent.com/openwrt/openwrt/master/package/kernel/mt76/Makefile
 sed -i '/mt7662u_rom_patch.bin/a\\techo mt76-usb disable_usb_sg=1 > $\(1\)\/etc\/modules.d\/mt76-usb' Makefile
 popd
 
