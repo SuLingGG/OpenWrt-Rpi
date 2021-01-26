@@ -134,7 +134,7 @@ jobs:
         sed -i "s/target\//$TARGET\//g" distfeeds*.conf
         sed -i "s/platform/$PLATFORM/g" distfeeds*.conf
         cd $OPENWRTROOT
-        echo "dtparam=i2c_arm=on,audio=on" >> target/linux/bcm27xx/$SUBTARGET/image/Makefile
+        echo "dtparam=i2c_arm=on,audio=on" >> target/linux/bcm27xx/$SUBTARGET/image/config.txt
         mkdir -p files/etc/uci-defaults/
         cp ../scripts/init-settings.sh files/etc/uci-defaults/99-init-settings
         mkdir -p files/etc/opkg
