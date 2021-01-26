@@ -1,6 +1,0 @@
-#!/bin/sh
-cpu_arch="$(cat "/proc/cpuinfo" | grep "model name" | sed -n "1p" | awk -F ': ' '{print $2}')"
-[ -z "${cpu_arch}" ] && cpu_arch="ARMv8 Processor"
-cpu_cores="$(cat "/proc/cpuinfo" | grep "processor" | wc -l)"
-sys_temp="$(awk "BEGIN{printf (\"%.1f\n\",$(cat /sys/class/thermal/thermal_zone0/temp)/1000) }")°C"
-echo -n "${cpu_arch} x ${cpu_cores} (${sys_temp})"
