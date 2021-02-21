@@ -6,11 +6,11 @@
 # Blog: https://p3terx.com
 #=================================================
 
-name: Build NanoPi R2S Lean's OpenWrt
+name: Build NanoPi R2S/R4S Lean's OpenWrt
 
 on:
   repository_dispatch:
-    types: [lean, r2s]
+    types: [lean, r2s, r4s]
   workflow_dispatch:
   schedule:
     - cron: 0 18 * * *
@@ -20,7 +20,7 @@ on:
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  CONFIG_FILE: config/lean/rockchip/r2s-lean-openwrt.config
+  CONFIG_FILE: config/lean/rockchip/rockchip-lean-openwrt.config
   DIY_SH: scripts/lean-openwrt.sh
   IPV6MOD_IN_FIRMWARE: true
   KMODS_IN_FIRMWARE: true
