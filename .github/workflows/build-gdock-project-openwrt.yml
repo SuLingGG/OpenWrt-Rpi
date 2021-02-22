@@ -217,6 +217,7 @@ jobs:
           rclone copy bin $RCLONE_PACKAGE:$(date +"%Y-%m-%d")/project --filter-from ../data/rclone/upload-rule.txt
           rclone copy bin/targets $RCLONE_FIRMWARE:$(date +"%Y-%m-%d")/project --exclude "packages/"
           echo "::warning file=Firmware-GoogleDrive::Download Link: https://drive.google.com/drive/folders/1_P2RoPbguY99qJxmCU4SKUgP8Kg0Xr03"
+          echo "::warning file=Firmware-MirrorSite::Download Link: http://cn.openwrt.cc:60080/firmware/$(date +"%Y-%m-%d")/project/$TARGET/$SUBTARGET"
 
       - name: Organize Files
         id: organize
