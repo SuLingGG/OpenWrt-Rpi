@@ -22,6 +22,7 @@
 - 若在固件使用前与使用过程中遇到任何功能问题，请先查阅本文所述内容，若仍没有得到满意答案，可以在此项目中提交 Issues 或通过以下方式咨询:
 - 联系方式: [QQ 群](https://jq.qq.com/?_wv=1027&k=5RkQisS) / [Telegram 群组](https://t.me/joinchat/Fc-MpxcaH3mEPA4yOMtJPQ) / [Telegram 频道](https://t.me/beautifulapps) (加群前请务必仔细阅读文档)
 - (其中 QQ 群为主力联系方式，Telegram 群组为备用联系方式，Telegram 频道将推送一些固件及文章更新内容的通知)
+- **如果你是具有丰富 OpenWrt 使用经验的用户，且追求精简与按需订制的固件，可以移步本项目的姊妹项目: [OpenWrt-Mini](https://github.com/SuLingGG/OpenWrt-Mini) 看看~**
 
 ## 设备支持情况
 
