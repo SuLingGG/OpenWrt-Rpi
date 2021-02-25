@@ -63,7 +63,6 @@ git clone --depth=1 https://github.com/rufengsuixing/luci-app-onliner
 
 # Add luci-app-adguardhome
 svn co https://github.com/immortalwrt/immortalwrt/trunk/package/ctcgfw/luci-app-adguardhome
-svn co https://github.com/immortalwrt/packages/trunk/net/adguardhome
 
 # Add openwrt-iptvhelper.
 git clone --depth=1 https://github.com/riverscn/openwrt-iptvhelper
@@ -95,10 +94,8 @@ git clone --depth=1 https://github.com/lisaac/luci-app-dockerman
 sed -i 's/+docker-ce/+docker \\\n\t+dockerd/g' luci-app-dockerman/applications/luci-app-dockerman/Makefile
 git clone --depth=1 https://github.com/lisaac/luci-lib-docker
 
-# Use immortalwrt's luci-app-netdata & netdata
-rm -rf ../../feeds/packages/admin/netdata
+# Use immortalwrt's luci-app-netdata
 svn co https://github.com/immortalwrt/immortalwrt/trunk/package/ntlf9t/luci-app-netdata
-svn co https://github.com/immortalwrt/packages/trunk/admin/netdata
 
 # Add tmate
 git clone --depth=1 https://github.com/project-openwrt/openwrt-tmate
@@ -109,6 +106,18 @@ git clone --depth=1 https://github.com/tindy2013/openwrt-subconverter
 # Add driver for rtl8821cu & rtl8812au-ac
 svn co https://github.com/project-openwrt/openwrt/branches/master/package/ctcgfw/rtl8812au-ac
 svn co https://github.com/project-openwrt/openwrt/branches/master/package/ctcgfw/rtl8821cu
+popd
+
+# Add adguardhome
+pushd feeds/packages/net
+rm -rf adguardhome
+svn co https://github.com/immortalwrt/packages/trunk/net/adguardhome
+popd
+
+# Add netdata
+pushd feeds/packages/admin
+rm -rf netdata
+svn co https://github.com/immortalwrt/packages/trunk/admin/netdata
 popd
 
 # Mod zzz-default-settings
