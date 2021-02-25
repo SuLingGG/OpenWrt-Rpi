@@ -62,7 +62,7 @@ git clone -b master --depth=1 https://github.com/vernesong/OpenClash
 git clone --depth=1 https://github.com/rufengsuixing/luci-app-onliner
 
 # Add luci-app-adguardhome
-svn co https://github.com/immortalwrt/immortalwrt/trunk/package/ctcgfw/luci-app-adguardhome
+git clone --depth=1 https://github.com/SuLingGG/luci-app-adguardhome
 
 # Add openwrt-iptvhelper.
 git clone --depth=1 https://github.com/riverscn/openwrt-iptvhelper
@@ -106,12 +106,6 @@ git clone --depth=1 https://github.com/tindy2013/openwrt-subconverter
 # Add driver for rtl8821cu & rtl8812au-ac
 svn co https://github.com/project-openwrt/openwrt/branches/master/package/ctcgfw/rtl8812au-ac
 svn co https://github.com/project-openwrt/openwrt/branches/master/package/ctcgfw/rtl8821cu
-popd
-
-# Add adguardhome
-pushd feeds/packages/net
-rm -rf adguardhome
-svn co https://github.com/immortalwrt/packages/trunk/net/adguardhome
 popd
 
 # Add netdata
