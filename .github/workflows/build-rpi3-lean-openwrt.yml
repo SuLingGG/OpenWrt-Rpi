@@ -80,6 +80,7 @@ jobs:
           [ -e files ] && mv files $OPENWRTROOT/files
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
           cat config/lean/bcm27xx/rpi-lean-extra.config >> $OPENWRTROOT/.config
+          chmod +x scripts/*.sh
           cd $OPENWRTROOT
           ../$DIY_SH
           ../scripts/preset-clash-core.sh armv8
@@ -222,6 +223,7 @@ jobs:
 
       - name: Pre Create Directory
         uses: JimCronqvist/action-ssh@master
+        if: env.GENERATE_STATUS == 'success' && env.REMOTE_PRIVATEKEY != ''
         with:
           hosts: ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_IP }}
           privateKey: ${{ secrets.REMOTE_PRIVATEKEY }}
@@ -233,7 +235,7 @@ jobs:
 
       - name: Deploy Files To Server
         uses: easingthemes/ssh-deploy@master
-        if: env.GENERATE_STATUS == 'success'
+        if: env.GENERATE_STATUS == 'success' && env.REMOTE_PRIVATEKEY != ''
         continue-on-error: true
         with:
           SSH_PRIVATE_KEY: ${{ secrets.REMOTE_PRIVATEKEY }}
@@ -245,7 +247,7 @@ jobs:
 
       - name: Deploy Files Archive
         uses: JimCronqvist/action-ssh@master
-        if: env.GENERATE_STATUS == 'success'
+        if: env.GENERATE_STATUS == 'success' && env.REMOTE_PRIVATEKEY != ''
         with:
           hosts: "${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_IP }}"
           privateKey: ${{ secrets.REMOTE_PRIVATEKEY }}
