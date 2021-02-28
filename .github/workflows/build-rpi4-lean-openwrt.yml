@@ -84,6 +84,7 @@ jobs:
           ../$DIY_SH
           ../scripts/preset-clash-core.sh armv8
           ../scripts/preset-terminal-tools.sh
+          ../scripts/enable-rpi4-wifi.sh
 
       - name: Download Package
         id: package
