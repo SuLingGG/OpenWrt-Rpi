@@ -68,8 +68,6 @@ jobs:
           cd openwrt
           echo "OPENWRTROOT=$PWD" >> $GITHUB_ENV
           echo "::set-output name=OPENWRTROOT::$(echo $PWD)"
-          chmod +x ../scripts/*.sh
-          ../scripts/complete-dependences.sh
           ./scripts/feeds update -a
 
       - name: Install Feeds
@@ -227,7 +225,7 @@ jobs:
           privateKey: ${{ secrets.REMOTE_PRIVATEKEY }}
           debug: false
           command: |
-            cd $WEBROOT
+            cd /data/dnmp/www/openwrt.cc
             mkdir -p releases/targets/$TARGET/$SUBTARGET
             mkdir -p archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/targets/$TARGET/$SUBTARGET
 
@@ -238,7 +236,7 @@ jobs:
         with:
           SSH_PRIVATE_KEY: ${{ secrets.REMOTE_PRIVATEKEY }}
           ARGS: "-avzr --exclude="
-          SOURCE: "${{ env.FIRMWARE }}/"
+          SOURCE: "openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
           REMOTE_HOST: ${{ secrets.REMOTE_IP }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           TARGET: "{{ env.WEBROOT }}/releases/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
@@ -251,8 +249,8 @@ jobs:
           privateKey: ${{ secrets.REMOTE_PRIVATEKEY }}
           debug: false
           command: |
-            mkdir -p $WEBROOT/archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/targets/$TARGET
-            cp -rf $WEBROOT/releases/targets/$TARGET/$SUBTARGET $WEBROOT/archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/targets/$TARGET/$SUBTARGET
+            mkdir -p /data/dnmp/www/openwrt.cc/archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/targets/$TARGET
+            cp -rf /data/dnmp/www/openwrt.cc/releases/targets/$TARGET/$SUBTARGET /data/dnmp/www/openwrt.cc/archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/targets/$TARGET/$SUBTARGET
 
       - name: Organize Files
         id: organize
