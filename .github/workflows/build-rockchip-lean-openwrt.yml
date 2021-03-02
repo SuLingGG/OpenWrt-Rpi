@@ -27,7 +27,6 @@ env:
   WEBROOT: /data/dnmp/www/openwrt.cc
   UPLOAD_RCLONE: true
   UPLOAD_WETRANSFER: true
-  UPLOAD_COWTRANSFER: true
   TZ: Asia/Shanghai
 
 jobs:
@@ -55,7 +54,7 @@ jobs:
           sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-1804) tree
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
-          sudo timedatectl set-timezone "$TZ"
+          sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
       - name: Clone Source Code
         run: |
@@ -219,40 +218,24 @@ jobs:
           rclone copy bin/targets $RCLONE_FIRMWARE:$(date +"%Y-%m-%d")/lean --exclude "packages/"
           echo "::warning file=Firmware-GoogleDrive::Download Link: https://drive.google.com/drive/folders/1_P2RoPbguY99qJxmCU4SKUgP8Kg0Xr03"
 
-      - name: Pre Create Directory
-        uses: JimCronqvist/action-ssh@master
-        if: env.GENERATE_STATUS == 'success' && env.REMOTE_PRIVATEKEY != ''
-        with:
-          hosts: ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_IP }}
-          privateKey: ${{ secrets.REMOTE_PRIVATEKEY }}
-          debug: false
-          command: |
-            cd /data/dnmp/www/openwrt.cc
-            mkdir -p releases/targets/$TARGET/$SUBTARGET
-            mkdir -p archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/targets/$TARGET/$SUBTARGET
-
       - name: Deploy Files To Server
-        uses: easingthemes/ssh-deploy@master
-        if: env.GENERATE_STATUS == 'success' && env.REMOTE_PRIVATEKEY != ''
-        continue-on-error: true
-        with:
-          SSH_PRIVATE_KEY: ${{ secrets.REMOTE_PRIVATEKEY }}
-          ARGS: "-avzr --exclude="
-          SOURCE: "openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
-          REMOTE_HOST: ${{ secrets.REMOTE_IP }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          TARGET: "{{ env.WEBROOT }}/releases/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
-
-      - name: Deploy Files Archive
-        uses: JimCronqvist/action-ssh@master
-        if: env.GENERATE_STATUS == 'success' && env.REMOTE_PRIVATEKEY != ''
-        with:
-          hosts: "${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_IP }}"
-          privateKey: ${{ secrets.REMOTE_PRIVATEKEY }}
-          debug: false
-          command: |
-            mkdir -p /data/dnmp/www/openwrt.cc/archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/targets/$TARGET
-            cp -rf /data/dnmp/www/openwrt.cc/releases/targets/$TARGET/$SUBTARGET /data/dnmp/www/openwrt.cc/archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/targets/$TARGET/$SUBTARGET
+        env:
+          HOST: "${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_IP }}"
+          SOURCE_TARGETS: "openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
+          DEST_TARGETS: "${{ env.WEBROOT }}/releases/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
+          REMOTE_PRIVATEKEY: "${{secrets.REMOTE_PRIVATEKEY}}"
+        if: env.GENERATE_STATUS == 'success' && env.REMOTE_PRIVATEKEY != null
+        run: |
+          mkdir -p ~/.ssh/
+          install -m 600 /dev/null ~/.ssh/id_rsa
+          echo "${{secrets.REMOTE_PRIVATEKEY}}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh -q -t -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $HOST \
+          bash -c "'mkdir -p $WEBROOT/releases/targets/$TARGET/$SUBTARGET'"
+          rsync -chav --delete -e 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no' $SOURCE_TARGETS $HOST:$DEST_TARGETS
+          ssh -q -t -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $HOST \
+          bash -c "'mkdir -p $WEBROOT/archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/targets/$TARGET && \
+          cp -rf $WEBROOT/releases/targets/$TARGET/$SUBTARGET $WEBROOT/archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/targets/$TARGET'"
 
       - name: Organize Files
         id: organize
@@ -261,23 +244,23 @@ jobs:
           cd ${FIRMWARE}
           rm -rf packages
           cd $OPENWRTROOT/bin/targets/$TARGET/
-          curl -fsSL git.io/file-transfer | sh
+          curl -sL https://git.io/file-transfer | bash -s beta
+          sudo mv transfer /usr/bin
+          sudo chmod +x /usr/bin/transfer
           df -hT $PWD
           echo "::set-output name=ORGANIZE_STATUS::success"
 
       - name: Upload Firmware To WeTransfer
         if: steps.organize.outputs.ORGANIZE_STATUS == 'success' && env.UPLOAD_WETRANSFER == 'true'
         run: |
-          cd $OPENWRTROOT/bin/targets/$TARGET/
-          ./transfer wet -s -p 16 --no-progress $FIRMWARE/*nanopi* 2>&1 | tee wetransfer-firmware.log
+          transfer wet -s -p 16 --no-progress $FIRMWARE/*nanopi* 2>&1 | tee wetransfer-firmware.log
           rm -rf *nanopi*
           echo "::warning file=Firmware-Wetransfer.com::$(cat wetransfer-firmware.log | grep https)"
 
       - name: Upload Other Files To WeTransfer
         if: steps.organize.outputs.ORGANIZE_STATUS == 'success' && env.UPLOAD_WETRANSFER == 'true'
         run: |
-          cd $OPENWRTROOT/bin/targets/$TARGET/
-          ./transfer wet -s -p 16 --no-progress $FIRMWARE 2>&1 | tee wetransfer-other.log
+          transfer wet -s -p 16 --no-progress $FIRMWARE 2>&1 | tee wetransfer-other.log
           echo "::warning file=Firmware-Wetransfer.com::$(cat wetransfer-other.log | grep https)"
 
       - name: Delete Artifacts
