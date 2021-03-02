@@ -197,6 +197,7 @@ jobs:
       - name: Deploy Packages-Server
         if: env.GENERATE_STATUS == 'success'
         run: |
+          sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
           mkdir -p server/web/snapshots/targets/$TARGET/$SUBTARGET
           cp -r $OPENWRTROOT/bin/packages server/web/snapshots
           cp -r $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET/packages server/web/snapshots/targets/$TARGET/$SUBTARGET
