@@ -239,6 +239,7 @@ jobs:
           ssh -q -t -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $HOST \
           bash -c "'mkdir -p $WEBROOT/archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/targets/$TARGET && \
           cp -rf $WEBROOT/releases/targets/$TARGET/$SUBTARGET $WEBROOT/archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/targets/$TARGET'"
+          echo "::warning file=Firmware-OpenWrt.cc::Download Link: https://openwrt.cc/releases/targets/$TARGET/$SUBTARGET"
 
       - name: Organize Files
         id: organize
