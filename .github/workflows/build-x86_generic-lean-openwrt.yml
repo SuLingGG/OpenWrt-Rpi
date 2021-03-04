@@ -254,9 +254,9 @@ jobs:
           mkdir -p uefi-images
           mkdir -p legacy-images
           mkdir -p other-files
-          mv $SUBTARGET/*combined-efi* uefi-images
-          mv $SUBTARGET/*combined* legacy-images
-          mv $SUBTARGET/* other-files
+          mv *combined-efi* uefi-images
+          mv *combined* legacy-images
+          mv * other-files
           curl -sL https://git.io/file-transfer | bash -s beta
           sudo mv transfer /usr/bin
           sudo chmod +x /usr/bin/transfer
