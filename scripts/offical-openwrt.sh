@@ -73,7 +73,8 @@ mkdir parted
 cp luci-app-diskman/Parted.Makefile parted/Makefile
 
 # Add luci-app-gowebdav
-git clone --depth=1 https://github.com/project-openwrt/openwrt-gowebdav
+svn co https://github.com/immortalwrt/immortalwrt/trunk/package/ctcgfw/gowebdav
+svn co https://github.com/immortalwrt/immortalwrt/trunk/package/ctcgfw/luci-app-gowebdav
 
 # Add luci-app-jd-dailybonus
 git clone --depth=1 https://github.com/jerrykuku/luci-app-jd-dailybonus
