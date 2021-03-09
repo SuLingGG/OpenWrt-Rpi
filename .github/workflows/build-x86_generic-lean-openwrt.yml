@@ -251,12 +251,12 @@ jobs:
         run: |
           cd ${FIRMWARE}
           rm -rf packages
-          mkdir -p uefi-images
-          mkdir -p legacy-images
-          mkdir -p other-files
-          mv *combined-efi* uefi-images
-          mv *combined* legacy-images
-          mv * other-files
+          mkdir -p $OPENWRTROOT/output/uefi-images
+          mkdir -p $OPENWRTROOT/output/legacy-images
+          mkdir -p $OPENWRTROOT/output/other-files
+          mv *combined-efi* $OPENWRTROOT/output/uefi-images
+          mv *combined* $OPENWRTROOT/output/legacy-images
+          mv * $OPENWRTROOT/output/other-files
           curl -sL https://git.io/file-transfer | bash -s beta
           sudo mv transfer /usr/bin
           sudo chmod +x /usr/bin/transfer
@@ -267,21 +267,21 @@ jobs:
         if: steps.organize.outputs.ORGANIZE_STATUS == 'success' && env.UPLOAD_WETRANSFER == 'true'
         run: |
           cd $FIRMWARE
-          transfer wet -s -p 16 --no-progress ./uefi-images 2>&1 | tee wetransfer-uefi.log
+          transfer wet -s -p 16 --no-progress $OPENWRTROOT/output/uefi-images 2>&1 | tee wetransfer-uefi.log
           echo "::warning file=Wetransfer-UEFI=::$(cat wetransfer-uefi.log | grep https)"
 
       - name: Upload Legacy Firmwares To WeTransfer
         if: steps.organize.outputs.ORGANIZE_STATUS == 'success' && env.UPLOAD_WETRANSFER == 'true'
         run: |
           cd $FIRMWARE
-          transfer wet -s -p 16 --no-progress ./legacy-images 2>&1 | tee wetransfer-legacy.log
+          transfer wet -s -p 16 --no-progress $OPENWRTROOT/output/legacy-images 2>&1 | tee wetransfer-legacy.log
           echo "::warning file=Wetransfer-Legacy::$(cat wetransfer-legacy.log | grep https)"
 
       - name: Upload Other Files To WeTransfer
         if: steps.organize.outputs.ORGANIZE_STATUS == 'success' && env.UPLOAD_WETRANSFER == 'true'
         run: |
           cd $FIRMWARE
-          transfer wet -s -p 16 --no-progress ./other-files 2>&1 | tee wetransfer-other.log
+          transfer wet -s -p 16 --no-progress $OPENWRTROOT/output/other-files 2>&1 | tee wetransfer-other.log
           echo "::warning file=Wetransfer-OtherFiles::$(cat wetransfer-other.log | grep https)"
 
       - name: Delete Artifacts
