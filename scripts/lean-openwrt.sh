@@ -58,7 +58,8 @@ git clone --depth=1 https://github.com/KFERMercer/luci-app-dockerman
 git clone --depth=1 https://github.com/lisaac/luci-lib-docker
 
 # Add luci-app-gowebdav
-git clone --depth=1 https://github.com/immortalwrt/packages/branches/openwrt-18.06/net/gowebdav
+svn co https://github.com/immortalwrt/luci/branches/openwrt-18.06/applications/luci-app-gowebdav
+svn co https://github.com/immortalwrt/packages/branches/openwrt-18.06/net/gowebdav
 
 # Add luci-theme-argon
 git clone --depth=1 -b 18.06 https://github.com/jerrykuku/luci-theme-argon
