@@ -25,7 +25,7 @@ git clone --depth=1 https://github.com/SuLingGG/default-settings
 
 # Add Project OpenWrt's autocore
 rm -rf autocore
-svn co https://github.com/project-openwrt/openwrt/branches/master/package/lean/autocore
+svn co https://github.com/immortalwrt/immortalwrt/branches/openwrt-18.06-k5.4/package/lean/autocore
 
 # Add luci-app-ssr-plus
 git clone --depth=1 https://github.com/fw876/helloworld
@@ -73,8 +73,8 @@ mkdir parted
 cp luci-app-diskman/Parted.Makefile parted/Makefile
 
 # Add luci-app-gowebdav
-svn co https://github.com/immortalwrt/immortalwrt/trunk/package/ctcgfw/gowebdav
-svn co https://github.com/immortalwrt/immortalwrt/trunk/package/ctcgfw/luci-app-gowebdav
+# svn co https://github.com/immortalwrt/immortalwrt/trunk/package/ctcgfw/gowebdav
+# svn co https://github.com/immortalwrt/immortalwrt/trunk/package/ctcgfw/luci-app-gowebdav
 
 # Add luci-app-jd-dailybonus
 git clone --depth=1 https://github.com/jerrykuku/luci-app-jd-dailybonus
@@ -85,7 +85,7 @@ git clone --depth=1 https://github.com/jerrykuku/luci-app-argon-config
 
 # Add smartdns
 svn co https://github.com/pymumu/smartdns/trunk/package/openwrt ../smartdns
-svn co https://github.com/project-openwrt/openwrt/trunk/package/ntlf9t/luci-app-smartdns ../luci-app-smartdns
+svn co https://github.com/immortalwrt/immortalwrt/branches/openwrt-18.06-k5.4/package/ntlf9t/luci-app-smartdns ../luci-app-smartdns
 
 # Add luci-udptools
 git clone --depth=1 https://github.com/zcy85611/openwrt-luci-kcp-udp
@@ -99,20 +99,20 @@ git clone --depth=1 https://github.com/lisaac/luci-lib-docker
 svn co https://github.com/immortalwrt/immortalwrt/trunk/package/ntlf9t/luci-app-netdata
 
 # Add tmate
-git clone --depth=1 https://github.com/project-openwrt/openwrt-tmate
+git clone --depth=1 https://github.com/immortalwrt/packages/branches/master/net/tmate
 
 # Add subconverter
 git clone --depth=1 https://github.com/tindy2013/openwrt-subconverter
 
 # Add driver for rtl8821cu & rtl8812au-ac
-svn co https://github.com/project-openwrt/openwrt/branches/master/package/ctcgfw/rtl8812au-ac
-svn co https://github.com/project-openwrt/openwrt/branches/master/package/ctcgfw/rtl8821cu
+svn co https://github.com/immortalwrt/immortalwrt/branches/master/package/kernel/rtl8812au-ac
+svn co https://github.com/immortalwrt/immortalwrt/branches/master/package/kernel/rtl8821cu
 popd
 
 # Add netdata
 pushd feeds/packages/admin
 rm -rf netdata
-svn co https://github.com/immortalwrt/packages/trunk/admin/netdata
+svn co https://github.com/immortalwrt/packages/branches/master/admin/netdata
 popd
 
 # Mod zzz-default-settings
