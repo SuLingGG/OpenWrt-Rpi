@@ -16,7 +16,7 @@ popd
 # Copy Lean's packages to ./package/lean.
 mkdir package/lean
 pushd package/lede/package/lean
-cp -r {adbyby,automount,baidupcs-web,coremark,ddns-scripts_aliyun,ddns-scripts_dnspod,dns2socks,ipt2socks,ipv6-helper,kcptun,luci-app-adbyby-plus,luci-app-arpbind,luci-app-autoreboot,luci-app-baidupcs-web,luci-app-cifs-mount,luci-app-cpufreq,luci-app-familycloud,luci-app-filetransfer,luci-app-frpc,luci-app-n2n_v2,luci-app-nfs,luci-app-nft-qos,luci-app-nps,luci-app-ps3netsrv,luci-app-softethervpn,luci-app-usb-printer,luci-app-unblockmusic,luci-app-verysync,luci-app-vsftpd,luci-app-webadmin,luci-app-xlnetacc,luci-lib-fs,microsocks,n2n_v2,npc,pdnsd-alt,proxychains-ng,ps3netsrv,redsocks2,shadowsocksr-libev,simple-obfs,softethervpn5,srelay,tcpping,trojan,UnblockNeteaseMusic,UnblockNeteaseMusicGo,uugamebooster,v2ray,v2ray-plugin,verysync,vsftpd-alt,xray} "../../../lean"
+cp -r {adbyby,automount,baidupcs-web,coremark,ddns-scripts_aliyun,ddns-scripts_dnspod,dns2socks,ipt2socks,ipv6-helper,kcptun,luci-app-adbyby-plus,luci-app-arpbind,luci-app-autoreboot,luci-app-baidupcs-web,luci-app-cifs-mount,luci-app-cpufreq,luci-app-familycloud,luci-app-filetransfer,luci-app-frpc,luci-app-n2n_v2,luci-app-nfs,luci-app-nft-qos,luci-app-nps,luci-app-ps3netsrv,luci-app-softethervpn,luci-app-usb-printer,luci-app-unblockmusic,luci-app-verysync,luci-app-vsftpd,luci-app-webadmin,luci-app-xlnetacc,luci-lib-fs,microsocks,n2n_v2,npc,pdnsd-alt,proxychains-ng,ps3netsrv,redsocks2,shadowsocksr-libev,simple-obfs,softethervpn5,srelay,tcpping,trojan,UnblockNeteaseMusic,UnblockNeteaseMusicGo,uugamebooster,v2ray-plugin,verysync,vsftpd-alt} "../../../lean"
 popd
 
 # Default settings
@@ -30,7 +30,6 @@ svn co https://github.com/immortalwrt/immortalwrt/branches/openwrt-18.06-k5.4/pa
 # Add luci-app-ssr-plus
 git clone --depth=1 https://github.com/fw876/helloworld
 rm -rf helloworld/luci-app-ssr-plus/po/zh_Hans
-
 popd
 
 # Clean Lean's code
@@ -96,10 +95,10 @@ sed -i 's/+docker-ce/+docker \\\n\t+dockerd/g' luci-app-dockerman/applications/l
 git clone --depth=1 https://github.com/lisaac/luci-lib-docker
 
 # Use immortalwrt's luci-app-netdata
-svn co https://github.com/immortalwrt/immortalwrt/trunk/package/ntlf9t/luci-app-netdata
+svn co https://github.com/immortalwrt/packages/trunk/admin/netdata
 
 # Add tmate
-git clone --depth=1 https://github.com/immortalwrt/packages/branches/master/net/tmate
+svn co https://github.com/immortalwrt/packages/trunk/net/tmate
 
 # Add subconverter
 git clone --depth=1 https://github.com/tindy2013/openwrt-subconverter
@@ -135,11 +134,6 @@ sed -i '/odhcp/d' include/target.mk
 
 # Change dnsmasq to dnsmasq-full
 sed -i 's/dnsmasq/dnsmasq-full/g' include/target.mk
-
-# Add po2lmo
-git clone https://github.com/openwrt-dev/po2lmo.git
-pushd po2lmo
-make && sudo make install
 popd
 
 # Fix mt76 wireless driver
