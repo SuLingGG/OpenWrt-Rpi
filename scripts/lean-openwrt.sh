@@ -71,7 +71,7 @@ rm -rf ../lean/luci-app-netdata
 svn co https://github.com/immortalwrt/immortalwrt/branches/openwrt-18.06-k5.4/package/ntlf9t/luci-app-netdata
 
 # Add tmate
-git clone --depth=1 https://github.com/immortalwrt/packages/branches/openwrt-18.06/net/tmate
+svn co https://github.com/immortalwrt/packages/branches/openwrt-18.06/net/tmate
 
 # Add subconverter
 git clone --depth=1 https://github.com/tindy2013/openwrt-subconverter
@@ -131,12 +131,6 @@ popd
 # Fix mt76 wireless driver
 pushd package/kernel/mt76
 sed -i '/mt7662u_rom_patch.bin/a\\techo mt76-usb disable_usb_sg=1 > $\(1\)\/etc\/modules.d\/mt76-usb' Makefile
-popd
-
-# Add po2lmo
-git clone https://github.com/openwrt-dev/po2lmo.git
-pushd po2lmo
-make && sudo make install
 popd
 
 # Change default shell to zsh
