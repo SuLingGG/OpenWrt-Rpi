@@ -72,6 +72,7 @@ svn co https://github.com/immortalwrt/immortalwrt/branches/openwrt-18.06-k5.4/pa
 
 # Add tmate
 svn co https://github.com/immortalwrt/packages/branches/openwrt-18.06/net/tmate
+svn co https://github.com/immortalwrt/packages/branches/openwrt-18.06/libs/msgpack-c
 
 # Add subconverter
 git clone --depth=1 https://github.com/tindy2013/openwrt-subconverter
