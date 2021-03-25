@@ -99,6 +99,7 @@ svn co https://github.com/immortalwrt/packages/trunk/admin/netdata
 
 # Add tmate
 svn co https://github.com/immortalwrt/packages/trunk/net/tmate
+svn co https://github.com/immortalwrt/packages/trunk/libs/msgpack-c
 
 # Add subconverter
 git clone --depth=1 https://github.com/tindy2013/openwrt-subconverter
