@@ -27,6 +27,7 @@ svn co https://github.com/immortalwrt/packages/branches/$1/net/smartdns packages
 
 # Add tmate
 svn co https://github.com/immortalwrt/packages/branches/$1/net/tmate packages/net/tmate
+svn co https://github.com/immortalwrt/packages/branches/openwrt-18.06/libs/msgpack-c packages/libs/msgpack-c
 
 # Add gotop
 svn co https://github.com/immortalwrt/packages/branches/$1/admin/gotop packages/admin/gotop
