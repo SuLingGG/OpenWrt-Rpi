@@ -67,7 +67,8 @@ jobs:
           cd openwrt
           echo "OPENWRTROOT=$PWD" >> $GITHUB_ENV
           echo "::set-output name=OPENWRTROOT::$(echo $PWD)"
-          ./scripts/feeds update -a
+          chmod +x ../scripts/*.sh
+          ../scripts/hook-feeds.sh openwrt-18.06
 
       - name: Install Feeds
         run: |
@@ -78,7 +79,6 @@ jobs:
         run: |
           [ -e files ] && mv files $OPENWRTROOT/files
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
-          chmod +x scripts/*.sh
           cd $OPENWRTROOT
           ../$DIY_SH
           ../scripts/preset-clash-core.sh armv8

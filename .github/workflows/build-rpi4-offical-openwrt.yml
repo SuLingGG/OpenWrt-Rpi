@@ -68,7 +68,8 @@ jobs:
           echo "OPENWRTROOT=$PWD" >> $GITHUB_ENV
           sed -i 's/luci.git/luci.git\;openwrt-19.07/g' feeds.conf.default
           echo "::set-output name=OPENWRTROOT::$(echo $PWD)"
-          ./scripts/feeds update -a
+          chmod +x ../scripts/*.sh
+          ../scripts/hook-feeds.sh master
 
       - name: Install Feeds
         run: |
@@ -80,7 +81,6 @@ jobs:
           [ -e files ] && mv files $OPENWRTROOT/files
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
           cat config/offical/bcm27xx/rpi-offical-extra.config >> $OPENWRTROOT/.config
-          chmod +x scripts/*.sh
           cd $OPENWRTROOT
           ../$DIY_SH
           ../scripts/preset-clash-core.sh armv8

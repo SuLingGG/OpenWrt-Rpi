@@ -71,10 +71,6 @@ git clone --depth=1 https://github.com/SuLingGG/luci-app-diskman
 mkdir parted
 cp luci-app-diskman/Parted.Makefile parted/Makefile
 
-# Add luci-app-gowebdav
-# svn co https://github.com/immortalwrt/immortalwrt/trunk/package/ctcgfw/gowebdav
-# svn co https://github.com/immortalwrt/immortalwrt/trunk/package/ctcgfw/luci-app-gowebdav
-
 # Add luci-app-jd-dailybonus
 git clone --depth=1 https://github.com/jerrykuku/luci-app-jd-dailybonus
 
@@ -83,7 +79,6 @@ git clone --depth=1 https://github.com/jerrykuku/luci-theme-argon
 git clone --depth=1 https://github.com/jerrykuku/luci-app-argon-config
 
 # Add smartdns
-svn co https://github.com/pymumu/smartdns/trunk/package/openwrt ../smartdns
 svn co https://github.com/immortalwrt/immortalwrt/branches/openwrt-18.06-k5.4/package/ntlf9t/luci-app-smartdns ../luci-app-smartdns
 
 # Add luci-udptools
@@ -96,9 +91,6 @@ git clone --depth=1 https://github.com/lisaac/luci-lib-docker
 
 # Use immortalwrt's luci-app-netdata
 svn co https://github.com/immortalwrt/packages/trunk/admin/netdata
-
-# Add tmate
-svn co https://github.com/immortalwrt/packages/trunk/net/tmate
 
 # Add subconverter
 git clone --depth=1 https://github.com/tindy2013/openwrt-subconverter
