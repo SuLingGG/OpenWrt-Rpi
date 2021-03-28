@@ -60,9 +60,6 @@ git clone -b master --depth=1 https://github.com/vernesong/OpenClash
 # Add luci-app-onliner. (need luci-app-nlbwmon)
 git clone --depth=1 https://github.com/rufengsuixing/luci-app-onliner
 
-# Add luci-app-adguardhome
-git clone --depth=1 https://github.com/SuLingGG/luci-app-adguardhome
-
 # Add openwrt-iptvhelper.
 git clone --depth=1 https://github.com/riverscn/openwrt-iptvhelper
 
