@@ -33,6 +33,9 @@ svn co https://github.com/immortalwrt/packages/trunk/libs/msgpack-c packages/lib
 svn co https://github.com/immortalwrt/packages/branches/openwrt-18.06/admin/gotop packages/admin/gotop
 popd
 
+# Add minieap
+svn co https://github.com/immortalwrt/packages/trunk/net/minieap packages/net/minieap
+
 # Set to local feeds
 pushd customfeeds/packages
 export packages_feed="$(pwd)"
