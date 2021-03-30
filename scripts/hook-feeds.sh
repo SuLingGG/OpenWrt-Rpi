@@ -1,7 +1,6 @@
 #!/bin/bash
 #=================================================
 # File name: hook-feeds.sh
-# Usage: "hook-feeds.sh $branch" | example: "hook-feeds.sh master" or "hook-feeds.sh openwrt-18.06"
 # Author: SuLingGG
 # Blog: https://mlapp.cn
 #=================================================
@@ -15,26 +14,28 @@ git clone --depth=1 https://github.com/coolsnowwolf/luci customfeeds/luci
 pushd customfeeds
 
 # Add luci-app-adguardhome
-svn co https://github.com/immortalwrt/luci/branches/$1/applications/luci-app-adguardhome luci/applications/luci-app-adguardhome
-svn co https://github.com/immortalwrt/packages/branches/$1/net/adguardhome packages/net/adguardhome
+svn co https://github.com/immortalwrt/luci/trunk/applications/luci-app-adguardhome luci/applications/luci-app-adguardhome
+svn co https://github.com/immortalwrt/packages/trunk/net/adguardhome packages/net/adguardhome
+svn co https://github.com/immortalwrt/packages/trunk/lang/node-yarn packages/lang/node-yarn
+svn co https://github.com/immortalwrt/packages/trunk/devel/packr packages/devel/packr
 
 # Add luci-app-gowebdav
-svn co https://github.com/immortalwrt/luci/branches/$1/applications/luci-app-gowebdav luci/applications/luci-app-gowebdav
-svn co https://github.com/immortalwrt/packages/branches/$1/net/gowebdav packages/net/gowebdav
+svn co https://github.com/immortalwrt/luci/trunk/applications/luci-app-gowebdav luci/applications/luci-app-gowebdav
+svn co https://github.com/immortalwrt/packages/trunk/net/gowebdav packages/net/gowebdav
 
 # Add netdata
 rm -rf packages/admin/netdata
 svn co https://github.com/immortalwrt/packages/trunk/admin/netdata packages/admin/netdata
 
 # Add smartdns
-svn co https://github.com/immortalwrt/packages/branches/$1/net/smartdns packages/net/smartdns
+svn co https://github.com/immortalwrt/packages/trunk/net/smartdns packages/net/smartdns
 
 # Add tmate
-svn co https://github.com/immortalwrt/packages/branches/$1/net/tmate packages/net/tmate
-svn co https://github.com/immortalwrt/packages/branches$1/libs/msgpack-c packages/libs/msgpack-c
+svn co https://github.com/immortalwrt/packages/trunk/net/tmate packages/net/tmate
+svn co https://github.com/immortalwrt/packages/trunk/libs/msgpack-c packages/libs/msgpack-c
 
 # Add gotop
-svn co https://github.com/immortalwrt/packages/branches/$1/admin/gotop packages/admin/gotop
+svn co https://github.com/immortalwrt/packages/branches/openwrt-18.06/admin/gotop packages/admin/gotop
 popd
 
 # Set to local feeds

@@ -68,7 +68,7 @@ jobs:
           echo "OPENWRTROOT=$PWD" >> $GITHUB_ENV
           echo "::set-output name=OPENWRTROOT::$(echo $PWD)"
           chmod +x ../scripts/*.sh
-          ../scripts/hook-feeds.sh openwrt-18.06
+          ../scripts/hook-feeds.sh
 
       - name: Install Feeds
         run: |
