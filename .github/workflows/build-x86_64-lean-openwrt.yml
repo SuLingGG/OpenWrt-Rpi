@@ -67,6 +67,9 @@ jobs:
           cd openwrt
           echo "OPENWRTROOT=$PWD" >> $GITHUB_ENV
           echo "::set-output name=OPENWRTROOT::$(echo $PWD)"
+          mkdir customfeeds
+          git clone --depth=1 https://github.com/coolsnowwolf/packages customfeeds/packages
+          git clone --depth=1 https://github.com/coolsnowwolf/luci customfeeds/luci
           chmod +x ../scripts/*.sh
           ../scripts/hook-feeds.sh
 
