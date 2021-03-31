@@ -75,9 +75,6 @@ git clone --depth=1 https://github.com/jerrykuku/luci-app-jd-dailybonus
 git clone --depth=1 https://github.com/jerrykuku/luci-theme-argon
 git clone --depth=1 https://github.com/jerrykuku/luci-app-argon-config
 
-# Add smartdns
-svn co https://github.com/immortalwrt/immortalwrt/branches/openwrt-18.06-k5.4/package/ntlf9t/luci-app-smartdns ../luci-app-smartdns
-
 # Add luci-udptools
 git clone --depth=1 https://github.com/zcy85611/openwrt-luci-kcp-udp
 
@@ -85,9 +82,6 @@ git clone --depth=1 https://github.com/zcy85611/openwrt-luci-kcp-udp
 git clone --depth=1 https://github.com/lisaac/luci-app-dockerman
 sed -i 's/+docker-ce/+docker \\\n\t+dockerd/g' luci-app-dockerman/applications/luci-app-dockerman/Makefile
 git clone --depth=1 https://github.com/lisaac/luci-lib-docker
-
-# Use immortalwrt's luci-app-netdata
-svn co https://github.com/immortalwrt/packages/trunk/admin/netdata
 
 # Add subconverter
 git clone --depth=1 https://github.com/tindy2013/openwrt-subconverter
