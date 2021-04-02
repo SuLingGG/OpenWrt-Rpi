@@ -1,12 +1,9 @@
 # OpenWrt-Rpi
 Raspberry Pi 4 OpenWrt Compile Project. (Based on [SuLingGG Daily Github Action](https://github.com/SuLingGG/OpenWrt-Rpi))
 
-
-### Firmware Features
-
-<details><summary>Main features (click to show)</summary>
+<details><summary>Firmware features (click to show)</summary>
 <p>
-
+Main features :
 - Contains rich OpenWrt original LuCI plug-ins and community LuCI plug-ins
 - Integrate most wired, wireless, 3G/4G network card drivers, no need to install additional
 - Pre-install the latest version of Clash core and oh-my-zsh to minimize configuration costs
