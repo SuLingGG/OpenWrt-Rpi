@@ -6,7 +6,7 @@
 # Blog: https://p3terx.com
 #=================================================
 
-name: Build Raspberry Pi 4 Lean's OpenWrt
+name: Build Raspberry Pi 4 Lean's OpenWrt (FW Only)
 
 on:
   repository_dispatch:
