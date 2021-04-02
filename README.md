@@ -3,7 +3,10 @@ Raspberry Pi 4 OpenWrt Compile Project. (Based on [SuLingGG Daily Github Action]
 
 <details><summary>Firmware features (click to show)</summary>
 <p>
+
+
 Main features :
+
 - Contains rich OpenWrt original LuCI plug-ins and community LuCI plug-ins
 - Integrate most wired, wireless, 3G/4G network card drivers, no need to install additional
 - Pre-install the latest version of Clash core and oh-my-zsh to minimize configuration costs
@@ -38,6 +41,7 @@ Note: The advertisement blocking effect at the router level is not good. If you 
 - Support multi-line multi-dial, load balancing, MWAN3 shunt assistant.
 
 My additional setup :
+
 - Added speedtest and neofetch command
 - Removed all languages except English
 
