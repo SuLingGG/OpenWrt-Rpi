@@ -152,19 +152,22 @@ jobs:
           name: bin-archive
           path: openwrt/bin
 
-      - name: Organize files
+      - name: Organize Files
         id: organize
-        if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+        if: env.GENERATE_STATUS == 'success'
         run: |
-          cd openwrt/bin/targets/*/*
+          cd ${FIRMWARE}
           rm -rf packages
-          echo "FIRMWARE=$PWD" >> $GITHUB_ENV
-          echo "::set-output name=status::success"
+          cd $OPENWRTROOT/bin/targets/$TARGET/
+          curl -sL https://git.io/file-transfer | bash -s beta
+          sudo mv transfer /usr/bin
+          sudo chmod +x /usr/bin/transfer
+          df -hT $PWD
           echo "::set-output name=ORGANIZE_STATUS::success"
 
       - name: Upload firmware directory
         uses: actions/upload-artifact@main
-        if: steps.organize.outputs.status == 'success' && !cancelled()
+        if: steps.organize.outputs.ORGANIZE_STATUS == 'success' && env.UPLOAD_RELEASE == 'true'
         with:
           name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
           path: ${{ env.FIRMWARE }}
