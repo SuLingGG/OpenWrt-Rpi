@@ -202,57 +202,57 @@ jobs:
           name: bin-archive
           path: openwrt/bin
 
-        - name: Organize files
-          id: organize
-          if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
-          run: |
-            cd openwrt/bin/targets/*/*
-            rm -rf packages
-            echo "FIRMWARE=$PWD" >> $GITHUB_ENV
-            echo "::set-output name=status::success"
-            echo "::set-output name=ORGANIZE_STATUS::success"
+      - name: Organize files
+        id: organize
+        if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+        run: |
+          cd openwrt/bin/targets/*/*
+          rm -rf packages
+          echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+          echo "::set-output name=status::success"
+          echo "::set-output name=ORGANIZE_STATUS::success"
 
-        - name: Upload firmware directory
-          uses: actions/upload-artifact@main
-          if: steps.organize.outputs.status == 'success' && !cancelled()
-          with:
-            name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-            path: ${{ env.FIRMWARE }}
+      - name: Upload firmware directory
+        uses: actions/upload-artifact@main
+        if: steps.organize.outputs.status == 'success' && !cancelled()
+        with:
+          name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+          path: ${{ env.FIRMWARE }}
 
-        - name: Generate release tag
-          id: tag
-          if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-          run: |
-            echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")"
-            touch release.txt
-            [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
-            [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
-            echo "::set-output name=status::success"
+      - name: Generate release tag
+        id: tag
+        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+        run: |
+          echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")"
+          touch release.txt
+          [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
+          [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
+          echo "::set-output name=status::success"
 
-        - name: Upload firmware to release
-          uses: softprops/action-gh-release@v1
-          if: steps.tag.outputs.status == 'success' && !cancelled()
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-            tag_name: ${{ steps.tag.outputs.release_tag }}
-            body_path: release.txt
-            files: ${{ env.FIRMWARE }}/*
+      - name: Upload firmware to release
+        uses: softprops/action-gh-release@v1
+        if: steps.tag.outputs.status == 'success' && !cancelled()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          body_path: release.txt
+          files: ${{ env.FIRMWARE }}/*
 
-        - name: Delete workflow runs
-          uses: GitRML/delete-workflow-runs@main
-          with:
-            retain_days: 1
-            keep_minimum_runs: 3
+      - name: Delete workflow runs
+        uses: GitRML/delete-workflow-runs@main
+        with:
+          retain_days: 1
+          keep_minimum_runs: 3
 
-        - name: Remove old Releases
-          uses: dev-drprasad/delete-older-releases@v0.1.0
-          if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-          with:
-            keep_latest: 3
-            delete_tags: true
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Remove old Releases
+        uses: dev-drprasad/delete-older-releases@v0.1.0
+        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+        with:
+          keep_latest: 3
+          delete_tags: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Delete Artifacts
         uses: geekyeggo/delete-artifact@v1
