@@ -101,3 +101,9 @@ popd
 
 # Change default shell to zsh
 sed -i 's/\/bin\/ash/\/usr\/bin\/zsh/g' package/base-files/files/etc/passwd
+
+#add neofetch
+wget -O package/base-files/files/bin/neofetch "https://raw.githubusercontent.com/helmiau/openwrt-config/main/neopet" && chmod +x package/base-files/files/bin/neofetch
+
+#add speedtest
+wget -O package/base-files/files/bin/speedtest "https://raw.githubusercontent.com/vitoharhari/speedtest/main/speedtest" && chmod +x package/base-files/files/bin/speedtest
