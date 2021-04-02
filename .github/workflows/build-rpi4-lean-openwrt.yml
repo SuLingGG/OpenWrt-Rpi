@@ -25,8 +25,12 @@ env:
   IPV6MOD_IN_FIRMWARE: true
   KMODS_IN_FIRMWARE: true
   WEBROOT: /data/dnmp/www/openwrt.cc
-  UPLOAD_RCLONE: true
-  UPLOAD_WETRANSFER: true
+  UPLOAD_FIRMWARE: true
+  UPLOAD_BIN_DIR: false
+  UPLOAD_RELEASE: true
+  UPLOAD_RCLONE: false
+  UPLOAD_WETRANSFER: false
+  UPLOAD_COWTRANSFER: false
   TZ: Asia/Shanghai
 
 jobs:
