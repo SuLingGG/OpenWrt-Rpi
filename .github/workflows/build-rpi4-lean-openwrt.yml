@@ -215,12 +215,6 @@ jobs:
           df -hT $PWD
           echo "::set-output name=ORGANIZE_STATUS::success"
 
-      - name: Upload Firmware To WeTransfer
-        if: steps.organize.outputs.ORGANIZE_STATUS == 'success' && env.UPLOAD_WETRANSFER == 'true'
-        run: |
-          transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
-          echo "::warning file=Firmware-Wetransfer.com::$(cat wetransfer.log | grep https)"
-
       - name: Delete Artifacts
         uses: geekyeggo/delete-artifact@v1
         with:
