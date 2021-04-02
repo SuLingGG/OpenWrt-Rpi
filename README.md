@@ -44,6 +44,9 @@ My additional setup :
 
 - Added speedtest and neofetch command
 - Removed all languages except English
+- Set English as default language
+- Set timezone to WIB-7 Asia/Jakarta
+- Add shutdown, poweroff, reboot commands
 
 
 </p>
