@@ -1,17 +1,40 @@
-name: Delete Workflow Runs
+name: Delete older workflow and older releases
 
 on:
+  repository_dispatch:
   workflow_dispatch:
-
   schedule:
     - cron: "0 0 * * *"
+
+env:
+  DELETE_RELEASE: true
+  DELETE_ARTIFACTS: true
+  KEEP_DAY: 3
+  KEEP_MININUM_RUNS: 0
+  KEEP_MININUM_RELEASE: 4
 
 jobs:
   del_runs:
     runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
     steps:
-      - name: Delete Workflow Runs
-        uses: GitRML/delete-workflow-runs@main
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          retain_days: 7
+    - name: Checkout
+      uses: actions/checkout@main
+
+    - name: Delete older releases
+      uses: dev-drprasad/delete-older-releases@master
+      if: env.DELETE_RELEASE == 'true'
+      with:
+        keep_latest: ${{ env.KEEP_MININUM_RELEASE }}
+        delete_tags: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Delete older workflow runs and artifacts
+      uses: Mattraks/delete-workflow-runs@main
+      if: env.DELETE_ARTIFACTS == 'true'
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: ${{ github.repository }}
+        retain_days: ${{ env.KEEP_DAY }}
+        keep_minimum_runs: ${{ env.KEEP_MININUM_RUNS }}
