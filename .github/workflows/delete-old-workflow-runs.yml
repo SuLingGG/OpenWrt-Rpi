@@ -14,4 +14,4 @@ jobs:
         uses: GitRML/delete-workflow-runs@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          retain_days: 15
+          retain_days: 7
