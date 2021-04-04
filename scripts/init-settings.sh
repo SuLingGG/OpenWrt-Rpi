@@ -21,6 +21,7 @@ uci set system.@system[0].zonename='Asia/Jakarta'
 
 # Set default language to Auto
 uci set luci.main.lang='auto'
+sed -i "s/lang 'zh_cn'/lang 'auto'/g" package/base-files/files/etc/config/luci
 
 # Add shutdown, poweroff, reboot commands
 uci set luci.@command[0]=command
@@ -41,6 +42,9 @@ uci set luci.@command[4].command='/etc/init.d/shadowsocksr stop'
 uci set luci.@command[5]=command
 uci set luci.@command[5].name='Restart Load Balance'
 uci set luci.@command[5].command='mwan3 restart'
+
+#uci commit
+uci commit
 
 # Disable autostart by default for some packages
 cd /etc/rc.d
