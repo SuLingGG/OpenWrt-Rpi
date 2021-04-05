@@ -22,6 +22,8 @@ uci set system.@system[0].zonename='Asia/Jakarta'
 # Set default language to Auto
 uci set luci.main.lang='auto'
 sed -i "s/lang 'zh_cn'/lang 'auto'/g" package/base-files/files/etc/config/luci
+uci set luci.main.lang='en'
+sed -i "s/lang 'zh_cn'/lang 'en'/g" package/base-files/files/etc/config/luci
 
 # Add shutdown, poweroff, reboot commands
 uci set luci.@command[0]=command
