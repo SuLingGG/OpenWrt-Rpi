@@ -56,9 +56,9 @@ My additional setup :
 ### Firmware Installation
 
 - Download latest firmware [here](https://github.com/helmiau/OpenWrt-Rpi/releases/latest) which contain **sysupgrade** or **factory** words 
-- Download [Rufus](https://github.com/pbatard/rufus/releases/download/v3.13/rufus-3.13p.exe)
+- Download [Rufus](https://github.com/pbatard/rufus/releases/download/v3.13/rufus-3.13p.exe) or [Balena Ecther](https://github.com/balena-io/etcher/releases/latest)
 - Insert SdCard
-- Open Rufus
+- Open Rufus/Etcher
 - Select disk (sdcard)
 - Drag and drop downloaded firmware to Rufus window
 - Start
