@@ -64,15 +64,6 @@ cd /etc/rc.d
 rm -f S98udptools || true
 
 # Add shadowsocksr shortcut
-cat >> /bin/ssr-restart <<EOF
-/etc/init.d/shadowsocksr restart
-EOF
-cat >> /bin/ssr-stop <<EOF
-/etc/init.d/shadowsocksr stop
-EOF
-cat >> /bin/ssr-start <<EOF
-/etc/init.d/shadowsocksr start
-EOF
 chmod +x /bin/ssr-restart
 chmod +x /bin/ssr-stop
 chmod +x /bin/ssr-start
