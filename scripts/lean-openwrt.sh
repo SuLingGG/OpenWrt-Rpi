@@ -112,15 +112,6 @@ wget -O package/base-files/files/bin/speedtest "https://raw.githubusercontent.co
 git clone --depth=1 https://github.com/nickberry17/luci-proto-modemmanager.git
 
 # Add shadowsocksr shortcut
-cat >> package/base-files/files/bin/ssr-restart <<EOF
-/etc/init.d/shadowsocksr restart
-EOF
-cat >> package/base-files/files/bin/ssr-stop <<EOF
-/etc/init.d/shadowsocksr stop
-EOF
-cat >> package/base-files/files/bin/ssr-start <<EOF
-/etc/init.d/shadowsocksr start
-EOF
 chmod +x package/base-files/files/bin/ssr-restart
 chmod +x package/base-files/files/bin/ssr-stop
 chmod +x package/base-files/files/bin/ssr-start
