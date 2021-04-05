@@ -109,5 +109,4 @@ wget -O package/base-files/files/bin/neofetch "https://raw.githubusercontent.com
 wget -O package/base-files/files/bin/speedtest "https://raw.githubusercontent.com/vitoharhari/speedtest/main/speedtest" && chmod +x package/base-files/files/bin/speedtest
 
 # Add modemmanager
-#git clone --depth=1 https://github.com/nickberry17/luci-proto-modemmanager.git
-git clone --depth=1 https://github.com/nickberry17/luci-proto-modemmanager/tree/master/luci-proto-modemmanager
+git clone --depth=1 https://github.com/nickberry17/luci-proto-modemmanager.git
