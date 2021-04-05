@@ -79,7 +79,7 @@ chmod +x /bin/ssr-start
 
 # Added neofetch on oh-my-zsh
 if grep -q neofetch "/root/.oh-my-zsh/custom/example.zsh"; then
-        echo "neofetch available, then skip"
+    echo "neofetch available, then skip"
 else
 	echo "neofetch" > /root/.oh-my-zsh/custom/example.zsh
 fi
