@@ -1,5 +1,5 @@
 # OpenWrt-Rpi
-Raspberry Pi 4 OpenWrt Compile Project. (Based on [SuLingGG Daily Github Action](https://github.com/SuLingGG/OpenWrt-Rpi))
+Raspberry Pi 4 OpenWrt Compile Project. (Based on [SuLingGG Daily Github Action](https://github.com/SuLingGG/OpenWrt-Rpi) and compiled using)
 
 <details><summary>Firmware features (click to show)</summary>
 <p>
@@ -55,7 +55,7 @@ My additional setup :
 
 ### Firmware Installation
 
-- Download firmware which contain **sysupgrade** or **factory** words 
+- Download latest firmware [here](https://github.com/helmiau/OpenWrt-Rpi/releases/latest) which contain **sysupgrade** or **factory** words 
 - Download [Rufus](https://github.com/pbatard/rufus/releases/download/v3.13/rufus-3.13p.exe)
 - Insert SdCard
 - Open Rufus
@@ -70,5 +70,11 @@ Username	: root
 Password	: password
 ```
 
+### Credits
+- [OpenWrt Official](https://github.com/openwrt/openwrt)
+- [P3TERX/Actions-OpenWrt](https://github.com/P3TERX/Actions-OpenWrt)
+- [coolsnowwolf/lede](https://github.com/coolsnowwolf/lede)
+- [SuLingGG/OpenWrt-Rpi](https://github.com/SuLingGG/OpenWrt-Rpi)
+- [ophub/amlogic-s9xxx-openwrt](https://github.com/ophub/amlogic-s9xxx-openwrt)
 
-[Read more](https://github.com/helmiau/OpenWrt-Rpi/blob/main/README_ORIGINAL.md#openwrt-rpi)
+[Read more original README](https://github.com/helmiau/OpenWrt-Rpi/blob/main/README_ORIGINAL.md#openwrt-rpi)
