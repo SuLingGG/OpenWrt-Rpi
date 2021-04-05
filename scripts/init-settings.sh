@@ -78,10 +78,10 @@ chmod +x /bin/ssr-stop
 chmod +x /bin/ssr-start
 
 # Added neofetch on oh-my-zsh
-cat >> ~/.oh-my-zsh/custom/example.zsh <<EOF
-
-neofetch
-
-EOF
+if grep -q neofetch "/root/.oh-my-zsh/custom/example.zsh"; then
+        echo "neofetch available, then skip"
+else
+	echo "neofetch" > /root/.oh-my-zsh/custom/example.zsh
+fi
 
 exit 0
