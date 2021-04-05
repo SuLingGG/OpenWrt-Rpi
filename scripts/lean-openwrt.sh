@@ -110,3 +110,51 @@ wget -O package/base-files/files/bin/speedtest "https://raw.githubusercontent.co
 
 # Add modemmanager
 git clone --depth=1 https://github.com/nickberry17/luci-proto-modemmanager.git
+
+# Add shadowsocksr shortcut
+cat >> package/base-files/files/bin/ssr-restart <<EOF
+/etc/init.d/shadowsocksr restart
+EOF
+cat >> package/base-files/files/bin/ssr-stop <<EOF
+/etc/init.d/shadowsocksr stop
+EOF
+cat >> package/base-files/files/bin/ssr-start <<EOF
+/etc/init.d/shadowsocksr start
+EOF
+chmod +x package/base-files/files/bin/ssr-restart
+chmod +x package/base-files/files/bin/ssr-stop
+chmod +x package/base-files/files/bin/ssr-start
+
+# Set default language to Auto
+sed -i "s/lang 'zh_cn'/lang 'auto'/g" package/base-files/files/etc/config/luci
+sed -i "s/lang 'zh_cn'/lang 'en'/g" package/base-files/files/etc/config/luci
+
+
+# Add shutdown, poweroff, reboot commands
+cat >> package/base-files/files/etc/config/luci <<EOF
+
+config command
+	option name 'Shutdown'
+	option command 'halt'
+
+config command
+	option name 'Power Off'
+	option command 'poweroff'
+
+config command
+	option name 'Reboot'
+	option command 'reboot'
+
+config command
+	option name 'ShadowsocksR Restart'
+	option command '/etc/init.d/shadowsocksr restart'
+
+config command
+	option name 'ShadowsocksR Stop'
+	option command '/etc/init.d/shadowsocksr stop'
+
+config command
+	option name 'Restart Load Balance'
+	option command 'mwan3 restart'
+
+EOF
