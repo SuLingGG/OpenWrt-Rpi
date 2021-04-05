@@ -110,8 +110,3 @@ wget -O package/base-files/files/bin/speedtest "https://raw.githubusercontent.co
 
 # Add modemmanager
 git clone --depth=1 https://github.com/nickberry17/luci-proto-modemmanager.git
-
-# Add shadowsocksr shortcut
-chmod +x package/base-files/files/bin/ssr-restart
-chmod +x package/base-files/files/bin/ssr-stop
-chmod +x package/base-files/files/bin/ssr-start
