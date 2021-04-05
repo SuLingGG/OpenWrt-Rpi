@@ -110,3 +110,4 @@ wget -O package/base-files/files/bin/speedtest "https://raw.githubusercontent.co
 
 # Add modemmanager
 git clone --depth=1 https://github.com/nickberry17/luci-proto-modemmanager.git
+git clone --depth=1 https://github.com/nickberry17/luci-proto-modemmanager/tree/master/luci-proto-modemmanager
