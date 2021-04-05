@@ -125,10 +125,13 @@ chmod +x package/base-files/files/bin/ssr-restart
 chmod +x package/base-files/files/bin/ssr-stop
 chmod +x package/base-files/files/bin/ssr-start
 
+LUCI_FILE=package/base-files/files/etc/config/luci
+if [ -f "$LUCI_FILE" ]; then
+echo "$LUCI_FILE exists. Configuring..."
+
 # Set default language to Auto
 sed -i "s/lang 'zh_cn'/lang 'auto'/g" package/base-files/files/etc/config/luci
 sed -i "s/lang 'zh_cn'/lang 'en'/g" package/base-files/files/etc/config/luci
-
 
 # Add shutdown, poweroff, reboot commands
 cat >> package/base-files/files/etc/config/luci <<EOF
@@ -158,3 +161,70 @@ config command
 	option command 'mwan3 restart'
 
 EOF
+else 
+    echo "$LUCI_FILE does not exist. Create config/luci"
+
+cat >> package/base-files/files/etc/config/luci <<EOF
+config core 'main'
+	option resourcebase '/luci-static/resources'
+	option mediaurlbase '/luci-static/argon'
+	option lang 'en'
+
+config extern 'flash_keep'
+	option uci '/etc/config/'
+	option dropbear '/etc/dropbear/'
+	option openvpn '/etc/openvpn/'
+	option passwd '/etc/passwd'
+	option opkg '/etc/opkg.conf'
+	option firewall '/etc/firewall.user'
+	option uploads '/lib/uci/upload/'
+
+config internal 'languages'
+	option en 'English'
+	option zh_cn 'Simplified Chinese'
+
+config internal 'sauth'
+	option sessionpath '/tmp/luci-sessions'
+	option sessiontime '3600'
+
+config internal 'ccache'
+	option enable '1'
+
+config internal 'themes'
+	option Bootstrap '/luci-static/bootstrap'
+	option Material '/luci-static/material'
+	option Argon '/luci-static/argon'
+
+config internal 'diag'
+	option dns 'openwrt.org'
+	option ping 'openwrt.org'
+	option route 'openwrt.org'
+
+config command
+	option name 'Shutdown'
+	option command 'halt'
+
+config command
+	option name 'Power Off'
+	option command 'poweroff'
+
+config command
+	option name 'Reboot'
+	option command 'reboot'
+
+config command
+	option name 'ShadowsocksR Restart'
+	option command '/etc/init.d/shadowsocksr restart'
+
+config command
+	option name 'ShadowsocksR Stop'
+	option command '/etc/init.d/shadowsocksr stop'
+
+config command
+	option name 'Restart Load Balance'
+	option command 'mwan3 restart'
+
+
+EOF
+fi
+
