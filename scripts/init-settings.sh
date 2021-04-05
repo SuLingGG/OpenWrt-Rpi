@@ -26,24 +26,35 @@ uci set luci.main.lang='en'
 sed -i "s/lang 'zh_cn'/lang 'en'/g" package/base-files/files/etc/config/luci
 
 # Add shutdown, poweroff, reboot commands
-uci set luci.@command[0]=command
-uci set luci.@command[0].name='Shutdown'
-uci set luci.@command[0].command='halt'
-uci set luci.@command[1]=command
-uci set luci.@command[1].name='Power Off'
-uci set luci.@command[1].command='poweroff'
-uci set luci.@command[2]=command
-uci set luci.@command[2].name='Reboot'
-uci set luci.@command[2].command='reboot'
-uci set luci.@command[3]=command
-uci set luci.@command[3].name='ShadowsocksR Restart'
-uci set luci.@command[3].command='/etc/init.d/shadowsocksr restart'
-uci set luci.@command[4]=command
-uci set luci.@command[4].name='ShadowsocksR Stop'
-uci set luci.@command[4].command='/etc/init.d/shadowsocksr stop'
-uci set luci.@command[5]=command
-uci set luci.@command[5].name='Restart Load Balance'
-uci set luci.@command[5].command='mwan3 restart'
+cat >> package/base-files/files/etc/config/luci <<EOF
+
+
+config command
+	option name 'Shutdown'
+	option command 'halt'
+
+config command
+	option name 'Power Off'
+	option command 'poweroff'
+
+config command
+	option name 'Reboot'
+	option command 'reboot'
+
+config command
+	option name 'ShadowsocksR Restart'
+	option command '/etc/init.d/shadowsocksr restart'
+
+config command
+	option name 'ShadowsocksR Stop'
+	option command '/etc/init.d/shadowsocksr stop'
+
+config command
+	option name 'Restart Load Balance'
+	option command 'mwan3 restart'
+
+
+EOF
 
 #uci commit
 uci commit
