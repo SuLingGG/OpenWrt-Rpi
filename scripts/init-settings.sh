@@ -21,12 +21,12 @@ uci set system.@system[0].zonename='Asia/Jakarta'
 
 # Set default language to Auto
 uci set luci.main.lang='auto'
-sed -i "s/lang 'zh_cn'/lang 'auto'/g" package/base-files/files/etc/config/luci
+sed -i "s/lang 'zh_cn'/lang 'auto'/g" /etc/config/luci
 uci set luci.main.lang='en'
-sed -i "s/lang 'zh_cn'/lang 'en'/g" package/base-files/files/etc/config/luci
+sed -i "s/lang 'zh_cn'/lang 'en'/g" /etc/config/luci
 
 # Add shutdown, poweroff, reboot commands
-cat >> package/base-files/files/etc/config/luci <<EOF
+cat >> /etc/config/luci <<EOF
 
 
 config command
@@ -62,5 +62,26 @@ uci commit
 # Disable autostart by default for some packages
 cd /etc/rc.d
 rm -f S98udptools || true
+
+# Add shadowsocksr shortcut
+cat >> /bin/ssr-restart <<EOF
+/etc/init.d/shadowsocksr restart
+EOF
+cat >> /bin/ssr-stop <<EOF
+/etc/init.d/shadowsocksr stop
+EOF
+cat >> /bin/ssr-start <<EOF
+/etc/init.d/shadowsocksr start
+EOF
+chmod +x /bin/ssr-restart
+chmod +x /bin/ssr-stop
+chmod +x /bin/ssr-start
+
+# Added neofetch on oh-my-zsh
+cat >> ~/.oh-my-zsh/custom/example.zsh <<EOF
+
+neofetch
+
+EOF
 
 exit 0
