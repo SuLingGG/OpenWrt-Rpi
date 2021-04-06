@@ -188,30 +188,19 @@ jobs:
           echo "::set-output name=status::success"
           echo "::set-output name=ORGANIZE_STATUS::success"
 
-      - name: Upload firmware directory
-        uses: actions/upload-artifact@main
-        if: steps.organize.outputs.status == 'success' && !cancelled()
+      - name: Upload artifact to Actions
+        uses: kittaakos/upload-artifact-as-is@master
+        if: steps.generate.outputs.GENERATE_STATUS == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
         with:
-          name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-          path: ${{ env.FIRMWARE }}
-
-      - name: Generate release tag
-        id: tag
-        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-        run: |
-          echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")"
-          touch release.txt
-          [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
-          [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
-          echo "::set-output name=status::success"
+          path: ${{ env.FILEPATH }}/
 
       - name: Upload firmware to release
         uses: softprops/action-gh-release@v1
-        if: steps.tag.outputs.status == 'success' && !cancelled()
+        if: steps.generate.outputs.GENERATE_STATUS == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.tag.outputs.release_tag }}
+          tag_name: rpi-4-$(date +"%Y.%m.%d-%H%M")
           body_path: release.txt
           files: ${{ env.FIRMWARE }}/*
 
@@ -221,7 +210,7 @@ jobs:
           retain_days: 1
           keep_minimum_runs: 3
 
-      - name: Remove old Releases
+      - name: Remove older Releases
         uses: dev-drprasad/delete-older-releases@v0.1.0
         if: env.UPLOAD_RELEASE == 'true' && !cancelled()
         with:
