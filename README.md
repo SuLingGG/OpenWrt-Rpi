@@ -64,13 +64,13 @@ Note: The advertisement blocking effect at the router level is not good. If you 
 4. MicroSD Adapter/converter
 
 **Installation Steps :**
-- Download latest firmware [here](https://github.com/helmiau/OpenWrt-Rpi/releases/latest) which contain **sysupgrade** or **factory** words 
-- Download [Rufus](https://github.com/pbatard/rufus/releases/download/v3.13/rufus-3.13p.exe) or [Balena Ecther](https://github.com/balena-io/etcher/releases/latest)
-- Insert SdCard
-- Open Rufus/Etcher
-- Select disk (sdcard)
-- Drag and drop downloaded firmware to Rufus window
-- Start
+1. Download latest firmware [here](https://github.com/helmiau/OpenWrt-Rpi/releases/latest) which contain **sysupgrade** or **factory** words 
+2. Download [Rufus](https://github.com/pbatard/rufus/releases/download/v3.13/rufus-3.13p.exe) or [Balena Ecther](https://github.com/balena-io/etcher/releases/latest)
+3. Insert SdCard
+4. Open Rufus/Etcher
+5. Select disk (sdcard)
+6. Drag and drop downloaded firmware to Rufus window
+7. Start
 
 ### Login Information
 ```
