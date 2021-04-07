@@ -57,13 +57,13 @@ Note: The advertisement blocking effect at the router level is not good. If you 
 
 ### Firmware Requirements and Installation
 
-**[Minimum Requirements :]**
+**Minimum Requirements :**
 1. SDCard 4GB
 2. Raspberry Pi 1/2/3/4
 3. PC/Laptop with Windows OS
 4. MicroSD Adapter/converter
 
-**[Installation Steps:]**
+**Installation Steps :**
 - Download latest firmware [here](https://github.com/helmiau/OpenWrt-Rpi/releases/latest) which contain **sysupgrade** or **factory** words 
 - Download [Rufus](https://github.com/pbatard/rufus/releases/download/v3.13/rufus-3.13p.exe) or [Balena Ecther](https://github.com/balena-io/etcher/releases/latest)
 - Insert SdCard
