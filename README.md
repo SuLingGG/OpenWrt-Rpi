@@ -1,11 +1,8 @@
-# OpenWrt-Rpi
-Raspberry Pi 4 OpenWrt Compile Project. (Based on [SuLingGG Daily Github Action](https://github.com/SuLingGG/OpenWrt-Rpi) and compiled using)
+## OpenWrt custom firmware for Raspberry Pi
+Raspberry Pi 4 OpenWrt Compile Project. (Based on [SuLingGG OpenWrt-Rpi](https://github.com/SuLingGG/OpenWrt-Rpi) compiled using GitHub Actions). This project also available for Raspberry Pi 1/2/3
 
-<details><summary>Firmware features (click to show)</summary>
+<details><summary>Main firmware features : (click to show)</summary>
 <p>
-
-
-Main features :
 
 - Contains rich OpenWrt original LuCI plug-ins and community LuCI plug-ins
 - Integrate most wired, wireless, 3G/4G network card drivers, no need to install additional
@@ -40,7 +37,12 @@ Note: The advertisement blocking effect at the router level is not good. If you 
 - Support SQM Qos, Socat, support udpspeeder and udp2raw acceleration, support SFE acceleration, bridge acceleration, IPV6 acceleration, FULLCONE NAT acceleration, BBR acceleration.
 - Support multi-line multi-dial, load balancing, MWAN3 shunt assistant.
 
-My additional setup :
+</p>
+</details>
+
+
+<details><summary>My own configurations : (click to show)</summary>
+<p>
 
 - Added speedtest and neofetch command
 - Removed all languages except English
@@ -53,8 +55,15 @@ My additional setup :
 </details>
 
 
-### Firmware Installation
+### Firmware Requirements and Installation
 
+[Minimum Requirements :]
+1. SDCard 4GB
+2. Raspberry Pi 1/2/3/4
+3. PC/Laptop with Windows OS
+4. MicroSD Adapter/converter
+
+[Installation Steps:]
 - Download latest firmware [here](https://github.com/helmiau/OpenWrt-Rpi/releases/latest) which contain **sysupgrade** or **factory** words 
 - Download [Rufus](https://github.com/pbatard/rufus/releases/download/v3.13/rufus-3.13p.exe) or [Balena Ecther](https://github.com/balena-io/etcher/releases/latest)
 - Insert SdCard
