@@ -49,7 +49,7 @@ Note: The advertisement blocking effect at the router level is not good. If you 
 - Set English as default language
 - Set timezone to WIB-7 Asia/Jakarta
 - Add shutdown, poweroff, reboot commands
-
+- Loadbalance 4 USB Hilink
 
 </p>
 </details>
