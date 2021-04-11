@@ -199,6 +199,7 @@ jobs:
         uses: dev-drprasad/delete-older-releases@v0.1.0
         if: env.UPLOAD_RELEASE == 'true' && !cancelled()
         with:
+          repo: helmiau/OpenWrt-Rpi
           keep_latest: 4
           delete_tags: true
         env:
