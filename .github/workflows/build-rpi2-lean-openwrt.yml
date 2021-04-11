@@ -20,7 +20,7 @@ on:
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  CONFIG_FILE: config/lean/bcm27xx/rpi2-lean-target.config
+  CONFIG_FILE: config/bcm27xx/rpi2-lean-target.config
   DIY_SH: scripts/lean-openwrt.sh
   IPV6MOD_IN_FIRMWARE: true
   KMODS_IN_FIRMWARE: true
@@ -82,7 +82,7 @@ jobs:
         run: |
           [ -e files ] && mv files $OPENWRTROOT/files
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
-          cat config/lean/bcm27xx/rpi-lean-extra.config >> $OPENWRTROOT/.config
+          cat config/bcm27xx/rpi-lean-extra.config >> $OPENWRTROOT/.config
           cd $OPENWRTROOT
           ../$DIY_SH
           ../scripts/preset-clash-core.sh armv7
