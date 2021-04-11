@@ -94,7 +94,7 @@ jobs:
           cd $OPENWRTROOT
           if "$KMODS_IN_FIRMWARE" = 'true'
           then
-              echo "CONFIG_ALL_KMODS=y" >> .config
+              echo "CONFIG_ALL_NONSHARED=y" >> .config
           fi
           make defconfig
           make download -j8
