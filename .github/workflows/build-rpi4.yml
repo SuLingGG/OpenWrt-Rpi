@@ -203,6 +203,7 @@ jobs:
           repo: helmiau/OpenWrt-Rpi
           keep_latest: 4
           delete_tags: true
+          delete_tag_pattern: rpi-4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
