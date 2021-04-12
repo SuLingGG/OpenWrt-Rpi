@@ -224,7 +224,7 @@ jobs:
           delete_tags: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-a
+
       - name: Delete workflow runs
         uses: GitRML/delete-workflow-runs@main
         with:
