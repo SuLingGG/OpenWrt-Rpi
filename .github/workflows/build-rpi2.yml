@@ -169,6 +169,9 @@ jobs:
           make package/install -j$(nproc) || make package/install -j1 V=s
           make target/install -j$(nproc) || make target/install -j1 V=s
           make checksum
+          grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
+          [ -s DEVICE_NAME ] && echo "DEVICE_NAME=$(cat DEVICE_NAME)" >> $GITHUB_ENV
+          echo "FILE_DATE=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
           echo "::set-output name=GENERATE_STATUS::success"
 
       - name: Upload Bin Folder
@@ -188,11 +191,11 @@ jobs:
           echo "::set-output name=status::success"
           echo "::set-output name=ORGANIZE_STATUS::success"
 
-      - name: Upload firmware directory
+      - name: Upload firmware directory to Actions
         uses: actions/upload-artifact@main
         if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.organize.outputs.status == 'success' && !cancelled()
         with:
-          name: openwrt-rpi2-${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+          name: openwrt-${{ env.DEVICE_NAME }}-${{ env.FILE_DATE }}
           path: ${{ env.FIRMWARE }}
 
       - name: Generate new release tag
