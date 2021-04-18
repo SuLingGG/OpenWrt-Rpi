@@ -85,5 +85,6 @@ Password	: password
 - [coolsnowwolf/lede](https://github.com/coolsnowwolf/lede)
 - [SuLingGG/OpenWrt-Rpi](https://github.com/SuLingGG/OpenWrt-Rpi)
 - [ophub/amlogic-s9xxx-openwrt](https://github.com/ophub/amlogic-s9xxx-openwrt)
+- [Kry9toN/openwrt-amlogic](https://github.com/Kry9toN/openwrt-amlogic)
 
 [Read more original README](https://github.com/helmiau/OpenWrt-Rpi/blob/main/README_ORIGINAL.md#openwrt-rpi)
