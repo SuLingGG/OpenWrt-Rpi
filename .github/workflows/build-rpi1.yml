@@ -198,6 +198,12 @@ jobs:
           name: openwrt-${{ env.DEVICE_NAME }}-${{ env.FILE_DATE }}
           path: ${{ env.FIRMWARE }}
 
+      - name: Upload firmware files to Actions
+        uses: kittaakos/upload-artifact-as-is@master
+        if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.organize.outputs.status == 'success' && !cancelled()
+        with:
+          path: ${{ env.FIRMWARE }}/*
+        
       - name: Generate new release tag
         id: tag
         if: steps.organize.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
