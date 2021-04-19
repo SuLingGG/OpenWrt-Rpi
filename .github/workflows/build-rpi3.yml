@@ -218,12 +218,13 @@ jobs:
           body_path: release.txt
           files: ${{ env.FIRMWARE }}/*
 
-      - name: Remove older Releases
-        uses: dev-drprasad/delete-older-releases@v0.1.0
+      - name: Delete older Releases
+        uses: dev-drprasad/delete-older-releases@v0.2.0
         if: steps.tag.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
         with:
           keep_latest: 4
           delete_tags: true
+          delete_tag_pattern: rpi-3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
