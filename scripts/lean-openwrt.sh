@@ -109,7 +109,22 @@ wget -O package/base-files/files/bin/neofetch "https://raw.githubusercontent.com
 wget -O package/base-files/files/bin/speedtest "https://raw.githubusercontent.com/vitoharhari/speedtest/main/speedtest" && chmod +x package/base-files/files/bin/speedtest
 
 # Add modemmanager
-git clone --depth=1 https://github.com/nickberry17/luci-proto-modemmanager.git
+git clone --depth=1 https://github.com/nickberry17/luci-proto-modemmanager
 
 # Add shadowsocksr shortcut ssr
 wget -O package/base-files/files/bin/ssr "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/ssr" && chmod +x package/base-files/files/bin/ssr
+
+# Add 3ginfo, luci-app-3ginfo
+git clone --depth=1 https://github.com/4IceG/luci-app-3ginfo
+
+# Add modeminfo
+git clone --depth=1 https://github.com/koshev-msk/luci-app-modeminfo
+
+# Add sms-tool
+git clone --depth=1 https://github.com/4IceG/luci-app-sms-tool
+
+# Add luci-app-atinout-mod
+git clone --depth=1 https://github.com/4IceG/luci-app-atinout-mod
+
+# Add luci-app-smstools3
+git clone --depth=1 https://github.com/koshev-msk/luci-app-smstools3
