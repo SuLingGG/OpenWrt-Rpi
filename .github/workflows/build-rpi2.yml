@@ -13,7 +13,7 @@ on:
     types: [lean, rpi2]
   workflow_dispatch:
   schedule:
-    - cron: 0 18 * * *
+    - cron: 0 17 * * *
 #  watch:
 #    types: started
 
@@ -28,10 +28,7 @@ env:
   UPLOAD_FIRMWARE: true
   UPLOAD_BIN_DIR: true
   UPLOAD_RELEASE: true
-  UPLOAD_RCLONE: false
-  UPLOAD_WETRANSFER: false
-  UPLOAD_COWTRANSFER: false
-  TZ: Asia/Shanghai
+  TZ: Asia/Jakarta
 
 jobs:
   Build:
@@ -58,7 +55,7 @@ jobs:
           sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-1804) tree
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
-          sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+          sudo ln -sf /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
       - name: Clone Source Code
         run: |
@@ -181,7 +178,7 @@ jobs:
           name: bin-archive
           path: openwrt/bin
 
-      - name: Organize files
+      - name: Organize Files
         id: organize
         if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
         run: |
@@ -191,30 +188,28 @@ jobs:
           echo "::set-output name=status::success"
           echo "::set-output name=ORGANIZE_STATUS::success"
 
-      - name: Upload firmware directory to Actions
+      - name: Upload Firmware Directory to GitHub Actions
         uses: actions/upload-artifact@main
         if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.organize.outputs.status == 'success' && !cancelled()
         with:
-          name: openwrt-${{ env.DEVICE_NAME }}-${{ env.FILE_DATE }}
+          name: openwrt-${{ env.DEVICE_NAME }}-${{ env.FILE_DATE }}-all.zip
           path: ${{ env.FIRMWARE }}
 
-      - name: Upload firmware files to Actions
+      - name: Upload Firmware Files to GitHub Actions
         uses: kittaakos/upload-artifact-as-is@master
         if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.organize.outputs.status == 'success' && !cancelled()
         with:
           path: ${{ env.FIRMWARE }}/*
         
-      - name: Generate new release tag
+      - name: Generate New Release Tag
         id: tag
         if: steps.organize.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
         run: |
           echo "::set-output name=release_tag::openwrt-rpi-2-$(date +"%Y.%m.%d")"
           touch release.txt
-          [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
-          [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
           echo "::set-output name=status::success"
 
-      - name: Upload firmware to release
+      - name: Upload Firmware Files to GitHub Release
         uses: softprops/action-gh-release@v1
         if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.tag.outputs.status == 'success' && !cancelled()
         env:
@@ -224,17 +219,17 @@ jobs:
           body_path: release.txt
           files: ${{ env.FIRMWARE }}/*
 
-      - name: Delete older Releases
+      - name: Delete Older Releases
         uses: dev-drprasad/delete-older-releases@v0.2.0
         if: steps.tag.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
         with:
-          keep_latest: 4
+          keep_latest: 2
           delete_tags: true
           delete_tag_pattern: rpi-2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Delete workflow runs
+      - name: Delete Workflow Runs
         uses: GitRML/delete-workflow-runs@main
         with:
           retain_days: 1
