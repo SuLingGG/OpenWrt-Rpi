@@ -110,21 +110,27 @@ wget -O package/base-files/files/bin/speedtest "https://raw.githubusercontent.co
 
 # Add modemmanager
 git clone --depth=1 https://github.com/nickberry17/luci-proto-modemmanager
+popd
 
 # Add shadowsocksr shortcut ssr
 wget -O package/base-files/files/bin/ssr "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/ssr" && chmod +x package/base-files/files/bin/ssr
 
 # Add 3ginfo, luci-app-3ginfo
 git clone --depth=1 https://github.com/4IceG/luci-app-3ginfo
+popd
 
 # Add modeminfo
 git clone --depth=1 https://github.com/koshev-msk/luci-app-modeminfo
+popd
 
 # Add sms-tool
 git clone --depth=1 https://github.com/4IceG/luci-app-sms-tool
+popd
 
 # Add luci-app-atinout-mod
 git clone --depth=1 https://github.com/4IceG/luci-app-atinout-mod
+popd
 
 # Add luci-app-smstools3
 git clone --depth=1 https://github.com/koshev-msk/luci-app-smstools3
+popd
