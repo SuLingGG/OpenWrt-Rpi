@@ -35,9 +35,7 @@ cd /etc/rc.d
 rm -f S98udptools || true
 
 # Add shadowsocksr shortcut
-chmod +x /bin/ssr-restart
-chmod +x /bin/ssr-stop
-chmod +x /bin/ssr-start
+chmod +x /bin/ssr
 
 # Added neofetch on oh-my-zsh
 if grep -q neofetch "/root/.oh-my-zsh/custom/example.zsh"; then
