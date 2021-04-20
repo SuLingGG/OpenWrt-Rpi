@@ -193,7 +193,7 @@ jobs:
         uses: actions/upload-artifact@main
         if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.organize.outputs.status == 'success' && !cancelled()
         with:
-          name: openwrt-${{ env.DEVICE_NAME }}-${{ env.FILE_DATE }}-all.zip
+          name: openwrt-${{ env.DEVICE_NAME }}-${{ env.FILE_DATE }}-all-test.zip
           path: ${{ env.FIRMWARE }}
 
       - name: Upload Firmware Files to GitHub Actions
@@ -206,7 +206,7 @@ jobs:
         id: tag
         if: steps.organize.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
         run: |
-          echo "::set-output name=release_tag::openwrt-rpi-4-$(date +"%Y.%m.%d")"
+          echo "::set-output name=release_tag::openwrt-rpi-4-$(date +"%Y.%m.%d")-test"
           touch release.txt
           echo "::set-output name=status::success"
 
