@@ -108,11 +108,13 @@ wget -O package/base-files/files/bin/neofetch "https://raw.githubusercontent.com
 # Add speedtest
 wget -O package/base-files/files/bin/speedtest "https://raw.githubusercontent.com/vitoharhari/speedtest/main/speedtest" && chmod +x package/base-files/files/bin/speedtest
 
+# Add shadowsocksr shortcut ssr
+wget -O package/base-files/files/bin/ssr-rst "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/ssr-rst" && chmod +x package/base-files/files/bin/ssr-rst
+wget -O package/base-files/files/bin/ssr-start "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/ssr-start" && chmod +x package/base-files/files/bin/ssr-start
+wget -O package/base-files/files/bin/ssr-stop "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/ssr-stop" && chmod +x package/base-files/files/bin/ssr-stop
+
 # Add modemmanager
 git clone --depth=1 https://github.com/nickberry17/luci-proto-modemmanager
-
-# Add shadowsocksr shortcut ssr
-wget -O package/base-files/files/bin/ssr "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/ssr" && chmod +x package/base-files/files/bin/ssr
 
 # Add 3ginfo, luci-app-3ginfo
 git clone --depth=1 https://github.com/4IceG/luci-app-3ginfo
