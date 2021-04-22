@@ -201,11 +201,21 @@ jobs:
         with:
           path: ${{ env.FIRMWARE }}/*
         
+      - name: Delete Older Releases and Tags
+        uses: dev-drprasad/delete-older-releases@v0.2.0
+        if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.organize.outputs.status == 'success' && !cancelled()
+        with:
+          keep_latest: 0
+          delete_tags: true
+          delete_tag_pattern: ${{ env.DEVICE_NAME }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Generate New Release Tag
         id: tag
         if: steps.organize.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
         run: |
-          echo "::set-output name=release_tag::openwrt-rpi-3-$(date +"%Y.%m.%d")"
+          echo "::set-output name=release_tag::openwrt-${{ env.DEVICE_NAME }}"
           touch release.txt
           echo "::set-output name=status::success"
 
@@ -218,16 +228,6 @@ jobs:
           tag_name: ${{ steps.tag.outputs.release_tag }}
           body_path: release.txt
           files: ${{ env.FIRMWARE }}/*
-
-      - name: Delete Older Releases
-        uses: dev-drprasad/delete-older-releases@v0.2.0
-        if: steps.tag.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
-        with:
-          keep_latest: 2
-          delete_tags: true
-          delete_tag_pattern: rpi-3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Delete Workflow Runs
         uses: GitRML/delete-workflow-runs@main
