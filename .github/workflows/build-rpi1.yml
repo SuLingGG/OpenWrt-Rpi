@@ -215,7 +215,7 @@ jobs:
         id: tag
         if: steps.organize.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
         run: |
-          echo "::set-output name=release_tag::openwrt-${{ env.DEVICE_NAME }}"-1
+          echo "::set-output name=release_tag::openwrt-${{ env.DEVICE_NAME }}-1"
           touch release.txt
           echo "::set-output name=status::success"
 
