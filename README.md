@@ -46,10 +46,13 @@ Note: The advertisement blocking effect at the router level is not good. If you 
 
 - Added speedtest and neofetch command
 - Removed all languages except English
-- Set English as default language
+- Set English as default language (idk work or not)
 - Set timezone to WIB-7 Asia/Jakarta
 - Add shutdown, poweroff, reboot commands
 - Loadbalance 4 USB Hilink
+- Add shadowsocksr shortcut (ssr-rst, ssr-start, ssr-stop)
+- QMI modems supported ex. LT4220
+- VPN support : PPTP / L2TP / ShadowSocks / ShadowSocksR / V2ray(VMESS/VLESS) / Trojan / Trojan-Go
 
 </p>
 </details>
