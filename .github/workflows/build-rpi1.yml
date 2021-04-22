@@ -207,7 +207,7 @@ jobs:
         with:
           keep_latest: 0
           delete_tags: true
-          delete_tag_pattern: ${{ env.DEVICE_NAME }}
+          delete_tag_pattern: ${{ env.DEVICE_NAME }}-1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -215,7 +215,7 @@ jobs:
         id: tag
         if: steps.organize.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
         run: |
-          echo "::set-output name=release_tag::openwrt-${{ env.DEVICE_NAME }}"
+          echo "::set-output name=release_tag::openwrt-${{ env.DEVICE_NAME }}"-1
           touch release.txt
           echo "::set-output name=status::success"
 
