@@ -89,5 +89,6 @@ Password	: password
 - [SuLingGG/OpenWrt-Rpi](https://github.com/SuLingGG/OpenWrt-Rpi)
 - [ophub/amlogic-s9xxx-openwrt](https://github.com/ophub/amlogic-s9xxx-openwrt)
 - [Kry9toN/openwrt-amlogic](https://github.com/Kry9toN/openwrt-amlogic)
+- [config example 1](https://github.com/eallion/openwrt/blob/main/.config)
 
 [Read more original README](https://github.com/helmiau/OpenWrt-Rpi/blob/main/README_ORIGINAL.md#openwrt-rpi)
