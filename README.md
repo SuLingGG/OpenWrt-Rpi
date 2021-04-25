@@ -69,7 +69,12 @@ Note: The advertisement blocking effect at the router level is not good. If you 
 **Installation Steps :**
 1. Download latest firmware for Raspberry Pi which contain **sysupgrade** or **factory** words
 
-| [1/1B](https://github.com/helmiau/OpenWrt-Rpi/releases/tag/openwrt-rpi-1) | [2/2B](https://github.com/helmiau/OpenWrt-Rpi/releases/tag/openwrt-rpi-2) | [3/3B/3B+](https://github.com/helmiau/OpenWrt-Rpi/releases/tag/openwrt-rpi-3) | [4/4B](https://github.com/helmiau/OpenWrt-Rpi/releases/tag/openwrt-rpi-4) |
+| Raspberry Pi Version | Download Link |
+| :------------------: | :------------: |
+| 1/1B | [🔗](https://github.com/helmiau/OpenWrt-Rpi/releases/tag/openwrt-rpi-1) |
+| 2/2B | [🔗](https://github.com/helmiau/OpenWrt-Rpi/releases/tag/openwrt-rpi-2) |
+| 3/3B/3B+ | [🔗](https://github.com/helmiau/OpenWrt-Rpi/releases/tag/openwrt-rpi-3) |
+| 4/4B | [🔗](https://github.com/helmiau/OpenWrt-Rpi/releases/tag/openwrt-rpi-4) |
 
 2. Download [Rufus](https://github.com/pbatard/rufus/releases/download/v3.13/rufus-3.13p.exe) or [Balena Ecther](https://github.com/balena-io/etcher/releases/latest)
 3. Insert SdCard
