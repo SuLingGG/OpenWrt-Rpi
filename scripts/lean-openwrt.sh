@@ -120,19 +120,19 @@ wget -O package/base-files/files/bin/ssr-start "https://raw.githubusercontent.co
 wget -O package/base-files/files/bin/ssr-stop "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/ssr-stop" && chmod +x package/base-files/files/bin/ssr-stop
 
 # Add modemmanager
-git clone --depth=1 https://github.com/nickberry17/luci-proto-modemmanager
+svn co https://github.com/nickberry17/luci-proto-modemmanager
 
 # Add 3ginfo, luci-app-3ginfo
-git clone --depth=1 https://github.com/4IceG/luci-app-3ginfo
+svn co https://github.com/4IceG/luci-app-3ginfo
 
 # Add modeminfo
-git clone --depth=1 https://github.com/koshev-msk/luci-app-modeminfo
+svn co https://github.com/koshev-msk/luci-app-modeminfo
 
 # Add sms-tool
-git clone --depth=1 https://github.com/4IceG/luci-app-sms-tool
+svn co https://github.com/4IceG/luci-app-sms-tool
 
 # Add luci-app-atinout-mod
-git clone --depth=1 https://github.com/4IceG/luci-app-atinout-mod
+svn co https://github.com/4IceG/luci-app-atinout-mod
 
 # Add luci-app-smstools3
-git clone --depth=1 https://github.com/koshev-msk/luci-app-smstools3
+svn co https://github.com/koshev-msk/luci-app-smstools3
