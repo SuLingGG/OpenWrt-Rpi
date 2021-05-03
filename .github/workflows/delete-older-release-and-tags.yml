@@ -1,0 +1,20 @@
+name: Delete Workflow Runs
+
+on:
+  workflow_dispatch:
+
+#  schedule:
+#    - cron: "0 0 * * *"
+
+jobs:
+  del_runs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete Older Releases and Tags
+        uses: dev-drprasad/delete-older-releases@v0.2.0
+        with:
+          keep_latest: 0
+          delete_tags: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
