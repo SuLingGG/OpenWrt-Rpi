@@ -1,4 +1,4 @@
-name: Delete Workflow Runs
+name: Delete All Older Releases and Tags
 
 on:
   workflow_dispatch:
