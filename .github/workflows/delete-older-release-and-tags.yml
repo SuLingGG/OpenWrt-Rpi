@@ -1,4 +1,4 @@
-name: Delete All Older Releases and Tags
+name: Delete All Older Releases, Tags and Drafts
 
 on:
   workflow_dispatch:
@@ -15,6 +15,11 @@ jobs:
         with:
           keep_latest: 0
           delete_tags: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Delete drafts
+        uses: hugo19941994/delete-draft-releases@v0.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
