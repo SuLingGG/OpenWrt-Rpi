@@ -124,18 +124,24 @@ wget -O package/base-files/files/bin/ssr-stop "https://raw.githubusercontent.com
 
 # Add modemmanager
 svn co https://github.com/nickberry17/luci-proto-modemmanager
+popd
 
 # Add 3ginfo, luci-app-3ginfo
 svn co https://github.com/4IceG/luci-app-3ginfo
+popd
 
 # Add modeminfo
 svn co https://github.com/koshev-msk/luci-app-modeminfo
+popd
 
 # Add sms-tool
 svn co https://github.com/4IceG/luci-app-sms-tool
+popd
 
 # Add luci-app-atinout-mod
 svn co https://github.com/4IceG/luci-app-atinout-mod
+popd
 
 # Add luci-app-smstools3
 svn co https://github.com/koshev-msk/luci-app-smstools3
+popd
