@@ -145,3 +145,7 @@ popd
 # Add luci-app-smstools3
 svn co https://github.com/koshev-msk/luci-app-smstools3
 popd
+
+# Add badvpn
+svn co https://github.com/friyadhibiermann/openwrt_badvpn-tun2socks/tree/main/badvpn
+popd
