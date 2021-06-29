@@ -45,4 +45,8 @@ fi
 # Vmess creator shortcut
 chmod +x /bin/vmess
 
+# Add ram checker from wegare123
+# run "ram" using terminal to check ram usage
+chmod +x /bin/ram
+
 exit 0
