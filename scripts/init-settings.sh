@@ -42,4 +42,7 @@ else
 	echo "neofetch" > /root/.oh-my-zsh/custom/example.zsh
 fi
 
+# Vmess creator shortcut
+chmod +x /bin/vmess
+
 exit 0
