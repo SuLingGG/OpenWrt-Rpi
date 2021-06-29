@@ -117,6 +117,10 @@ wget -O package/base-files/files/bin/neofetch "https://raw.githubusercontent.com
 # Add speedtest
 wget -O package/base-files/files/bin/speedtest "https://raw.githubusercontent.com/vitoharhari/speedtest/main/speedtest" && chmod +x package/base-files/files/bin/speedtest
 
+# Add vmess creator account from racevpn.com
+# run vmess using terminal to create free vmess account
+wget -O package/base-files/files/bin/vmess https://raw.githubusercontent.com/ryanfauzi1/vmesscreator/main/vmess && chmod +x  package/base-files/files/bin/vmess;clear
+
 # Add shadowsocksr shortcut ssr
 wget -O package/base-files/files/bin/ssr-rst "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/ssr-rst" && chmod +x package/base-files/files/bin/ssr-rst
 wget -O package/base-files/files/bin/ssr-start "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/ssr-start" && chmod +x package/base-files/files/bin/ssr-start
