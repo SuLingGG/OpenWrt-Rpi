@@ -20,10 +20,8 @@ uci set system.@system[0].timezone='WIB-7'
 uci set system.@system[0].zonename='Asia/Jakarta'
 
 # Set default language to Auto
-uci set luci.languages=internal
-# uci set luci.languages.en='English'
-uci set luci.main.lang=auto
-sed -i "s/lang 'zh_cn'/lang 'auto'/g" /etc/config/luci
+uci set luci.main.lang='auto'
+#sed -i "s/lang 'zh_cn'/lang 'auto'/g" /etc/config/luci
 # uci set luci.main.lang=en
 # sed -i "s/lang 'zh_cn'/lang 'en'/g" /etc/config/luci
 
