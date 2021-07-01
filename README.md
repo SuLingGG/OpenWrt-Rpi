@@ -53,6 +53,9 @@ Note: The advertisement blocking effect at the router level is not good. If you 
 - Add shadowsocksr shortcut (ssr-rst, ssr-start, ssr-stop)
 - QMI modems supported ex. LT4220
 - VPN support : PPTP / L2TP / ShadowSocks / ShadowSocksR / V2ray(VMESS/VLESS) / Trojan / Trojan-Go
+- Extended root partition to 2GB
+- RAM Checker via  Terminal by command ```ram```
+- VMESS Account Creation (3 days) from racevpn.com via  Terminal by command ```vmess```
 
 </p>
 </details>
