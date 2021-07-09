@@ -134,6 +134,10 @@ wget -O package/base-files/files/bin/ssr-rst "https://raw.githubusercontent.com/
 wget -O package/base-files/files/bin/ssr-start "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/ssr-start" && chmod +x package/base-files/files/bin/ssr-start
 wget -O package/base-files/files/bin/ssr-stop "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/ssr-stop" && chmod +x package/base-files/files/bin/ssr-stop
 
+# Add IP Address Info Checker
+# run "myip" using terminal for use
+wget -O package/base-files/files/bin/myip "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/myip" && chmod +x package/base-files/files/bin/myip
+
 # Add modemmanager
 svn co https://github.com/nickberry17/luci-proto-modemmanager
 

@@ -57,6 +57,7 @@ Note: The advertisement blocking effect at the router level is not good. If you 
 - RAM Checker via  Terminal by command ```ram```
 - VMESS Account Creation (3 days) from racevpn.com via  Terminal by command ```vmess```
 - Fix browser always download file index.php (like xderm and libernet) via  Terminal by command ```fixphp```
+- Add IP Address Info Checker. run ```myip``` using terminal for use
 
 </p>
 </details>

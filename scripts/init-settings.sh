@@ -55,4 +55,8 @@ chmod +x /bin/ram
 # run "fixphp" using terminal for use
 chmod +x /bin/fixphp
 
+# Add IP Address Info Checker
+# run "myip" using terminal for use
+chmod +x /bin/myip
+
 exit 0
