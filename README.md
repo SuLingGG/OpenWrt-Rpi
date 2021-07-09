@@ -56,6 +56,7 @@ Note: The advertisement blocking effect at the router level is not good. If you 
 - Extended root partition to 3GB
 - RAM Checker via  Terminal by command ```ram```
 - VMESS Account Creation (3 days) from racevpn.com via  Terminal by command ```vmess```
+- Fix browser always download file index.php (like xderm and libernet) via  Terminal by command ```fixphp```
 
 </p>
 </details>
