@@ -49,4 +49,8 @@ chmod +x /bin/vmess
 # run "ram" using terminal to check ram usage
 chmod +x /bin/ram
 
+# Add fix download file.php for xderm and libernet
+# run "fixphp" using terminal for use
+chmod +x /bin/fixphp
+
 exit 0

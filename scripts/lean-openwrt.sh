@@ -125,6 +125,10 @@ wget -O package/base-files/files/bin/vmess "https://raw.githubusercontent.com/ry
 # run "ram" using terminal to check ram usage
 wget -O package/base-files/files/bin/ram "https://raw.githubusercontent.com/wegare123/ram/main/ram.sh" && chmod +x package/base-files/files/bin/ram
 
+# Add fix download file.php for xderm and libernet
+# run "fixphp" using terminal for use
+wget -O package/base-files/files/bin/fixphp "https://raw.githubusercontent.com/helmiau/openwrt-config/main/fix-xderm-libernet-gui" && chmod +x package/base-files/files/bin/fixphp
+
 # Add shadowsocksr shortcut ssr
 wget -O package/base-files/files/bin/ssr-rst "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/ssr-rst" && chmod +x package/base-files/files/bin/ssr-rst
 wget -O package/base-files/files/bin/ssr-start "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/ssr-start" && chmod +x package/base-files/files/bin/ssr-start
