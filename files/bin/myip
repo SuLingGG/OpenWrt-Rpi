@@ -1,6 +1,6 @@
 #!/bin/sh
 echo "==== IP Detail Information ====" > ipinfo.txt
-curl ip-api.com/json >> ipinfo.txt
+curl -s ip-api.com/json >> ipinfo.txt
 sed -i 's/{"//g' ipinfo.txt
 sed -i 's/","/\n/g' ipinfo.txt
 sed -i 's/":"/ : /g' ipinfo.txt
