@@ -1,4 +1,9 @@
 #!/bin/sh
+# ---------------------------------------------------------------
+#   This script will inform you about your IP Address information
+#   which taken from ip-api.com and show your IP Information
+#   this script is created by helmiau a.k.a Helmi Amirudin
+# ---------------------------------------------------------------
 echo "==== IP Detail Information ====" > ipinfo.txt
 curl -s ip-api.com/json >> ipinfo.txt
 sed -i 's/{"//g' ipinfo.txt
@@ -22,6 +27,8 @@ sed -i 's/org :/Organization	:/g' ipinfo.txt
 sed -i 's/as :/AS		:/g' ipinfo.txt
 sed -i 's/query :/IP Address	:/g' ipinfo.txt
 echo " " >> ipinfo.txt
+echo "===============================" >> ipinfo.txt
+echo "==    Created by helmiau     ==" >> ipinfo.txt
 echo "===============================" >> ipinfo.txt
 cat ipinfo.txt
 rm ipinfo.txt
