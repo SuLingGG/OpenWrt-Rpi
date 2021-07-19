@@ -70,6 +70,8 @@ jobs:
           mkdir customfeeds
           git clone --depth=1 https://github.com/coolsnowwolf/packages customfeeds/packages
           git clone --depth=1 https://github.com/coolsnowwolf/luci customfeeds/luci
+          git clone --wiringPi https://nmaas87.github.io/rpi-openwrt-packages/bin_packages/wiringPi
+
           chmod +x ../scripts/*.sh
           ../scripts/hook-feeds.sh
 
