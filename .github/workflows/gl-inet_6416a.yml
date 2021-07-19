@@ -1,0 +1,47 @@
+availability: Discontinued 2017
+bootloader: U-Boot
+button_count: '1'
+comments: 'Flash chip: Winbond W25Q128FV, RAM chip: EM6AB160TSD-5G'
+cpu: Atheros AR9331
+cpu_cores: 1
+cpu_mhz: 400
+device_id: gl-inet_6416a
+device_page: gl-inet_64xx
+device_type: Travel Router
+ethernet_100m_ports: 2
+firmware_oem_stock_url: http://www.gl-inet.com/firmware/6416
+firmware_openwrt_install_url: http://downloads.openwrt.org/releases/18.06.2/targets/ar71xx/generic/openwrt-18.06.2-ar71xx-generic-gl-inet-6416A-v1-squashfs-factory.bin
+firmware_openwrt_snapshot_install_url: http://downloads.openwrt.org/snapshots/targets/ar71xx/generic/lede-ar71xx-generic-gl-inet-6416A-v1-squashfs-factory.bin
+firmware_openwrt_snapshot_upgrade_url: http://downloads.openwrt.org/snapshots/targets/ar71xx/generic/lede-ar71xx-generic-gl-inet-6416A-v1-squashfs-sysupgrade.bin
+firmware_openwrt_upgrade_url: http://downloads.openwrt.org/releases/18.06.2/targets/ar71xx/generic/openwrt-18.06.2-ar71xx-generic-gl-inet-6416A-v1-squashfs-sysupgrade.bin
+flash_mb: 16
+forum_search: 6416A
+git_search: 6416A
+gpios: '5'
+image: gl-inet_6416a.jpg
+jtag: false
+led_count: '2'
+malformed: {}
+model: 6416A
+oem_device_homepage_url: http://www.gl-inet.com/gl-inet6416/
+package_architecture: mips_24kc
+power_supply: 5 VDC, 1.0 A
+ram_mb: 64
+recovery_method_s: U-Boot web recovery
+serial: true
+serial_connection_parameters: 115200 / 8N1
+subtarget: generic
+supported_current_rel: 18.06.2
+supported_since_commit: https://git.lede-project.org/?p=source.git;a=commit;h=2a0fcc029ffb599c595013b40056bf261ccdff56
+supported_since_rel: '14.07'
+switch: Atheros AR9331
+target: ar71xx
+usb_ports: 1x 2.0
+vendor: GL.iNet
+version: v1.0
+vlan: true
+wikidevi_url: https://wikidevi.com/wiki/GL.iNet_6416A
+wlan_24ghz: b/g/n
+wlan_comments: 1x1
+wlan_driver: ath9k
+wlan_hardware: Atheros AR9331
