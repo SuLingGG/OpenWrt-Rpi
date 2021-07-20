@@ -1,225 +1,215 @@
-#=================================================
+# ==================================================
 # https://github.com/P3TERX/Actions-OpenWrt
-# Description: Build OpenWrt using GitHub Actions
-# Lisence: MIT
-# Author: P3TERX
-# Blog: https://p3terx.com
-#=================================================
+#描述：使用 GitHub Actions 构建 OpenWrt
+#许可证：麻省理工学院
+#作者：P3TERX
+#博客：https://p3terx.com
+# ==================================================
 
-name: Build Raspberry Pi 4 Lean's OpenWrt
+名称：构建 Raspberry Pi 4 Lean 的 OpenWrt
 
-on:
-  repository_dispatch:
-    types: [lean, rpi4]
-  workflow_dispatch:
-  schedule:
-    - cron: 0 18 * * *
-#  watch:
-#    types: started
+在：
+  存储库调度：
+    类型：[精益，rpi4]
+  工作流调度：
+  时间表：
+    -定时任务：0 18 * * *
+#  观看：
+#    类型：开始
 
-env:
-  REPO_URL: https://github.com/coolsnowwolf/lede
-  REPO_BRANCH: master
-  CONFIG_FILE: config/bcm27xx/rpi4-lean-target.config
-  DIY_SH: scripts/lean-openwrt.sh
-  IPV6MOD_IN_FIRMWARE: true
-  KMODS_IN_FIRMWARE: true
-  WEBROOT: /data/dnmp/www/openwrt.cc
-  UPLOAD_RCLONE: true
-  UPLOAD_WETRANSFER: true
-  TZ: Asia/Shanghai
+环境：
+  REPO_URL : https://github.com/coolsnowwolf/lede
+  REPO_BRANCH :主
+  CONFIG_FILE : config/bcm27xx/rpi4-lean-target.config
+  DIY_SH :脚本/lean-openwrt.sh
+  IPV6MOD_IN_FIRMWARE :真
+  KMODS_IN_FIRMWARE :真
+  WEBROOT : /data/dnmp/www/openwrt.cc
+  UPLOAD_RCLONE :真
+  UPLOAD_WETRANSFER :真
+  TZ :亚洲/上海
 
-jobs:
-  Build:
-    runs-on: ubuntu-18.04
+工作：
+  构建：
+    运行：ubuntu-18.04
 
-    outputs:
-      OPENWRTROOT: ${{ steps.update.outputs.OPENWRTROOT }}
-      PLATFORM: ${{ steps.compile.outputs.PLATFORM }}
-      TARGET: ${{ steps.compile.outputs.TARGET }}
-      SUBTARGET: ${{ steps.compile.outputs.SUBTARGET }}
-      FIRMWARE: ${{ steps.compile.outputs.FIRMWARE }}
-      GENERATE_STATUS: ${{ steps.generate.outputs.GENERATE_STATUS }}
+    输出：
+      OPENWRTROOT : ${{ steps.update.outputs.OPENWRTROOT }}
+      平台：${{steps.compile.outputs.PLATFORM}}
+      目标：${{ steps.compile.outputs.TARGET }}
+      SUBTARGET : ${{ steps.compile.outputs.SUBTARGET }}
+      固件：${{steps.compile.outputs.FIRMWARE }}
+      GENERATE_STATUS : ${{ steps.generate.outputs.GENERATE_STATUS }}
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
+    步骤：
+      -名称：结帐
+        用途：动作/结帐@main
 
-      - name: Initialization Environment
-        env:
-          DEBIAN_FRONTEND: noninteractive
-        run: |
-          sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
-          sudo -E apt-get -qq update
-          sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-1804) tree
+      -名称：初始化环境
+        环境：
+          DEBIAN_FRONTEND :非交互式
+        运行：|
+          须藤 rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+          须藤 -E apt-get -qq 更新
+          sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-1804) 树
           sudo -E apt-get -qq autoremove --purge
-          sudo -E apt-get -qq clean
+          须藤 -E apt-get -qq 清洁
           sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-
-      - name: Clone Source Code
-        run: |
+      -名称：克隆源代码
+        运行：|
           df -hT $PWD
           git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
-
-      - name: Update Feeds
-        id: update
-        run: |
+      -名称：更新提要
+        编号：更新
+        运行：|
           cd openwrt
           echo "OPENWRTROOT=$PWD" >> $GITHUB_ENV
           echo "::set-output name=OPENWRTROOT::$(echo $PWD)"
-          mkdir customfeeds
+          mkdir 自定义源
           git clone --depth=1 https://github.com/coolsnowwolf/packages customfeeds/packages
           git clone --depth=1 https://github.com/coolsnowwolf/luci customfeeds/luci
           chmod +x ../scripts/*.sh
           ../scripts/hook-feeds.sh
-
-      - name: Install Feeds
-        run: |
-          cd $OPENWRTROOT
+      -名称：安装提要
+        运行：|
+          cd $OPENWRROOT
           ./scripts/feeds install -a
-
-      - name: Load Custom Configuration
-        run: |
-          [ -e files ] && mv files $OPENWRTROOT/files
+      -名称：加载自定义配置
+        运行：|
+          [ -e 文件 ] && mv 文件 $OPENWRTROOT/files
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
-          cat config/bcm27xx/rpi-lean-extra.config >> $OPENWRTROOT/.config
-          cd $OPENWRTROOT
+          猫配置/bcm27xx/rpi-lean-extra.config >> $OPENWRTROOT/.config
+          cd $OPENWRROOT
           echo -e "CONFIG_USB_LAN78XX=y\nCONFIG_USB_NET_DRIVERS=y" >> target/linux/bcm27xx/bcm2711/config-5.4
-          mkdir -p files/lib/firmware/brcm/
-          wget -q https://raw.githubusercontent.com/openwrt/cypress-nvram/master/brcmfmac43455-sdio.raspberrypi%2C4-model-b.txt -O files/lib/firmware/brcm/brcmfmac43455-sdio.raspberrypi,4-compute-module.txt
+          mkdir -p 文件/lib/固件/brcm/
+          wget -q https://raw.githubusercontent.com/openwrt/cypress-nvram/master/brcmfmac43455-sdio.raspberrypi%2C4-model-b.txt -O files/lib/firmware/brcm/brcmfmac43455-sdio.raspberrypi, 4-计算模块.txt
           ../$DIY_SH
           ../scripts/preset-clash-core.sh armv8
           ../scripts/preset-terminal-tools.sh
           ../scripts/enable-rpi4-wifi.sh
-
-      - name: Download Package
-        id: package
-        run: |
-          cd $OPENWRTROOT
-          if "$KMODS_IN_FIRMWARE" = 'true'
-          then
+      -名称：下载包
+        id :包
+        运行：|
+          cd $OPENWRROOT
+          如果“$KMODS_IN_FIRMWARE” = '真'
+          然后
               echo "CONFIG_ALL_NONSHARED=y" >> .config
-          fi
-          make defconfig
-          make download -j8
+          菲
+          进行定义
+          进行下载 -j8
           find dl -size -1024c -exec ls -l {} \;
           find dl -size -1024c -exec rm -f {} \;
-
-      - name: Compile Packages
-        id: compile
-        run: |
-          cd $OPENWRTROOT
-          echo -e "$(nproc) thread compile"
-          make tools/compile -j$(nproc) || make tools/compile -j1 V=s
-          make toolchain/compile -j$(nproc) || make toolchain/compile -j1 V=s
-          make target/compile -j$(nproc) || make target/compile -j1 V=s IGNORE_ERRORS=1
-          make diffconfig
-          make package/compile -j$(nproc) IGNORE_ERRORS=1 || make package/compile -j1 V=s IGNORE_ERRORS=1
-          make package/index
+      -名称：编译包
+        id：编译
+        运行：|
+          cd $OPENWRROOT
+          echo -e "$(nproc) 线程编译"
+          制作工具/编译 -j$(nproc) || 制作工具/编译 -j1 V=s
+          制作工具链/编译 -j$(nproc) || 制作工具链/编译 -j1 V=s
+          制作目标/编译 -j$(nproc) || 制作目标/编译 -j1 V=s IGNORE_ERRORS=1
+          进行差异配置
+          制作包/编译 -j$(nproc) IGNORE_ERRORS=1 || 制作包/编译 -j1 V=s IGNORE_ERRORS=1
+          制作包/索引
           cd $OPENWRTROOT/bin/packages/*
-          PLATFORM=$(basename `pwd`)
-          echo "PLATFORM=$PLATFORM" >> $GITHUB_ENV
+          平台=$（基本名称`密码`）
+          echo "平台=$平台" >> $GITHUB_ENV
           echo "::set-output name=PLATFORM::$(echo $PLATFORM)"
           cd $OPENWRTROOT/bin/targets/*
-          TARGET=$(basename `pwd`)
+          TARGET=$(basename`pwd`)
           echo "TARGET=$TARGET" >> $GITHUB_ENV
           echo "::set-output name=TARGET::$(echo $TARGET)"
-          cd *
-          SUBTARGET=$(basename `pwd`)
+          光盘 *
+          SUBTARGET=$(basename`pwd`)
           echo "SUBTARGET=$SUBTARGET" >> $GITHUB_ENV
           echo "::set-output name=SUBTARGET::$(echo $SUBTARGET)"
           echo "FIRMWARE=$PWD" >> $GITHUB_ENV
           echo "::set-output name=FIRMWARE::$(echo $PWD)"
           echo "::set-output name=COMPILE_STATUS::success"
-
-      - name: Generate Firmware
-        if: steps.compile.outputs.COMPILE_STATUS == 'success'
-        id: generate
-        run: |
-          cd data/opkg
+      -名称：生成固件
+        如果：steps.compile.outputs.COMPILE_STATUS == 'success'
+        id :生成
+        运行：|
+          cd 数据/opkg
           sed -i "s/subtarget/$SUBTARGET/g" distfeeds*.conf
           sed -i "s/target\//$TARGET\//g" distfeeds*.conf
           sed -i "s/platform/$PLATFORM/g" distfeeds*.conf
-          cd $OPENWRTROOT
+          cd $OPENWRROOT
           echo "dtparam=i2c_arm=on,audio=on" >> target/linux/bcm27xx/image/config.txt
-          mkdir -p files/etc/uci-defaults/
-          cp ../scripts/init-settings.sh files/etc/uci-defaults/99-init-settings
-          mkdir -p files/etc/opkg
-          cp ../data/opkg/distfeeds-packages-server.conf files/etc/opkg/distfeeds.conf.server
-          if "$KMODS_IN_FIRMWARE" = 'true'
-          then
-              mkdir -p files/www/snapshots
-              cp -r bin/targets files/www/snapshots
-              cp ../data/opkg/distfeeds-18.06-local.conf files/etc/opkg/distfeeds.conf
-          else
-              cp ../data/opkg/distfeeds-18.06-remote.conf files/etc/opkg/distfeeds.conf
-          fi
-          cp files/etc/opkg/distfeeds.conf.server files/etc/opkg/distfeeds.conf.mirror
-          sed -i "s/http:\/\/192.168.123.100:2345\/snapshots/https:\/\/openwrt.cc\/snapshots\/$(date +"%Y-%m-%d")\/lean/g" files/etc/opkg/distfeeds.conf.mirror
-          if "$IPV6MOD_IN_FIRMWARE" = 'true'
-          then
-              mkdir -p files/www/ipv6-modules
+          mkdir -p 文件/etc/uci-defaults/
+          cp ../scripts/init-settings.sh 文件/etc/uci-defaults/99-init-settings
+          mkdir -p 文件/etc/opkg
+          cp ../data/opkg/distfeeds-packages-server.conf 文件/etc/opkg/distfeeds.conf.server
+          如果“$KMODS_IN_FIRMWARE” = '真'
+          然后
+              mkdir -p 文件/www/snapshots
+              cp -r bin/目标文件/www/snapshots
+              cp ../data/opkg/distfeeds-18.06-local.conf 文件/etc/opkg/distfeeds.conf
+          别的
+              cp ../data/opkg/distfeeds-18.06-remote.conf 文件/etc/opkg/distfeeds.conf
+          菲
+          cp文件/etc/opkg/distfeeds.conf.server文件/etc/opkg/distfeeds.conf.mirror
+          sed -i "s/http:\/\/192.168.123.100:2345\/snapshots/https:\/\/openwrt.cc\/snapshots\/$(date +"%Y-%m-%d") \/lean/g”文件/etc/opkg/distfeeds.conf.mirror
+          如果“$IPV6MOD_IN_FIRMWARE” = '真'
+          然后
+              mkdir -p 文件/www/ipv6-modules
               cp bin/packages/$PLATFORM/luci/luci-proto-ipv6* files/www/ipv6-modules
               cp bin/packages/$PLATFORM/base/{ipv6helper*,odhcpd-ipv6only*,odhcp6c*,6in4*} "files/www/ipv6-modules"
-              cp bin/targets/$TARGET/$SUBTARGET/packages/{ip6tables*,kmod-nf-nat6*,kmod-ipt-nat6*,kmod-sit*,kmod-ip6tables-extra*} "files/www/ipv6-modules"
-              mkdir -p files/bin
-              cp ../scripts/ipv6-helper.sh files/bin/ipv6-helper
-          fi
-          make package/install -j$(nproc) || make package/install -j1 V=s
-          make target/install -j$(nproc) || make target/install -j1 V=s
-          make checksum
+              cp bin/targets/$TARGET/$SUBTARGET/packages/{ip6tables*,kmod-nf-nat6*,kmod-ipt-nat6*,kmod-sit*,kmod-ip6tables-extra*} "files/www/ipv6-模块”
+              mkdir -p 文件/bin
+              cp ../scripts/ipv6-helper.sh 文件/bin/ipv6-helper
+          菲
+          制作包/安装 -j$(nproc) || 制作包/安装 -j1 V=s
+          制作目标/安装 -j$(nproc) || 制作目标/安装 -j1 V=s
+          进行校验和
           echo "::set-output name=GENERATE_STATUS::success"
+      -名称：上传 Bin 文件夹
+        用途：动作/上传工件@main
+        如果：steps.generate.outputs.GENERATE_STATUS == 'success'
+        与：
+          名称：二进制归档
+          路径：openwrt/bin
 
-      - name: Upload Bin Folder
-        uses: actions/upload-artifact@main
-        if: steps.generate.outputs.GENERATE_STATUS == 'success'
-        with:
-          name: bin-archive
-          path: openwrt/bin
+  上传：
+    需求：[构建]
+    运行：ubuntu-18.04
 
-  Upload:
-    needs: [Build]
-    runs-on: ubuntu-18.04
+    步骤：
+      -名称：结帐
+        用途：动作/结帐@main
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-
-      - name: Restore Variables
-        run: |
+      -名称：恢复变量
+        运行：|
           echo "OPENWRTROOT=$(echo '${{needs.Build.outputs.OPENWRTROOT}}')" >> $GITHUB_ENV
-          echo "PLATFORM=$(echo '${{needs.Build.outputs.PLATFORM}}')" >> $GITHUB_ENV
+          echo "平台=$(echo '${{needs.Build.outputs.PLATFORM}}')" >> $GITHUB_ENV
           echo "TARGET=$(echo '${{needs.Build.outputs.TARGET}}')" >> $GITHUB_ENV
           echo "SUBTARGET=$(echo '${{needs.Build.outputs.SUBTARGET}}')" >> $GITHUB_ENV
           echo "FIRMWARE=$(echo '${{needs.Build.outputs.FIRMWARE}}')" >> $GITHUB_ENV
           echo "GENERATE_STATUS=$(echo '${{needs.Build.outputs.GENERATE_STATUS}}')" >> $GITHUB_ENV
+      -名称：下载 Bin 文件夹
+        用途：动作/下载-artifact@v2
+        如果：env.GENERATE_STATUS == '成功'
+        与：
+          名称：二进制归档
+          路径：openwrt/bin
 
-      - name: Download Bin Folder
-        uses: actions/download-artifact@v2
-        if: env.GENERATE_STATUS == 'success'
-        with:
-          name: bin-archive
-          path: openwrt/bin
-
-      - name: Deploy Packages-Server
-        if: env.GENERATE_STATUS == 'success'
-        run: |
+      -名称：部署包-服务器
+        如果：env.GENERATE_STATUS == '成功'
+        运行：|
           sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
           mkdir -p server/web/snapshots/targets/$TARGET/$SUBTARGET
           cp -r $OPENWRTROOT/bin/packages server/web/snapshots
           cp -r $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET/packages server/web/snapshots/targets/$TARGET/$SUBTARGET
-          mv server packages-server
-          zip -qrm packages-server.zip packages-server
+          mv 服务器包服务器
+          zip -qrm 包-服务器.zip 包-服务器
           mv packages-server.zip $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
-
-      - name: Rclone Upload
-        env:
-          RCLONE_PACKAGE: ${{ secrets.RCLONE_PACKAGE }}
-          RCLONE_FIRMWARE: ${{ secrets.RCLONE_FIRMWARE }}
-        if: env.GENERATE_STATUS == 'success' && env.UPLOAD_RCLONE == 'true' && env.RCLONE_PACKAGE != ''
-        run: |
-          cd $OPENWRTROOT
-          curl https://rclone.org/install.sh | sudo bash
+      -名称：Rclone 上传
+        环境：
+          RCLONE_PACKAGE : ${{ secrets.RCLONE_PACKAGE }}
+          RCLONE_FIRMWARE : ${{ secrets.RCLONE_FIRMWARE }}
+        如果：env.GENERATE_STATUS == 'success' && env.UPLOAD_RCLONE == 'true' && env.RCLONE_PACKAGE != ''
+        运行：|
+          cd $OPENWRROOT
+          curl https://rclone.org/install.sh | 须藤 bash
           mkdir -p ~/.config/rclone/
           cat << EOF > ~/.config/rclone/rclone.conf
           ${{ secrets.RCLONE_CONFIG }}
@@ -227,18 +217,17 @@ jobs:
           rclone copy bin $RCLONE_PACKAGE:$(date +"%Y-%m-%d")/lean --filter-from ../data/rclone/upload-rule.txt
           rclone copy bin/targets $RCLONE_FIRMWARE:$(date +"%Y-%m-%d")/lean --exclude "packages/"
           echo "::warning file=Firmware-GoogleDrive::Download Link: https://drive.google.com/drive/folders/1_P2RoPbguY99qJxmCU4SKUgP8Kg0Xr03"
-
-      - name: Deploy Files To HostHatch Node
-        id: hosthatch
-        env:
-          HOST: "${{ secrets.REMOTE_USER }}@${{ secrets.HOSTHATCH_IP }}"
-          SOURCE_TARGETS: "openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
-          DEST_TARGETS: "${{ env.WEBROOT }}/releases/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
-          REMOTE_PRIVATEKEY: "${{secrets.HOSTHATCH_PRIVATEKEY}}"
-        if: env.REMOTE_PRIVATEKEY != null
-        run: |
+      -名称：将文件部署到 HostHatch 节点
+        编号：hosthatch
+        环境：
+          主机：“ ${{secrets.REMOTE_USER }}@${{secrets.HOSTHATCH_IP }} ”
+          SOURCE_TARGETS : " openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/ "
+          DEST_TARGETS : " ${{ env.WEBROOT }}/releases/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/ "
+          REMOTE_PRIVATEKEY : " ${{secrets.HOSTHATCH_PRIVATEKEY}} "
+        如果：env.REMOTE_PRIVATEKEY != null
+        运行：|
           mkdir -p ~/.ssh/
-          install -m 600 /dev/null ~/.ssh/id_rsa
+          安装 -m 600 /dev/null ~/.ssh/id_rsa
           echo "${{secrets.HOSTHATCH_PRIVATEKEY}}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh -q -t -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $HOST \
@@ -246,62 +235,58 @@ jobs:
           $WEBROOT/archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/targets/$TARGET/$SUBTARGET'"
           rsync -chavP --delete -e 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no' $SOURCE_TARGETS $HOST:$DEST_TARGETS
           ssh -q -t -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $HOST \
-          bash -c "'rsync -axv --delete $WEBROOT/releases/targets/$TARGET/$SUBTARGET $WEBROOT/archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/targets/$TARGET/$SUBTARGET'"
-
-      - name: Deploy Files To OVH Node
-        id: ovh
-        env:
-          HOST: "${{ secrets.REMOTE_USER }}@${{ secrets.OVH_IP }}"
-          SOURCE_TARGETS: "openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
-          DEST_TARGETS: "${{ env.WEBROOT }}/releases/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
-          REMOTE_PRIVATEKEY: "${{secrets.OVH_PRIVATEKEY}}"
-        if: env.REMOTE_PRIVATEKEY != null
-        run: |
+          bash -c "'rsync -axv --delete $WEBROOT/releases/targets/$TARGET/$SUBTARGET $WEBROOT/archive/$(date +%Y)/$(date +%m)/$(date +%d) )/发布/目标/$TARGET/$SUBTARGET'"
+      -名称：将文件部署到 OVH 节点
+        编号：ovh
+        环境：
+          主机：“ ${{secrets.REMOTE_USER }}@${{secrets.OVH_IP }} ”
+          SOURCE_TARGETS : " openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/ "
+          DEST_TARGETS : " ${{ env.WEBROOT }}/releases/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/ "
+          REMOTE_PRIVATEKEY : " ${{secrets.OVH_PRIVATEKEY}} "
+        如果：env.REMOTE_PRIVATEKEY != null
+        运行：|
           mkdir -p ~/.ssh/
-          install -m 600 /dev/null ~/.ssh/id_rsa
+          安装 -m 600 /dev/null ~/.ssh/id_rsa
           echo "${{secrets.OVH_PRIVATEKEY}}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh -q -t -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $HOST \
           bash -c "'mkdir -p $WEBROOT/releases/targets/$TARGET/$SUBTARGET'"
           rsync -chavP --delete -e 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no' $SOURCE_TARGETS $HOST:$DEST_TARGETS
-
-      - name: Deploy Files To PacificRack Node
-        id: pacificrack
-        env:
-          HOST: "${{ secrets.REMOTE_USER }}@${{ secrets.PACIFICRACK_IP }}"
-          SOURCE_TARGETS: "openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
-          DEST_TARGETS: "${{ env.WEBROOT }}/releases/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
-          REMOTE_PRIVATEKEY: "${{secrets.PACIFICRACK_PRIVATEKEY}}"
-        if: env.REMOTE_PRIVATEKEY != null
-        run: |
+      -名称：将文件部署到 PacificRack 节点
+        编号: pacificrack
+        环境：
+          主机：“ ${{secrets.REMOTE_USER }}@${{secrets.PACIFICRACK_IP}} ”
+          SOURCE_TARGETS : " openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/ "
+          DEST_TARGETS : " ${{ env.WEBROOT }}/releases/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/ "
+          REMOTE_PRIVATEKEY : " ${{secrets.PACIFICRACK_PRIVATEKEY}} "
+        如果：env.REMOTE_PRIVATEKEY != null
+        运行：|
           mkdir -p ~/.ssh/
-          install -m 600 /dev/null ~/.ssh/id_rsa
+          安装 -m 600 /dev/null ~/.ssh/id_rsa
           echo "${{secrets.PACIFICRACK_PRIVATEKEY}}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh -q -t -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $HOST \
           bash -c "'mkdir -p $WEBROOT/releases/targets/$TARGET/$SUBTARGET'"
           rsync -chavP --delete -e 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no' $SOURCE_TARGETS $HOST:$DEST_TARGETS
-
-      - name: Organize Files
-        id: organize
-        if: env.GENERATE_STATUS == 'success'
-        run: |
-          cd ${FIRMWARE}
-          rm -rf packages
+      -名称：组织文件
+        id :组织
+        如果：env.GENERATE_STATUS == '成功'
+        运行：|
+          cd ${固件}
+          rm -rf 包
           cd $OPENWRTROOT/bin/targets/$TARGET/
-          curl -sL https://git.io/file-transfer | bash -s beta
-          sudo mv transfer /usr/bin
-          sudo chmod +x /usr/bin/transfer
+          curl -sL https://git.io/file-transfer | bash -s 测试版
+          须藤 mv 传输 /usr/bin
+          须藤 chmod +x /usr/bin/transfer
           df -hT $PWD
           echo "::set-output name=ORGANIZE_STATUS::success"
-
-          - name: Upload Firmware To WeTransfer
-        if: steps.organize.outputs.ORGANIZE_STATUS == 'success' && env.UPLOAD_WETRANSFER == 'true'
-        run: |
-          transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
+      -名称：上传固件到 WeTransfer
+        如果：steps.organize.outputs.ORGANIZE_STATUS == 'success' && env.UPLOAD_WETRANSFER == 'true'
+        运行：|
+          转移湿 -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
           echo "::warning file=Firmware-Wetransfer.com::$(cat wetransfer.log | grep https)"
-      - name: Delete Artifacts
-        uses: geekyeggo/delete-artifact@v1
-        with:
-          name: |
-            bin-archive
+      -名称：删除工件
+        用途：geekyeggo/delete-artifact@v1
+        与：
+          姓名：|
+            二进制归档
