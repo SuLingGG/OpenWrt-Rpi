@@ -70,8 +70,6 @@ jobs:
           mkdir customfeeds
           git clone --depth=1 https://github.com/coolsnowwolf/packages customfeeds/packages
           git clone --depth=1 https://github.com/coolsnowwolf/luci customfeeds/luci
-          git clone --wiringPi https://nmaas87.github.io/rpi-openwrt-packages/bin_packages/wiringPi
-
           chmod +x ../scripts/*.sh
           ../scripts/hook-feeds.sh
 
@@ -302,7 +300,7 @@ jobs:
         run: |
           transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
           echo "::warning file=Firmware-Wetransfer.com::$(cat wetransfer.log | grep https)"
-        
+
       - name: Delete Artifacts
         uses: geekyeggo/delete-artifact@v1
         with:
