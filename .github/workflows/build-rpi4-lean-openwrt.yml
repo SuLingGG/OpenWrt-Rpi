@@ -281,12 +281,16 @@
           df -hT $PWD
           echo "::set-output name=ORGANIZE_STATUS::success"
       -名称：上传固件到 WeTransfer
-        如果：steps.organize.outputs.ORGANIZE_STATUS == 'success' && env.UPLOAD_WETRANSFER == 'true'
-        运行：|
-          转移湿 -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
-          echo "::warning file=Firmware-Wetransfer.com::$(cat wetransfer.log | grep https)"
+      id : wetransfer
+      如果：steps.organize.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
+      运行：|
+        curl -fsSL git.io/file-transfer | 嘘
+        ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
+        echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
+        echo "::set-output name=url::$(cat wetransfer.log | grep https | cut -f3 -d" ")"
       -名称：删除工件
         用途：geekyeggo/delete-artifact@v1
         与：
           姓名：|
             二进制归档
+           
