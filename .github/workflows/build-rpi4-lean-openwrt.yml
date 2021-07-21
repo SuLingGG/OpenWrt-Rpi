@@ -1,14 +1,14 @@
-#==================================================
+# ==================================================
 # https://github.com/P3TERX/Actions-OpenWrt
-# 描述：使用 GitHub Actions 构建 OpenWrt
-# 许可证：麻省理工学院
+#描述：使用 GitHub Actions 构建 OpenWrt
+#许可证：麻省理工学院
 #作者：P3TERX
-# 博客：https://p3terx.com
-#==================================================
+#博客：https://p3terx.com
+# ==================================================
 
-名称：github/workflows/build-rpi4-lean-openwrt
+名称：构建 Raspberry Pi 4 Lean 的 OpenWrt
 
-上：
+在：
   存储库调度：
     类型：[精益，rpi4]
   工作流调度：
