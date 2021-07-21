@@ -6,7 +6,7 @@
 # 博客：https://p3terx.com
 #==================================================
 
-名称：构建 Raspberry Pi 4 Lean 的 OpenWrt
+名称：github/workflows/build-rpi4-lean-openwrt
 
 上：
   存储库调度：
