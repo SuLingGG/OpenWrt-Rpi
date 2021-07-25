@@ -248,23 +248,6 @@ jobs:
           ssh -q -t -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $HOST \
           bash -c "'rsync -axv --delete $WEBROOT/releases/targets/$TARGET/$SUBTARGET $WEBROOT/archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/targets/$TARGET/$SUBTARGET'"
 
-      - name: Deploy Files To OVH Node
-        id: ovh
-        env:
-          HOST: "${{ secrets.REMOTE_USER }}@${{ secrets.OVH_IP }}"
-          SOURCE_TARGETS: "openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
-          DEST_TARGETS: "${{ env.WEBROOT }}/releases/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
-          REMOTE_PRIVATEKEY: "${{secrets.OVH_PRIVATEKEY}}"
-        if: env.REMOTE_PRIVATEKEY != null
-        run: |
-          mkdir -p ~/.ssh/
-          install -m 600 /dev/null ~/.ssh/id_rsa
-          echo "${{secrets.OVH_PRIVATEKEY}}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh -q -t -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $HOST \
-          bash -c "'mkdir -p $WEBROOT/releases/targets/$TARGET/$SUBTARGET'"
-          rsync -chavP --delete -e 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no' $SOURCE_TARGETS $HOST:$DEST_TARGETS
-
       - name: Deploy Files To PacificRack Node
         id: pacificrack
         env:
