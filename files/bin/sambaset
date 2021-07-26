@@ -1,0 +1,108 @@
+#!/bin/bash
+#--------------------------------------------------------
+#   Don't remove this section for credits
+#   Don't rename this file
+#--------------------------------------------------------
+#   This script is used to install Xderm Mini GUI custom theme
+#   Installation script by helmiau a.k.a Helmi Amirudin
+#   my profile page https://me.helmiau.my.id
+#   my github https://github.com/helmiau
+#--------------------------------------------------------
+
+#-- Warna Teks Installer
+RED='\033[0;31m' # Merah
+GRE='\033[1;32m' # Hijau Muda
+CYA='\033[0;36m' # Biru Muda
+YEL='\033[1;33m' # Kuning
+NOR='\033[1;37m' # Putih
+
+#-- Theme Info
+OPKGSMB=$(if [[ $(opkg list-installed samba36-server | grep -c samba36-server) = "1" ]]; then echo -e "${GRE}Installed"; else echo -e "${RED}Unavailable"; fi)
+LUCISMB=$(if [[ $(opkg list-installed luci-app-samba | grep -c luci-app-samba) = "1" ]]; then echo -e "${GRE}Installed"; else echo -e "${RED}Unavailable"; fi)
+ETCPASSWD=$(if grep -q "USER:x:1000:1000" /etc/passwd; then echo -e "${GRE}Available"; else echo -e "${RED}Unavailable"; fi)
+ETCGROUP=$(if grep -q "GROUP:x:1000:" /etc/group; then echo -e "${GRE}Available"; else echo -e "${RED}Unavailable"; fi)
+ETCSHADOW=$(if grep -q "USER:" /etc/shadow; then echo -e "${GRE}Available"; else echo -e "${RED}Unavailable"; fi)
+#-- Theme Info End
+
+#-- Uneditable Info for script checking purpose
+#INSTALLERNAME="$(basename "$0")"
+
+#-- Installer Scripts
+echo -e "${NOR}==========================================="
+echo -e "       ${YEL}Samba Server Setup by helmiau${NOR}" #Do not remove this
+echo "==========================================="
+echo -e "   ${CYA}Samba36 Server Package    : $OPKGSMB${NOR}"
+echo -e "   ${CYA}Samba LuCI Panel          : $LUCISMB${NOR}"
+echo -e "   ${CYA}USER inside /etc/passwrd  : $ETCPASSWD${NOR}"
+echo -e "   ${CYA}GROUP inside /etc/group   : $ETCGROUP${NOR}"
+echo -e "   ${CYA}USER inside /etc/shadow   : $ETCSHADOW${NOR}"
+echo "==========================================="
+echo "   Main function of this tool is to add ${CYA}Allowed Users${NOR}"
+echo "   And disable ${CYA}Allow guests${NOR}"
+echo "==========================================="
+echo -e "           ${YEL}Exit = type anything !${NOR}"
+echo "==========================================="
+if [[ $(opkg list-installed samba36-server | grep -c samba36-server) = "1" ]]; then
+	echo "  Samba36 Server package already installed..."
+else
+	echo "  Samba36 Server package is not installed, installing..."
+	opkg update && opkg install samba36-server
+	echo "  Done !."
+fi
+if [[ $(opkg list-installed | grep -c luci-app-samba) = "1" ]]; then
+	echo "  Samba LuCI Panel already installed..."
+else
+	echo "  Samba LuCI Panel package is not installed, installing..."
+	opkg update && opkg install luci-app-samba
+	echo "  Done !."
+fi
+echo "==========================================="
+echo -e "   ${CYA}List available path under /mnt directory :${NOR}"
+echo -e "==========================================="
+ls -lh /mnt
+echo -e "${NOR}==========================================="
+echo -e "   ${CYA}Input Disk Directory for Samba Share : "
+echo -e "   ${CYA}Example : /mnt/sda1 or /mnt/usb etc.${NOR}"
+echo "==========================================="
+echo -n ""
+read -r DISKPATH
+if [[ $(grep "USER:x:1000:1000" /etc/passwd) ]]; then
+	echo -e "  File passwd contain USER, changing ${CYA}$DISKPATH${NOR} only..."
+	sed -i "/USER:x:1000:1000:/d" /etc/passwd
+	echo -e "USER:x:1000:1000:GROUP:$DISKPATH:/bin/false" >> /etc/passwd
+else
+	echo "  File passwd not contain USER, Adding $DISKPATH..."
+	echo -e "USER:x:1000:1000:GROUP:$DISKPATH:/bin/false" >> /etc/passwd
+fi
+if [[ $(grep "GROUP:x:1000:" /etc/group) ]]; then
+	echo "  File group contain GROUP, skipping..."
+else
+	echo "  File group not contain GROUP, adding..."
+	echo -e "GROUP:x:1000:" >> /etc/group
+fi
+if [[ $(grep "USER:" /etc/shadow) ]]; then
+	echo "  File shadow contain USER, skipping..."
+else
+	echo "  File shadow not contain USER, Adding USER..."
+	echo -e "USER:xyzDummyString:16666:0:99999:7:::" >> /etc/shadow
+fi
+echo -e "   ${YEL}$DISKPATH${CYA} added to Samba${NOR}"
+echo "==========================================="
+echo -e "   ${CYA}Now input password for USER account :${NOR}"
+echo -e "==========================================="
+passwd USER
+echo "==========================================="
+echo -e "   ${CYA}Now input password for smbpasswd user :${NOR}"
+echo -e "==========================================="
+smbpasswd -a USER
+echo -e "===========================================${YEL}"
+echo -e "   At LUCI, under ${CYA}Allowed Users${YEL}, enter ${CYA}USER${YEL}"
+echo -e "   uncheck ${CYA}Allowed Guest${YEL} for added security."
+echo -e "${NOR}==========================================="
+exit
+#
+#   This script is used to install Xderm Mini GUI custom theme
+#   Installation script by helmiau a.k.a Helmi Amirudin
+#   my profile page https://me.helmiau.my.id
+#   my github https://github.com/helmiau
+#

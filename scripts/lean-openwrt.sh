@@ -138,6 +138,10 @@ wget -O package/base-files/files/bin/ssr-stop "https://raw.githubusercontent.com
 # run "myip" using terminal for use
 wget -O package/base-files/files/bin/myip "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/myip" && chmod +x package/base-files/files/bin/myip
 
+# Add Samba Allowed Guest Setup
+# run "sambaset" using terminal to set it up
+wget -O package/base-files/files/bin/sambasetup "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/sambasetup" && chmod +x package/base-files/files/bin/sambasetup
+
 # Add modemmanager
 svn co https://github.com/nickberry17/luci-proto-modemmanager
 

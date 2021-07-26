@@ -59,4 +59,8 @@ chmod +x /bin/fixphp
 # run "myip" using terminal for use
 chmod +x /bin/myip
 
+# Add Samba Allowed Guest Setup
+# run "sambaset" using terminal to set it up
+chmod +x /bin/sambasetup
+
 exit 0

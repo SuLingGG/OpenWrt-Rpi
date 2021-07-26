@@ -58,6 +58,12 @@ Note: The advertisement blocking effect at the router level is not good. If you 
 - VMESS Account Creation (3 days) from racevpn.com via  Terminal by command ```vmess```
 - Fix browser always download file index.php (like xderm and libernet) via  Terminal by command ```fixphp```
 - Add IP Address Info Checker. run ```myip``` using terminal for use
+- Add Samba Allowed user setup. This tool will help you to add Allowed User for Samba Directory.
+	- Run ```sambaset``` using terminal for use, then follow instruction
+	- Open Network Share https://192.168.1.1/cgi-bin/luci/admin/nas/samba
+	- Add shared directory, fill name, path with your shared directory
+	- Fill **Allowed users** with **USER**, check **Browseable**, uncheck **Allowed Guests** and **Read-Only**
+	- Save and Apply
 
 </p>
 </details>
