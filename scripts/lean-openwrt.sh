@@ -140,7 +140,10 @@ wget -O package/base-files/files/bin/myip "https://raw.githubusercontent.com/hel
 
 # Add Samba Allowed Guest Setup
 # run "sambaset" using terminal to set it up
-wget -O package/base-files/files/bin/sambasetup "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/sambasetup" && chmod +x package/base-files/files/bin/sambasetup
+wget -O package/base-files/files/bin/sambaset "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/sambaset" && chmod +x package/base-files/files/bin/sambaset
+
+# Add language changer to auto
+wget -O package/base-files/files/bin/changelang "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/changelang" && chmod +x package/base-files/files/bin/changelang
 
 # Add modemmanager
 svn co https://github.com/nickberry17/luci-proto-modemmanager

@@ -19,15 +19,6 @@ uci set system.@system[0].hostname='HelmiWrt'
 uci set system.@system[0].timezone='WIB-7'
 uci set system.@system[0].zonename='Asia/Jakarta'
 
-# Set default language to Auto
-uci set luci.main.lang='auto'
-sed -i "s/'zh_cn'/'auto'/g" /etc/config/luci
-# uci set luci.main.lang=en
-# sed -i "s/'zh_cn'/'en'/g" /etc/config/luci
-
-#uci commit
-uci commit
-
 # Disable autostart by default for some packages
 cd /etc/rc.d
 rm -f S98udptools || true
@@ -61,6 +52,9 @@ chmod +x /bin/myip
 
 # Add Samba Allowed Guest Setup
 # run "sambaset" using terminal to set it up
-chmod +x /bin/sambasetup
+chmod +x /bin/sambaset
+
+# Add language changer to auto
+chmod +x /bin/changelang
 
 exit 0

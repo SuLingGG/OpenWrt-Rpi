@@ -1,0 +1,46 @@
+#!/bin/bash
+#--------------------------------------------------------
+#   Don't remove this section for credits
+#   Don't rename this file
+#--------------------------------------------------------
+#   This script is used to fix browser always download index.php
+#   Installation script by helmiau a.k.a Helmi Amirudin
+#   my profile page https://helmiau.com
+#   my github https://github.com/helmiau
+#--------------------------------------------------------
+
+
+helmiooo=$(cat /etc/config/uhttpd)
+if [[ $helmiooo == *"uhttpd 'mai"* ]]; then
+	sleep 1
+	sed -i "/config uhttpd 'main'/a list interpreter '.php=/usr/bin/php-cgi'" /etc/config/uhttpd
+fi
+
+helmiooo=$(cat /etc/config/uhttpd)
+if [[ $helmiooo == *"uhttpd 'mai"* ]]; then
+	sleep 1
+	sed -i "/config uhttpd 'main'/a option ubus_prefix '/ubus'" /etc/config/uhttpd
+fi
+
+helmiooo=$(cat /etc/config/uhttpd)
+if [[ $helmiooo == *"uhttpd mai"* ]]; then
+	sleep 1
+	sed -i "/config uhttpd main/a list interpreter '.php=/usr/bin/php-cgi'" /etc/config/uhttpd
+fi
+
+helmiooo=$(cat /etc/config/uhttpd)
+if [[ $helmiooo == *"uhttpd mai"* ]]; then
+	sleep 1
+	sed -i "/config uhttpd main/a option ubus_prefix '/ubus'" /etc/config/uhttpd
+fi
+
+# Set default language to Auto
+uci set luci.main.lang='auto'
+sed -i "s/'zh_cn'/'auto'/g" /etc/config/luci
+# uci set luci.main.lang=en
+# sed -i "s/'zh_cn'/'en'/g" /etc/config/luci
+
+#uci commit
+uci commit
+
+/etc/init.d/uhttpd
