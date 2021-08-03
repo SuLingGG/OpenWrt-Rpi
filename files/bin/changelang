@@ -9,6 +9,7 @@
 #   my github https://github.com/helmiau
 #--------------------------------------------------------
 
+/etc/init.d/uhttpd restart
 
 helmiooo=$(cat /etc/config/uhttpd)
 if [[ $helmiooo == *"uhttpd 'mai"* ]]; then
