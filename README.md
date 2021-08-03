@@ -100,7 +100,7 @@ Username	: root
 Password	: password
 ```
 
-Note : Raspberry Pi will reboot automatically when first boot up after firmware installation
+**Note : Raspberry Pi will reboot automatically when first boot up after firmware installation**
 
 ### Credits
 - [OpenWrt Official](https://github.com/openwrt/openwrt)
