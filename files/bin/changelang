@@ -43,4 +43,4 @@ sed -i "s/'zh_cn'/'auto'/g" /etc/config/luci
 #uci commit
 uci commit
 
-/etc/init.d/uhttpd
+/etc/init.d/uhttpd restart
