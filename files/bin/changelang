@@ -10,6 +10,7 @@
 #--------------------------------------------------------
 
 /etc/init.d/uhttpd restart
+/sbin/luci-reload
 
 helmiooo=$(cat /etc/config/uhttpd)
 if [[ $helmiooo == *"uhttpd 'mai"* ]]; then
@@ -44,4 +45,5 @@ sed -i "s/'zh_cn'/'auto'/g" /etc/config/luci
 #uci commit
 uci commit
 
+/sbin/luci-reload
 /etc/init.d/uhttpd restart
