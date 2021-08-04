@@ -54,7 +54,11 @@ chmod +x /bin/myip
 # run "sambaset" using terminal to set it up
 chmod +x /bin/sambaset
 
-# Add language changer to auto
+# Add refresh IP Address for QMI Modems, such as LT4220
+# Script by Rudi Hartono https://www.facebook.com/rud18
+chmod +x /bin/ipqmi
+
+# Add language changer to auto ! This line below must be placed in end of file before exit command
 chmod +x /bin/changelang
 
 exit 0

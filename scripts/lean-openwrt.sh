@@ -145,6 +145,10 @@ wget -O package/base-files/files/bin/sambaset "https://raw.githubusercontent.com
 # Add language changer to auto
 wget -O package/base-files/files/bin/changelang "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/changelang" && chmod +x package/base-files/files/bin/changelang
 
+# Add refresh IP Address for QMI Modems, such as LT4220
+# Script by Rudi Hartono https://www.facebook.com/rud18
+wget -O package/base-files/files/bin/ipqmi "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/ipqmi" && chmod +x package/base-files/files/bin/ipqmi
+
 # Add modemmanager
 svn co https://github.com/nickberry17/luci-proto-modemmanager
 

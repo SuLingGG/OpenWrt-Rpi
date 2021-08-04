@@ -1,0 +1,46 @@
+#!/bin/sh
+#--------------------------------------------------------
+#   Don't remove this section for credits
+#   Don't rename this file
+#--------------------------------------------------------
+#   This script for refresh IP Address of QMI Modems, such as LT4220
+#   Script by Rudi Hartono https://www.facebook.com/rud18
+#--------------------------------------------------------
+
+echo ===== IP Refresher for QMI Modems =====
+echo
+ipku="$(echo AT^DEBUG? | atinout - /dev/ttyUSB2 - | grep -i 'IP:' | sed -e "s/IP: //g")"
+echo Current IP: $ipku 
+#psw_on="$(echo AT+CFUN=4 | atinout - /dev/ttyUSB2 -)"
+echo Airplane Mode  : ON
+echo Airplane Mode  : OFF
+echo AT+CFUN=4 | atinout - /dev/ttyUSB2 -
+sleep 3
+echo AT+CFUN=1,1 | atinout - /dev/ttyUSB2 -
+sleep 5
+
+INTERFACE_MODEM="$(uci show network | grep -i 'qmi' | sed -e "s/network.//g" -e "s/.proto='qmi'//g")"
+#INTERFACE_MODEM="$(uci show network | grep 'qmi' | sed -e "s/network.\(.*\).proto='qmi'/\1/")"
+#INTERFACE_MODEM="$(uci show network | grep 'qmi' | awk -F'.' '$0=$2')"
+
+echo interface $INTERFACE_MODEM di refresh
+ifup $INTERFACE_MODEM
+sleep 5
+
+while true
+do
+
+
+ipx="$(ifconfig | grep -i 'P-t-P:')"
+if [ ${#ipx} == 0 ]; then
+echo "Interface Belum Terdeteksi"
+sleep 10
+ifup $INTERFACE_MODEM
+
+else
+
+echo "Interface Sudah Terdeteksi"
+echo AT^DEBUG? | atinout - /dev/ttyUSB2 - | grep -i 'IP:'
+break
+fi
+done
