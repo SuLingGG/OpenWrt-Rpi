@@ -59,6 +59,34 @@ git clone --depth=1 -b 18.06 https://github.com/jerrykuku/luci-theme-argon
 git clone --depth=1 https://github.com/jerrykuku/luci-app-argon-config
 rm -rf ../lean/luci-theme-argon
 
+#------------ Start of @helmiau additionals packages for cloning repo -----------
+
+# Add luci-theme-opentopd
+git clone --depth=1 https://github.com/sirpdboy/luci-theme-opentopd.git
+
+# Add modemmanager
+git clone --depth=1 https://github.com/nickberry17/luci-proto-modemmanager.git
+
+# Add modeminfo
+git clone --depth=1 https://github.com/koshev-msk/luci-app-modeminfo
+
+# Add luci-app-smstools3
+git clone --depth=1 https://github.com/koshev-msk/luci-app-smstools3
+
+# Add luci-app-mmconfig : configure modem cellular bands via mmcli utility
+git clone --depth=1 https://github.com/koshev-msk/luci-app-mmconfig
+
+# Add 3ginfo, luci-app-3ginfo
+git clone --depth=1 https://github.com/4IceG/luci-app-3ginfo
+
+# Add luci-app-sms-tool
+git clone --depth=1 https://github.com/4IceG/luci-app-sms-tool
+
+# Add luci-app-atinout-mod
+git clone --depth=1 https://github.com/4IceG/luci-app-atinout-mod
+
+#------------ End of @helmiau additionals packages for cloning repo -----------
+
 # Add subconverter
 git clone --depth=1 https://github.com/tindy2013/openwrt-subconverter
 
@@ -111,6 +139,8 @@ popd
 # Change default shell to zsh
 sed -i 's/\/bin\/ash/\/usr\/bin\/zsh/g' package/base-files/files/etc/passwd
 
+#------------ Start of @helmiau terminal scripts additionals menu -----------
+
 # Add neofetch
 wget -O package/base-files/files/bin/neofetch "https://raw.githubusercontent.com/helmiau/openwrt-config/main/neopet" && chmod +x package/base-files/files/bin/neofetch
 
@@ -149,20 +179,4 @@ wget -O package/base-files/files/bin/changelang "https://raw.githubusercontent.c
 # Script by Rudi Hartono https://www.facebook.com/rud18
 wget -O package/base-files/files/bin/ipqmi "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/ipqmi" && chmod +x package/base-files/files/bin/ipqmi
 
-# Add modemmanager
-svn co https://github.com/nickberry17/luci-proto-modemmanager
-
-# Add 3ginfo, luci-app-3ginfo
-svn co https://github.com/4IceG/luci-app-3ginfo
-
-# Add modeminfo
-svn co https://github.com/koshev-msk/luci-app-modeminfo
-
-# Add sms-tool
-svn co https://github.com/4IceG/luci-app-sms-tool
-
-# Add luci-app-atinout-mod
-svn co https://github.com/4IceG/luci-app-atinout-mod
-
-# Add luci-app-smstools3
-svn co https://github.com/koshev-msk/luci-app-smstools3
+#------------ End of @helmiau terminal scripts additionals menu -----------

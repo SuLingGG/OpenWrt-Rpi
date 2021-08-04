@@ -6,6 +6,8 @@
 # Blog: https://mlapp.cn
 #=================================================
 
+#------------ Start of @helmiau additionals menu -----------
+
 # Set default theme to luci-theme-argon
 uci set luci.main.mediaurlbase='/luci-static/argon'
 
@@ -18,10 +20,6 @@ uci set system.@system[0].hostname='HelmiWrt'
 # Set Timezone to Asia/Jakarta
 uci set system.@system[0].timezone='WIB-7'
 uci set system.@system[0].zonename='Asia/Jakarta'
-
-# Disable autostart by default for some packages
-cd /etc/rc.d
-rm -f S98udptools || true
 
 # Add shadowsocksr shortcut
 chmod +x /bin/ssr-rst
@@ -58,7 +56,20 @@ chmod +x /bin/sambaset
 # Script by Rudi Hartono https://www.facebook.com/rud18
 chmod +x /bin/ipqmi
 
+# Fix luci-app-atinout-mod by 4IceG
+chmod +x /usr/bin/luci-app-atinout
+
+# Fix for xderm mini gui if trojan is not installed
+ln -sf /usr/sbin/trojan /usr/bin/trojan
+
 # Add language changer to auto ! This line below must be placed in end of file before exit command
 chmod +x /bin/changelang
 
+#------------ End of @helmiau additionals menu -----------
+
+# Disable autostart by default for some packages
+cd /etc/rc.d
+rm -f S98udptools || true
+
+reboot
 exit 0

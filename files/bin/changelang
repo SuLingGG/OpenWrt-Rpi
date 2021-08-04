@@ -47,6 +47,3 @@ uci commit
 
 /sbin/luci-reload
 /etc/init.d/uhttpd restart
-
-sleep 2
-reboot
