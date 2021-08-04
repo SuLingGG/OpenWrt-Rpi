@@ -100,7 +100,9 @@ Username	: root
 Password	: password
 ```
 
-**Note : Raspberry Pi will reboot automatically when first boot up after firmware installation**
+**Note :**
+- Raspberry Pi will reboot automatically when first boot up after firmware installation
+- If you get blank when open TTYD (Terminal LuCi App), change https://192.168.1.1 to http://192.168.1.1
 
 ### Credits
 - [OpenWrt Official](https://github.com/openwrt/openwrt)
