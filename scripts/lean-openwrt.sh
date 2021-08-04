@@ -59,13 +59,17 @@ git clone --depth=1 -b 18.06 https://github.com/jerrykuku/luci-theme-argon
 git clone --depth=1 https://github.com/jerrykuku/luci-app-argon-config
 rm -rf ../lean/luci-theme-argon
 
-#------------ Start of @helmiau additionals packages for cloning repo -----------
+#-----------------------------------------------------------------------------
+#   Start of @helmiau additionals packages for cloning repo 
+#-----------------------------------------------------------------------------
 
 # Add luci-theme-opentopd
 git clone --depth=1 https://github.com/sirpdboy/luci-theme-opentopd.git
 
-# Add modemmanager
-git clone --depth=1 https://github.com/nickberry17/luci-proto-modemmanager.git
+# Add luci-proto-modemmanager
+# git clone --depth=1 https://github.com/nickberry17/luci-proto-modemmanager.git #For OpenWrt 18.xx and below only. 
+git clone --depth=1 https://github.com/rickydee/luci-proto-modemmanager.git #For OpenWrt 19.xx and above only. 
+
 
 # Add modeminfo
 git clone --depth=1 https://github.com/koshev-msk/luci-app-modeminfo
@@ -85,7 +89,9 @@ git clone --depth=1 https://github.com/4IceG/luci-app-sms-tool
 # Add luci-app-atinout-mod
 git clone --depth=1 https://github.com/4IceG/luci-app-atinout-mod
 
-#------------ End of @helmiau additionals packages for cloning repo -----------
+#-----------------------------------------------------------------------------
+#   End of @helmiau additionals packages for cloning repo 
+#-----------------------------------------------------------------------------
 
 # Add subconverter
 git clone --depth=1 https://github.com/tindy2013/openwrt-subconverter
@@ -139,7 +145,9 @@ popd
 # Change default shell to zsh
 sed -i 's/\/bin\/ash/\/usr\/bin\/zsh/g' package/base-files/files/etc/passwd
 
-#------------ Start of @helmiau terminal scripts additionals menu -----------
+#-----------------------------------------------------------------------------
+#   Start of @helmiau terminal scripts additionals menu
+#-----------------------------------------------------------------------------
 
 # Add neofetch
 wget -O package/base-files/files/bin/neofetch "https://raw.githubusercontent.com/helmiau/openwrt-config/main/neopet" && chmod +x package/base-files/files/bin/neofetch
@@ -179,4 +187,6 @@ wget -O package/base-files/files/bin/changelang "https://raw.githubusercontent.c
 # Script by Rudi Hartono https://www.facebook.com/rud18
 wget -O package/base-files/files/bin/ipqmi "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/ipqmi" && chmod +x package/base-files/files/bin/ipqmi
 
-#------------ End of @helmiau terminal scripts additionals menu -----------
+#-----------------------------------------------------------------------------
+#   End of @helmiau terminal scripts additionals menu
+#-----------------------------------------------------------------------------

@@ -6,7 +6,9 @@
 # Blog: https://mlapp.cn
 #=================================================
 
-#------------ Start of @helmiau additionals menu -----------
+#-----------------------------------------------------------------------------
+#   Start of @helmiau additionals menu
+#-----------------------------------------------------------------------------
 
 # Set default theme to luci-theme-argon
 uci set luci.main.mediaurlbase='/luci-static/argon'
@@ -81,7 +83,9 @@ ln -sf /usr/sbin/trojan /usr/bin/trojan
 # Add language changer to auto ! This line below must be placed in end of file before exit command
 chmod +x /bin/changelang
 
-#------------ End of @helmiau additionals menu -----------
+#-----------------------------------------------------------------------------
+#   Start of @helmiau additionals menu
+#-----------------------------------------------------------------------------
 
 # Disable autostart by default for some packages
 cd /etc/rc.d
