@@ -117,3 +117,5 @@ Password	: password
 - [config example 1](https://github.com/eallion/openwrt/blob/main/.config)
 
 [Read more original README](https://github.com/SuLingGG/OpenWrt-Rpi/blob/main/README.md#openwrt-rpi)
+
+<h6 align="center">Copyright by <a href="http://www.helmiau.com">Helmi Amirudin</a> ® 2021 <br> Thank You ! 🤝</h6>
