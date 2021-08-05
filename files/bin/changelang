@@ -3,34 +3,12 @@
 #   Don't remove this section for credits
 #   Don't rename this file
 #--------------------------------------------------------
-#   This script is used to fix browser always download index.php
+#   This script change default language to auto
 #   Installation script by helmiau a.k.a Helmi Amirudin
 #   my profile page https://helmiau.com
 #   my github https://github.com/helmiau
 #--------------------------------------------------------
 
-helmiooo=$(cat /etc/config/uhttpd)
-if [[ $helmiooo == *"uhttpd 'mai"* ]]; then
-	sleep 1
-	sed -i "/config uhttpd 'main'/a list interpreter '.php=/usr/bin/php-cgi'" /etc/config/uhttpd
-fi
-
-helmiooo=$(cat /etc/config/uhttpd)
-if [[ $helmiooo == *"uhttpd 'mai"* ]]; then
-	sleep 1
-	sed -i "/config uhttpd 'main'/a option ubus_prefix '/ubus'" /etc/config/uhttpd
-fi
-
-helmiooo=$(cat /etc/config/uhttpd)
-if [[ $helmiooo == *"uhttpd mai"* ]]; then
-	sleep 1
-	sed -i "/config uhttpd main/a list interpreter '.php=/usr/bin/php-cgi'" /etc/config/uhttpd
-fi
-
-helmiooo=$(cat /etc/config/uhttpd)
-if [[ $helmiooo == *"uhttpd mai"* ]]; then
-	sleep 1
-	sed -i "/config uhttpd main/a option ubus_prefix '/ubus'" /etc/config/uhttpd
-fi
-
-reboot
+# Set default language
+uci set luci.main.lang=auto
+uci commit luci

@@ -14,10 +14,6 @@ rm -f S98udptools || true
 #   Start of @helmiau additionals menu
 #-----------------------------------------------------------------------------
 
-# Set default language
-uci set luci.main.lang=auto
-uci commit luci
-
 # Set default theme to luci-theme-argon
 uci set luci.main.mediaurlbase='/luci-static/argon'
 uci commit luci
@@ -90,8 +86,9 @@ chmod +x /usr/bin/luci-app-atinout
 # Fix for xderm mini gui if trojan is not installed
 ln -sf /usr/sbin/trojan /usr/bin/trojan
 
-# Add language changer to auto ! This line below must be placed in end of file before exit command
+# Add language changer to auto !
 chmod +x /bin/changelang
+changelang
 
 #-----------------------------------------------------------------------------
 #   Start of @helmiau additionals menu
