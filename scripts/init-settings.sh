@@ -52,9 +52,9 @@ else
 	echo 'echo "  vmess      : Free vmess account for 3 days by racevpn.com."' >> /root/.oh-my-zsh/custom/example.zsh
 	echo 'echo "======================================================"' >> /root/.oh-my-zsh/custom/example.zsh
 	echo "echo -e xdaLuCI IPxdaxda: $(uci show network | grep network.lan.ipaddr | cut -d \' -f2) | sed 's/xda/  /g'" >> /root/.oh-my-zsh/custom/example.zsh
-	echo "if wget -S --spider ip-api.com/json 2>&1 | grep -q 'HTTP/1.1 200 OK'; then" >> /root/.oh-my-zsh/custom/example.zsh
-		echo 'echo "  Public IP  : $(curl -s ip-api.com/line/\?fields=query)"' >> /root/.oh-my-zsh/custom/example.zsh
-		echo 'echo "  ISP        : $(curl -s ip-api.com/line/\?fields=isp)"' >> /root/.oh-my-zsh/custom/example.zsh
+	echo "if wget -S --spider --timeout=1 ip-api.com/json 2>&1 | grep -q 'HTTP/1.1 200 OK'; then" >> /root/.oh-my-zsh/custom/example.zsh
+		echo 'echo "  Public IP  : $(curl -s -m 5 ip-api.com/line/\?fields=query)"' >> /root/.oh-my-zsh/custom/example.zsh
+		echo 'echo "  ISP        : $(curl -s -m 5 ip-api.com/line/\?fields=isp)"' >> /root/.oh-my-zsh/custom/example.zsh
 	echo "else" >> /root/.oh-my-zsh/custom/example.zsh
 		echo 'echo "  Public IP  : Not Available - No Connection"' >> /root/.oh-my-zsh/custom/example.zsh
 		echo 'echo "  ISP        : Not Available - No Connection"' >> /root/.oh-my-zsh/custom/example.zsh
