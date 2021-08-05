@@ -9,9 +9,6 @@
 #   my github https://github.com/helmiau
 #--------------------------------------------------------
 
-/etc/init.d/uhttpd restart
-/sbin/luci-reload
-
 helmiooo=$(cat /etc/config/uhttpd)
 if [[ $helmiooo == *"uhttpd 'mai"* ]]; then
 	sleep 1
@@ -36,14 +33,4 @@ if [[ $helmiooo == *"uhttpd mai"* ]]; then
 	sed -i "/config uhttpd main/a option ubus_prefix '/ubus'" /etc/config/uhttpd
 fi
 
-# Set default language to Auto
-uci set luci.main.lang='auto'
-sed -i "s/'zh_cn'/'auto'/g" /etc/config/luci
-# uci set luci.main.lang=en
-# sed -i "s/'zh_cn'/'en'/g" /etc/config/luci
-
-#uci commit
-uci commit
-
-/sbin/luci-reload
-/etc/init.d/uhttpd restart
+reboot

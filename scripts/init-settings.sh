@@ -6,12 +6,21 @@
 # Blog: https://mlapp.cn
 #=================================================
 
+# Disable autostart by default for some packages
+cd /etc/rc.d
+rm -f S98udptools || true
+
 #-----------------------------------------------------------------------------
 #   Start of @helmiau additionals menu
 #-----------------------------------------------------------------------------
 
+# Set default language
+uci set luci.main.lang=auto
+uci commit luci
+
 # Set default theme to luci-theme-argon
 uci set luci.main.mediaurlbase='/luci-static/argon'
+uci commit luci
 
 # Set Argon theme to light on first boot
 uci set argon.@global[0].mode='light'
@@ -22,6 +31,7 @@ uci set system.@system[0].hostname='HelmiWrt'
 # Set Timezone to Asia/Jakarta
 uci set system.@system[0].timezone='WIB-7'
 uci set system.@system[0].zonename='Asia/Jakarta'
+uci commit system
 
 # Add shadowsocksr shortcut
 chmod +x /bin/ssr-rst
@@ -87,9 +97,4 @@ chmod +x /bin/changelang
 #   Start of @helmiau additionals menu
 #-----------------------------------------------------------------------------
 
-# Disable autostart by default for some packages
-cd /etc/rc.d
-rm -f S98udptools || true
-
-reboot
 exit 0
