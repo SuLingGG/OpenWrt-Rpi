@@ -19,7 +19,7 @@ else
 fi
 if [ -f package/lean/default-settings/files/zzz-default-settings ];then
 	echo "  helmilog : default-settings/Makefile file available..."
-	sed -i 's/zh_cn/en/g' fpackage/lean/default-settings/files/zzz-default-settings
+	sed -i 's/zh_cn/en/g' package/lean/default-settings/files/zzz-default-settings
 	echo "  helmilog : zh_cn lang has changed to en..."
 else
 	echo "  helmilog : zzz-default-settings file is not available. Skipping..."
