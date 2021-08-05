@@ -10,16 +10,20 @@
 #sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
 
 # Replace the default languange from zh_cn to en/auto before build
-pushd package/lean
-if [ -d default-settings ];then
-	echo "default-settings directory available..."
-	sed -i 's/LUCI_LANG_zh-cn/LUCI_LANG_en/g' default-settings/Makefile
-	sed -i 's/zh_cn/en/g' files/zzz-default-settings
-	echo "zh_cn lang has changed to en..."
+if [ -f package/lean/default-settings/Makefile ];then
+	echo "  helmilog : default-settings/Makefile file available..."
+	sed -i 's/LUCI_LANG_zh-cn/LUCI_LANG_en/g' package/lean/default-settings/Makefile
+	echo "  helmilog : zh_cn lang has changed to en..."
 else
-	echo "default-settings directory is not available. Skipping..."
+	echo "  helmilog : default-settings/Makefile file is not available. Skipping..."
 fi
-popd
+if [ -f package/lean/default-settings/files/zzz-default-settings ];then
+	echo "  helmilog : default-settings/Makefile file available..."
+	sed -i 's/zh_cn/en/g' fpackage/lean/default-settings/files/zzz-default-settings
+	echo "  helmilog : zh_cn lang has changed to en..."
+else
+	echo "  helmilog : zzz-default-settings file is not available. Skipping..."
+fi
 
 # Add luci-app-ssr-plus
 pushd package/lean
