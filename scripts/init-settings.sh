@@ -104,6 +104,23 @@ echo 'sh changelang' >> /etc/rc.local
 echo 'sh /bin/changelang' >> /etc/rc.local
 echo 'exit 0' >> /etc/rc.local
 
+# QMI modem reconnect interface without reboot /lib/netifd/proto/qmi.sh
+# source docs.google.com/document/d/10ldzikC9EdvXT43LEtct0qSwi5qWJk-LHFZFsl8_69E
+if [ -f /lib/netifd/proto/qmi.sh ];then
+	if [[ $(grep -c helmiau /lib/netifd/proto/qmi.sh) = "2" ]];then
+		echo "  helmilog : qmi.sh file already patched. Skipping..."		
+	else
+		echo "  helmilog : qmi.sh file available, patching..."
+		sed -i 's$local uninitialized_timeout=0$local uninitialized_timeout=0\n#------ Patched by Helmi Amirudin a.k.a helmiau------\n		helmiau1\n		helmiau2\n		helmiau3\n#------ Patched by Helmi Amirudin a.k.a helmiau ------$g' /lib/netifd/proto/qmi.sh
+		sed -i 's#helmiau1#uqmi -s -d "$ device" --get-pin-status \&#g' /lib/netifd/proto/qmi.sh
+		sed -i 's#helmiau2#sleep 3#g' /lib/netifd/proto/qmi.sh
+		sed -i 's#helmiau3#killall uqmi || echo "UQMI works fine!"#g' /lib/netifd/proto/qmi.sh
+		echo "  helmilog : patching qmi.sh done..."
+	fi
+else
+	echo "  helmilog : qmi.sh file is not available. Skipping..."
+fi
+
 #-----------------------------------------------------------------------------
 #   Start of @helmiau additionals menu
 #-----------------------------------------------------------------------------
