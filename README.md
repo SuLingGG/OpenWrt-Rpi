@@ -18,9 +18,7 @@ Contains scientific Internet tools:
 - Both now support SS/SSR/V2ray/Trojan/Socks5 protocol, support Kcptun, support Netflix streaming, support link/subscription import node, Socks5 server, access control, automatic switching of failed nodes. Among them, Passwall additionally supports Brook and V2ray diversion.
 - For OpenClash, the latest version of Clash core (clash/clash_tun/clash_game) has been pre-installed in the firmware, and it can be used out of the box without additional download.
 - Support ad blocking AdGuard Home
-```sh
-Note: The advertisement blocking effect at the router level is not good. If you are very sensitive to advertisements, it is recommended to use the browser plug-in-level advertisement blocking plugin. In addition, ad blocking tools may severely affect internet speed.
-```
+> Note: The advertisement blocking effect at the router level is not good. If you are very sensitive to advertisements, it is recommended to use the browser plug-in-level advertisement blocking plugin. In addition, ad blocking tools may severely affect internet speed.
 - Support to unlock NetEase Cloud gray songs:
 - Contains three schemes of Golang/Nodejs/cloud unlocking.
 - Support Jingdong sign-in service, you can get 20+ golden beans/day unattended.
@@ -44,27 +42,28 @@ Note: The advertisement blocking effect at the router level is not good. If you 
 <details><summary>My own configurations : (click to show)</summary>
 <p>
 
-- Added speedtest and neofetch command
-- Removed all languages except English
-- Set English as default language (idk work or not)
-- Set timezone to WIB-7 Asia/Jakarta
-- Add shutdown, poweroff, reboot commands
-- Loadbalance 4 USB Hilink
-- Add shadowsocksr shortcut (ssr-rst, ssr-start, ssr-stop)
-- QMI modems supported ex. LT4220
+- Added speedtest and neofetch command.
+- Removed all languages except English.
+- Set English as default language.
+- Set timezone to WIB-7 Asia/Jakarta.
+- Add shutdown, poweroff, reboot commands.
+- Loadbalance 4 USB Hilink.
+- Add ShadowsocksR Plus+ shortcut (ssr-rst, ssr-start, ssr-stop).
+- QMI modems supported ex. LT4220.
 	- Add IP Refresh for QMI Modems by running **```ipqmi```** using terminal.
-- VPN support : PPTP / L2TP / ShadowSocks / ShadowSocksR / V2ray(VMESS/VLESS) / Trojan / Trojan-Go
-- Extended root partition to 3GB
-- RAM Checker via  Terminal by command ```ram```
-- VMESS Account Creation (3 days) from racevpn.com via  Terminal by command ```vmess```
-- Fix browser always download file index.php (like xderm and libernet) via  Terminal by command ```fixphp```
-- Add IP Address Info Checker. run ```myip``` using terminal for use
+	- Auto reconnect QMI Modems without reboot.
+- VPN support : PPTP / L2TP / ShadowSocks / ShadowSocksR / V2ray(VMESS/VLESS) / Trojan / Trojan-Go.
+- Extended root partition to 3GB.
+- RAM Checker via Terminal by command ```ram```.
+- VMESS Account Creation (3 days) from racevpn.com via  Terminal by command ```vmess```.
+- Fix browser always download file index.php (like xderm and libernet) via  Terminal by command ```fixphp```.
+- Add IP Address Info Checker. run ```myip``` using terminal for use.
 - Add Samba Allowed user setup. This tool will help you to add Allowed User for Samba Directory.
-	- Run ```sambaset``` using terminal for use, then follow instruction
-	- Open Network Share https://192.168.1.1/cgi-bin/luci/admin/nas/samba
-	- Add shared directory, fill name, path with your shared directory
-	- Fill **Allowed users** with **USER**, check **Browseable**, uncheck **Allowed Guests** and **Read-Only**
-	- Save and Apply
+	- Run ```sambaset``` using terminal for use, then follow instruction.
+	- Open Network Share https://192.168.1.1/cgi-bin/luci/admin/nas/samba.
+	- Add shared directory, fill name, path with your shared directory.
+	- Fill **Allowed users** with **USER**, check **Browseable**, uncheck **Allowed Guests** and **Read-Only**.
+	- Save and Apply.
 </p>
 </details>
 
@@ -86,7 +85,7 @@ Note: The advertisement blocking effect at the router level is not good. If you 
 | 3/3B/3B+ | [📂](https://github.com/helmiau/OpenWrt-Rpi/releases/tag/openwrt-rpi-3) | [🔽](https://github.com/helmiau/OpenWrt-Rpi/releases/download/openwrt-rpi-3/openwrt-bcm27xx-bcm2710-rpi-3-squashfs-factory.img.gz) | [🔽](https://github.com/helmiau/OpenWrt-Rpi/releases/download/openwrt-rpi-3/openwrt-bcm27xx-bcm2710-rpi-3-squashfs-sysupgrade.img.gz) | [🔽](https://github.com/helmiau/OpenWrt-Rpi/releases/download/openwrt-rpi-3/openwrt-bcm27xx-bcm2710-rpi-3-ext4-factory.img.gz) | [🔽](https://github.com/helmiau/OpenWrt-Rpi/releases/download/openwrt-rpi-3/openwrt-bcm27xx-bcm2710-rpi-3-ext4-sysupgrade.img.gz) | [🔽](https://github.com/helmiau/OpenWrt-Rpi/releases/download/openwrt-rpi-3/openwrt-bcm27xx-bcm2710-rpi-3-rootfs.tar.gz) |
 | 4/4B | [📂](https://github.com/helmiau/OpenWrt-Rpi/releases/tag/openwrt-rpi-4) | [🔽](https://github.com/helmiau/OpenWrt-Rpi/releases/download/openwrt-rpi-4/openwrt-bcm27xx-bcm2711-rpi-4-squashfs-factory.img.gz) | [🔽](https://github.com/helmiau/OpenWrt-Rpi/releases/download/openwrt-rpi-4/openwrt-bcm27xx-bcm2711-rpi-4-squashfs-sysupgrade.img.gz) | [🔽](https://github.com/helmiau/OpenWrt-Rpi/releases/download/openwrt-rpi-4/openwrt-bcm27xx-bcm2711-rpi-4-ext4-factory.img.gz) | [🔽](https://github.com/helmiau/OpenWrt-Rpi/releases/download/openwrt-rpi-4/openwrt-bcm27xx-bcm2711-rpi-4-ext4-sysupgrade.img.gz) | [🔽](https://github.com/helmiau/OpenWrt-Rpi/releases/download/openwrt-rpi-4/openwrt-bcm27xx-bcm2711-rpi-4-rootfs.tar.gz) |
 
-2. Download [Rufus Portable](https://github.com/pbatard/rufus/releases/download/v3.15/rufus-3.15p.exe) or [Balena Ecther Portable](https://github.com/balena-io/etcher/releases/download/v1.5.121/balenaEtcher-Portable-1.5.121.exe)
+2. Download [Rufus Portable](https://github.com/pbatard/rufus/releases/download/v3.15/rufus-3.15p.exe) or [Balena Etcher Portable](https://github.com/balena-io/etcher/releases/download/v1.5.121/balenaEtcher-Portable-1.5.121.exe)
 3. Insert SdCard
 4. Open Rufus/Etcher
 5. Select disk (sdcard)
