@@ -54,12 +54,12 @@ Contains scientific Internet tools:
 	- Auto reconnect QMI Modems without reboot.
 - VPN support : PPTP / L2TP / ShadowSocks / ShadowSocksR / V2ray(VMESS/VLESS) / Trojan / Trojan-Go.
 - Extended root partition to 3GB.
-- RAM Checker via Terminal by command ```ram```.
-- VMESS Account Creation (3 days) from racevpn.com via  Terminal by command ```vmess```.
-- Fix browser always download file index.php (like xderm and libernet) via  Terminal by command ```fixphp```.
+- RAM Checker via Terminal by command **```ram```**.
+- VMESS Account Creation (3 days) from racevpn.com via  Terminal by command **```vmess```**.
+- Fix browser always download file index.php (like xderm and libernet) via  Terminal by command **```fixphp```**.
 - Add IP Address Info Checker. run ```myip``` using terminal for use.
 - Add Samba Allowed user setup. This tool will help you to add Allowed User for Samba Directory.
-	- Run ```sambaset``` using terminal for use, then follow instruction.
+	- Run **```sambaset```** using terminal for use, then follow instruction.
 	- Open Network Share https://192.168.1.1/cgi-bin/luci/admin/nas/samba.
 	- Add shared directory, fill name, path with your shared directory.
 	- Fill **Allowed users** with **USER**, check **Browseable**, uncheck **Allowed Guests** and **Read-Only**.
