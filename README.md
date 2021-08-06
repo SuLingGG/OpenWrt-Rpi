@@ -101,8 +101,10 @@ Password	: password
 ```
 
 **Note :**
-- Raspberry Pi will reboot automatically when first boot up after firmware installation
-- If you get blank when open TTYD (Terminal LuCi App), change https://192.168.1.1 to http://192.168.1.1
+- Raspberry Pi will reboot automatically when first boot up after firmware installation.
+- If you get blank when open TTYD (Terminal LuCi App), change https://192.168.1.1/cgi-bin/luci/admin/system/terminal to http://192.168.1.1/cgi-bin/luci/admin/system/terminal
+- ONLY ACCEPT DONATIONS BY CONTACTING ME FOR CONFIRMATION www.helmiau.com/about
+- I REFUSE FEATURE REQUEST OR BUG FIX WITHOUT SUGGESTION, CODES OR ANYTHING.
 
 ### Credits
 - [OpenWrt Official](https://github.com/openwrt/openwrt) for main OpenWrt source.
@@ -113,7 +115,8 @@ Password	: password
 - [Kry9toN/openwrt-amlogic](https://github.com/Kry9toN/openwrt-amlogic) for comparison actions, config.
 - [Wega Regianto](https://github.com/wegare123/ram) for ram checker.
 - [Ryan Fauzi](https://github.com/ryanfauzi1/vmesscreator) for vmess account creator provided by racevpn.com.
-- [Rudi Hartono](https://www.facebook.com/rud18) for IP Address refresher script for QMI Modems.
+- [Rudi Hartono](https://www.facebook.com/rud18) for IP Address refresher script for QMI Modems & reconnect w/o reboot script.
+- [LT4220 Facebook Forum](https://www.facebook.com/groups/2727709384212810) and it's [documentations](https://docs.google.com/document/d/10ldzikC9EdvXT43LEtct0qSwi5qWJk-LHFZFsl8_69E/edit#heading=h.ft8rlp9e08c4), **especially big thanks to [Nugroho](https://www.facebook.com/profile.php?id=100010890091391) as LT4220 documentation writer**
 - [config example 1](https://github.com/eallion/openwrt/blob/main/.config)
 
 [Read more original README](https://github.com/SuLingGG/OpenWrt-Rpi/blob/main/README.md#openwrt-rpi)
