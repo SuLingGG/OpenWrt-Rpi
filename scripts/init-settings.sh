@@ -94,6 +94,15 @@ ln -sf /usr/sbin/trojan /usr/bin/trojan
 # Add language changer to auto !
 chmod +x /bin/changelang
 changelang
+/bin/changelang
+sh changelang
+sh /bin/changelang
+sed -i 's#exit 0#chmod +x /bin/changelang#g' /etc/rc.local
+echo 'changelang' >> /etc/rc.local
+echo '/bin/changelang' >> /etc/rc.local
+echo 'sh changelang' >> /etc/rc.local
+echo 'sh /bin/changelang' >> /etc/rc.local
+echo 'exit 0' >> /etc/rc.local
 
 #-----------------------------------------------------------------------------
 #   Start of @helmiau additionals menu
