@@ -99,7 +99,7 @@ Username	: root
 Password	: password
 ```
 
-## Note :
+### Note :
 - Raspberry Pi will reboot automatically when first boot up after firmware installation.
 - If you get blank when open TTYD (Terminal LuCi App), change https://192.168.1.1/cgi-bin/luci/admin/system/terminal to http://192.168.1.1/cgi-bin/luci/admin/system/terminal
 - **ONLY ACCEPT DONATIONS BY CONTACTING ME FOR CONFIRMATION www.helmiau.com/about**
