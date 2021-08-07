@@ -39,12 +39,12 @@ echo "neofetch" > /root/.oh-my-zsh/custom/example.zsh
 echo 'echo -e "\033[0;36m======================================================\033[1;31m"' >> /root/.oh-my-zsh/custom/example.zsh
 echo 'echo "       Additional command lists by helmiau.com"' >> /root/.oh-my-zsh/custom/example.zsh
 echo 'echo -e "\033[0;36m======================================================\033[1;32m"' >> /root/.oh-my-zsh/custom/example.zsh
-echo 'echo "  ram        : Check ram usage and running applications."' >> /root/.oh-my-zsh/custom/example.zsh
-echo 'echo "  sambaset   : Add samba Allowed Guest."' >> /root/.oh-my-zsh/custom/example.zsh
-echo 'echo "  fixphp     : Fix download index.php for xderm and libernet."' >> /root/.oh-my-zsh/custom/example.zsh
-echo 'echo "  myip       : Check your public IP Address Informations."' >> /root/.oh-my-zsh/custom/example.zsh
-echo 'echo "  ipqmi      : refresh IP Address for QMI Modems, such as LT4220."' >> /root/.oh-my-zsh/custom/example.zsh
-echo 'echo "  vmess      : Free vmess account for 3 days by racevpn.com."' >> /root/.oh-my-zsh/custom/example.zsh
+echo 'echo "  ram        : Check ram usage and running apps."' >> /root/.oh-my-zsh/custom/example.zsh
+echo 'echo "  sambaset   : Add USER samba as Allowed Guest."' >> /root/.oh-my-zsh/custom/example.zsh
+echo 'echo "  fixphp     : Fix download index.php xderm/libernet."' >> /root/.oh-my-zsh/custom/example.zsh
+echo 'echo "  myip       : Check your public IP Address Info."' >> /root/.oh-my-zsh/custom/example.zsh
+echo 'echo "  ipqmi      : refresh IP Address for QMI Modems."' >> /root/.oh-my-zsh/custom/example.zsh
+echo 'echo "  vmess      : Free vmess account for 3 days."' >> /root/.oh-my-zsh/custom/example.zsh
 echo 'echo -e "\033[0;36m======================================================\033[1;33m"' >> /root/.oh-my-zsh/custom/example.zsh
 echo "echo -e xdaLuCI IPxdaxda: $(uci show network | grep network.lan.ipaddr | cut -d \' -f2) | sed 's/xda/  /g'" >> /root/.oh-my-zsh/custom/example.zsh
 echo "if curl -s --max-time 5 --connect-timeout 5 ip-api.com/line\?fields=query,isp -v 2>&1 | grep -q 'HTTP/1.1 200 OK'; then" >> /root/.oh-my-zsh/custom/example.zsh
