@@ -55,6 +55,7 @@ echo "else" >> /root/.oh-my-zsh/custom/example.zsh
 	echo 'echo "  ISP        : Not Available - No Connection"' >> /root/.oh-my-zsh/custom/example.zsh
 echo "fi" >> /root/.oh-my-zsh/custom/example.zsh
 echo 'echo -e "\033[0;36m======================================================"' >> /root/.oh-my-zsh/custom/example.zsh
+chmod +x /bin/neofetch
 
 # Vmess creator shortcut
 chmod +x /bin/vmess
