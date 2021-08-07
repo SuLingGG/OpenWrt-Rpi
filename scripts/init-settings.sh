@@ -116,8 +116,8 @@ else
 fi
 
 # Patch english language for luci-app-fileassistant
-chmod +x /bin/changelang
-changelang
+chmod +x /bin/patch-fileassistant
+patch-fileassistant
 
 # Skip confirmation screen when start speedtest
 if [ ! -d /root/.config/ookla ]; then
