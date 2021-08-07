@@ -115,6 +115,10 @@ else
 	echo "  helmilog : qmi.sh file is not available. Skipping..."
 fi
 
+# Patch english language for luci-app-fileassistant
+chmod +x /bin/changelang
+changelang
+
 #-----------------------------------------------------------------------------
 #   Start of @helmiau additionals menu
 #-----------------------------------------------------------------------------

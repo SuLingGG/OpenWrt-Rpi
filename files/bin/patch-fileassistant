@@ -1,0 +1,47 @@
+#!/bin/bash
+#--------------------------------------------------------
+#   Don't remove this section for credits
+#   Don't rename this file
+#--------------------------------------------------------
+#   This script is used to patch luci-app-fileassistant english lang
+#   my profile page https://me.helmiau.my.id
+#   my github https://github.com/helmiau
+#--------------------------------------------------------
+
+FALUA="/usr/lib/lua/luci/controller/fileassistant.lua"
+FAHTM="/usr/lib/lua/luci/view/fileassistant.htm"
+FBJS="/www/luci-static/resources/fileassistant/fb.js"
+
+#usr/lib/lua/luci/controller/fileassistant.lua
+sed -i "s#文件助手#File Assistant#g" $FALUA
+#usr/lib/lua/luci/controller/fileassistant.lua
+
+
+#/usr/lib/lua/luci/view/fileassistant.htm
+sed -i "s#文件助手#File Assistant#g" $FAHTM
+sed -i "s#文件列表#File lists#g" $FAHTM
+sed -i "s#上传#Upload#g" $FAHTM
+sed -i "s#点我上传#Click to Upload#g" $FAHTM
+#/usr/lib/lua/luci/view/fileassistant.htm
+
+
+#/www/luci-static/resources/fileassistant/fb.js
+sed -i "s#你确定要删除#Are you sure to delete#g" $FBJS
+sed -i "s#吗？#file?#g" $FBJS
+
+sed -i "s#这是一个目录，请选择 ipk 文件进行安装！#This is a directory, please select IPK file to install!#g" $FBJS
+sed -i "s#只允许安装 ipk 格式的文件！#Only IPK files can be installed!#g" $FBJS
+
+sed -i "s#你确定要安装#Are you sure to install#g" $FBJS
+sed -i "s#吗？#file?#g" $FBJS
+
+sed -i "s#安装成功!#Install success!#g" $FBJS
+sed -i "s#安装失败，请检查文件格式!#Install failed, please check the file format!#g" $FBJS
+
+sed -i "s#请输入新的文件名：#Enter new file name :#g" $FBJS
+
+sed -i "s#安装#Install#g" $FBJS
+sed -i "s#重命名#Rename#g" $FBJS
+sed -i "s#删除#Delete#g" $FBJS
+sed -i "s#上传失败，请稍后再试#Upload failed, try again later#g" $FBJS
+#/www/luci-static/resources/fileassistant/fb.js
