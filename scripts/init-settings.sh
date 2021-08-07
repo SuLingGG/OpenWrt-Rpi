@@ -119,6 +119,19 @@ fi
 chmod +x /bin/changelang
 changelang
 
+# Skip confirmation screen when start speedtest
+if [ ! -d /root/.config/ookla ]; then
+  mkdir -p /root/.config/ookla;
+fi
+cat << 'EOF' > /root/.config/ookla/speedtest-cli.json
+{
+    "Settings": {
+        "LicenseAccepted": "604ec27f828456331ebf441826292c49276bd3c1bee1a2f65a6452f505c4061c"
+    }
+}
+EOF
+
+
 #-----------------------------------------------------------------------------
 #   Start of @helmiau additionals menu
 #-----------------------------------------------------------------------------
