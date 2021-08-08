@@ -3,7 +3,7 @@
 # File name: init-settings.sh
 # Description: This script will be executed during the first boot
 # Author: SuLingGG
-# Blog: https://mlapp.cn在编译完上传前设置
+# Blog: https://mlapp.cn
 #=================================================
 
 # Set default theme to luci-theme-argon
