@@ -132,6 +132,41 @@ cat << 'EOF' > /root/.config/ookla/speedtest-cli.json
 }
 EOF
 
+# Add reboot, poweroff, shutdown, shadowsocksr++ restart/stop, mwan3 restart to LuCI -> System -> Custom Command
+if [ ! -f /etc/config/luci ]; then
+  cat "\n\n" > /etc/config/luci;
+fi
+cat << "EOF" >> /etc/config/luci
+
+config command
+	option name 'Shutdown'
+	option command 'halt'
+
+config command
+	option name 'Power Off'
+	option command 'poweroff'
+
+config command
+	option name 'Reboot'
+	option command 'reboot'
+
+config command
+	option name 'ShadowsocksR Restart'
+	option command '/etc/init.d/shadowsocksr restart'
+
+config command
+	option name 'ShadowsocksR Stop'
+	option command '/etc/init.d/shadowsocksr stop'
+
+config command
+	option name 'Restart Load Balance'
+	option command 'mwan3 restart'
+
+EOF
+
+# Add my Load Balance settings
+chmod +x /bin/helmilb
+helmilb
 
 #-----------------------------------------------------------------------------
 #   Start of @helmiau additionals menu
