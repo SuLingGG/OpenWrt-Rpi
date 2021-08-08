@@ -73,7 +73,7 @@ Contains scientific Internet tools:</li>
 </p>
 </details>
 
-### Previews & Video
+### Previews Display & Features
 
 See [video preview here](https://www.youtube.com/embed/HsDEWwgy-xg)
 
