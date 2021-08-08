@@ -39,6 +39,7 @@ echo "neofetch" > /root/.oh-my-zsh/custom/example.zsh
 echo 'echo -e "\033[0;36m======================================================\033[1;31m"' >> /root/.oh-my-zsh/custom/example.zsh
 echo 'echo "       Additional command lists by helmiau.com"' >> /root/.oh-my-zsh/custom/example.zsh
 echo 'echo -e "\033[0;36m======================================================\033[1;32m"' >> /root/.oh-my-zsh/custom/example.zsh
+echo 'echo "  helmilb    : Install helmiau loadbalance 4 USB ISP."' >> /root/.oh-my-zsh/custom/example.zsh
 echo 'echo "  ram        : Check ram usage and running apps."' >> /root/.oh-my-zsh/custom/example.zsh
 echo 'echo "  sambaset   : Add USER samba as Allowed Guest."' >> /root/.oh-my-zsh/custom/example.zsh
 echo 'echo "  fixphp     : Fix download index.php xderm/libernet."' >> /root/.oh-my-zsh/custom/example.zsh
@@ -166,7 +167,7 @@ EOF
 
 # Add my Load Balance settings
 chmod +x /bin/helmilb
-helmilb
+#helmilb
 
 #-----------------------------------------------------------------------------
 #   Start of @helmiau additionals menu
