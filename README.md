@@ -76,7 +76,6 @@ Contains scientific Internet tools:</li>
 ### Previews & Video
 
 See [video preview here](https://www.youtube.com/embed/HsDEWwgy-xg)
-</iframe>
 
 <details><summary>Click to show screenshots preview</summary>
 <p>
