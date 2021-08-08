@@ -170,6 +170,16 @@ EOF
 chmod +x /bin/helmilb
 #helmilb
 
+
+# LuCI -> System -> Terminal (a.k.a) luci-app-ttyd without login
+cat << "EOF" > /etc/config/ttyd
+
+config ttyd
+	option interface '@lan'
+	option command '/bin/login -f root'
+
+EOF
+
 #-----------------------------------------------------------------------------
 #   Start of @helmiau additionals menu
 #-----------------------------------------------------------------------------
