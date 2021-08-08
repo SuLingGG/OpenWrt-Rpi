@@ -3,69 +3,120 @@ Raspberry Pi 4 OpenWrt Compile Project. (Based on [SuLingGG OpenWrt-Rpi](https:/
 
 <details><summary>Main firmware features : (click to show)</summary>
 <p>
-
-- Contains rich OpenWrt original LuCI plug-ins and community LuCI plug-ins
-- Integrate most wired, wireless, 3G/4G network card drivers, no need to install additional
-- Pre-install the latest version of Clash core and oh-my-zsh to minimize configuration costs
-- Pre-install all kmod ipk software packages in the firmware, pre-configure the local opkg software source, keep away from kmod conflicts
-- More comprehensive IPV6 support, the firmware built-in IPV6 CLI configuration tool, you can quickly install/uninstall/configure IPV6
-- Pull the latest OpenWrt source code and community plug-in source code at 2:00 am every day to compile and provide split downloads to ensure that you always get the latest experience
-- Provide packages-server (including WEB server package archive), which can quickly establish LAN software source under Windows
-- For advanced users, provide OpenWrt Image Builder, OpenWrt SDK, OpenWrt Tool Chain, and dl archive files
-Contains scientific Internet tools:
-- The firmware supports the following scientific Internet tools: ①ShadowSocksR Plus+ ②Passwall ③OpenClash
-- Among them, ShadowSocksR Plus+ in Offical version firmware is transplanted from Lean version source code.
-- Both now support SS/SSR/V2ray/Trojan/Socks5 protocol, support Kcptun, support Netflix streaming, support link/subscription import node, Socks5 server, access control, automatic switching of failed nodes. Among them, Passwall additionally supports Brook and V2ray diversion.
-- For OpenClash, the latest version of Clash core (clash/clash_tun/clash_game) has been pre-installed in the firmware, and it can be used out of the box without additional download.
-- Support ad blocking AdGuard Home
-> Note: The advertisement blocking effect at the router level is not good. If you are very sensitive to advertisements, it is recommended to use the browser plug-in-level advertisement blocking plugin. In addition, ad blocking tools may severely affect internet speed.
-- Support to unlock NetEase Cloud gray songs:
-- Contains three schemes of Golang/Nodejs/cloud unlocking.
-- Support Jingdong sign-in service, you can get 20+ golden beans/day unattended.
-- Support Docker container arm and aarch64 (arm64) architecture images. Before pulling the image, please confirm that the image has the above architecture version and use the corresponding architecture tag to pull it.
-- Support AirPlay2 and PCHiFi digital turntable remote control function, you can push music to the Raspberry Pi to play and control through the AirPlay feature.
-- Support Samba/CIFSD/FTP/SFTP file transfer, support mounting Samba/NFS file system to local, support Syncthing and VerySync synchronization, support Rclone to mount network disk files to local.
-- Support disk management, you can create/remove partitions and create Raid arrays with one click.
-- Support file assistant / file browser (Filemanager) / Kodexplorer (Kodexplorer), can manage the files in OpenWrt online.
-- Support Aria2 and Transmission download tools, you can download http/https/BT seeds/magnet links to Raspberry Pi.
-- Support SSR server (libv/python), V2ray server, Brook server, Trojan server, PPTP VPN server, IPSec VPN server, OpenVPN server, N2N v2 VPN, ZeroTier, support OpenVPN client, PPTP/L2TP client, OpenConnect client, WireGuard VPN.
-- Support DDNS (support Dnspod and Alibaba Cloud DDNS), SmartDNS, ARP binding.
-- Support Frpc/NPS intranet penetration and Frps server.
-- Support WeChat push (Server sauce), USB print server, KMS server, Wake-on-LAN, Thunderbird, Tianyi Family Cloud/Cloud Disk to speed up.
-- Support SQM Qos, Socat, support udpspeeder and udp2raw acceleration, support SFE acceleration, bridge acceleration, IPV6 acceleration, FULLCONE NAT acceleration, BBR acceleration.
-- Support multi-line multi-dial, load balancing, MWAN3 shunt assistant.
-
+<ul>
+<li>Contains rich OpenWrt original LuCI plug-ins and community LuCI plug-ins</li>
+<li>Integrate most wired, wireless, 3G/4G network card drivers, no need to install additional</li>
+<li>Pre-install the latest version of Clash core and oh-my-zsh to minimize configuration costs</li>
+<li>Pre-install all kmod ipk software packages in the firmware, pre-configure the local opkg software source, keep away from kmod conflicts</li>
+<li>More comprehensive IPV6 support, the firmware built-in IPV6 CLI configuration tool, you can quickly install/uninstall/configure IPV6</li>
+<li>Pull the latest OpenWrt source code and community plug-in source code at 2:00 am every day to compile and provide split downloads to ensure that you always get the latest experience</li>
+<li>Provide packages-server (including WEB server package archive), which can quickly establish LAN software source under Windows</li>
+<li>For advanced users, provide OpenWrt Image Builder, OpenWrt SDK, OpenWrt Tool Chain, and dl archive files
+Contains scientific Internet tools:</li>
+<li>The firmware supports the following scientific Internet tools: ①ShadowSocksR Plus+ ②Passwall ③OpenClash</li>
+<li>Among them, ShadowSocksR Plus+ in Offical version firmware is transplanted from Lean version source code.</li>
+<li>Both now support SS/SSR/V2ray/Trojan/Socks5 protocol, support Kcptun, support Netflix streaming, support link/subscription import node, Socks5 server, access control, automatic switching of failed nodes. Among them, Passwall additionally supports Brook and V2ray diversion.</li>
+<li>For OpenClash, the latest version of Clash core (clash/clash_tun/clash_game) has been pre-installed in the firmware, and it can be used out of the box without additional download.</li>
+<li>Support ad blocking AdGuard Home<blockquote>
+<p>Note: The advertisement blocking effect at the router level is not good. If you are very sensitive to advertisements, it is recommended to use the browser plug-in-level advertisement blocking plugin. In addition, ad blocking tools may severely affect internet speed.</p>
+</blockquote>
+</li>
+<li>Support to unlock NetEase Cloud gray songs:</li>
+<li>Contains three schemes of Golang/Nodejs/cloud unlocking.</li>
+<li>Support Jingdong sign-in service, you can get 20+ golden beans/day unattended.</li>
+<li>Support Docker container arm and aarch64 (arm64) architecture images. Before pulling the image, please confirm that the image has the above architecture version and use the corresponding architecture tag to pull it.</li>
+<li>Support AirPlay2 and PCHiFi digital turntable remote control function, you can push music to the Raspberry Pi to play and control through the AirPlay feature.</li>
+<li>Support Samba/CIFSD/FTP/SFTP file transfer, support mounting Samba/NFS file system to local, support Syncthing and VerySync synchronization, support Rclone to mount network disk files to local.</li>
+<li>Support disk management, you can create/remove partitions and create Raid arrays with one click.</li>
+<li>Support file assistant / file browser (Filemanager) / Kodexplorer (Kodexplorer), can manage the files in OpenWrt online.</li>
+<li>Support Aria2 and Transmission download tools, you can download http/https/BT seeds/magnet links to Raspberry Pi.</li>
+<li>Support SSR server (libv/python), V2ray server, Brook server, Trojan server, PPTP VPN server, IPSec VPN server, OpenVPN server, N2N v2 VPN, ZeroTier, support OpenVPN client, PPTP/L2TP client, OpenConnect client, WireGuard VPN.</li>
+<li>Support DDNS (support Dnspod and Alibaba Cloud DDNS), SmartDNS, ARP binding.</li>
+<li>Support Frpc/NPS intranet penetration and Frps server.</li>
+<li>Support WeChat push (Server sauce), USB print server, KMS server, Wake-on-LAN, Thunderbird, Tianyi Family Cloud/Cloud Disk to speed up.</li>
+<li>Support SQM Qos, Socat, support udpspeeder and udp2raw acceleration, support SFE acceleration, bridge acceleration, IPV6 acceleration, FULLCONE NAT acceleration, BBR acceleration.</li>
+<li>Support multi-line multi-dial, load balancing, MWAN3 shunt assistant.</li>
+</ul>
 </p>
 </details>
-
 
 <details><summary>My own configurations : (click to show)</summary>
 <p>
-
-- Added speedtest and neofetch command.
-- Removed all languages except English.
-- Set English as default language.
-- Set timezone to WIB-7 Asia/Jakarta.
-- Add shutdown, poweroff, reboot commands.
-- Loadbalance 4 USB Hilink.
-- Add ShadowsocksR Plus+ shortcut (ssr-rst, ssr-start, ssr-stop).
-- QMI modems supported ex. LT4220.
-	- Add IP Refresh for QMI Modems by running **```ipqmi```** using terminal.
-	- Auto reconnect QMI Modems without reboot.
-- VPN support : PPTP / L2TP / ShadowSocks / ShadowSocksR / V2ray(VMESS/VLESS) / Trojan / Trojan-Go.
-- Extended root partition to 3GB.
-- RAM Checker via Terminal by command **```ram```**.
-- VMESS Account Creation (3 days) from racevpn.com via  Terminal by command **```vmess```**.
-- Fix browser always download file index.php (like xderm and libernet) via  Terminal by command **```fixphp```**.
-- Add IP Address Info Checker. run **```myip```** using terminal for use.
-- Add Samba Allowed user setup. This tool will help you to add Allowed User for Samba Directory.
-	- Run **```sambaset```** using terminal for use, then follow instruction.
-	- Open Network Share https://192.168.1.1/cgi-bin/luci/admin/nas/samba.
-	- Add shared directory, fill name, path with your shared directory.
-	- Fill **Allowed users** with **USER**, check **Browseable**, uncheck **Allowed Guests** and **Read-Only**.
-	- Save and Apply.
+<ul>
+<li>Added speedtest and neofetch command.</li>
+<li>Removed all languages except English.</li>
+<li>Set English as default language.</li>
+<li>Set timezone to WIB-7 Asia/Jakarta.</li>
+<li>Add shutdown, poweroff, reboot commands.</li>
+<li>Loadbalance 4 USB Hilink.</li>
+<li>Add ShadowsocksR Plus+ shortcut (ssr-rst, ssr-start, ssr-stop).</li>
+<li>QMI modems supported ex. LT4220.<ul>
+<li>Add IP Refresh for QMI Modems by running <strong><code>ipqmi</code></strong> using terminal.</li>
+<li>Auto reconnect QMI Modems without reboot.</li>
+</ul>
+</li>
+<li>VPN support : PPTP / L2TP / ShadowSocks / ShadowSocksR / V2ray(VMESS/VLESS) / Trojan / Trojan-Go.</li>
+<li>Extended root partition to 3GB.</li>
+<li>RAM Checker via Terminal by command <strong><code>ram</code></strong>.</li>
+<li>VMESS Account Creation (3 days) from racevpn.com via  Terminal by command <strong><code>vmess</code></strong>.</li>
+<li>Fix browser always download file index.php (like xderm and libernet) via  Terminal by command <strong><code>fixphp</code></strong>.</li>
+<li>Add IP Address Info Checker. run <strong><code>myip</code></strong> using terminal for use.</li>
+<li>Add Samba Allowed user setup. This tool will help you to add Allowed User for Samba Directory.<ul>
+<li>Run <strong><code>sambaset</code></strong> using terminal for use, then follow instruction.</li>
+<li>Open Network Share <a href="https://192.168.1.1/cgi-bin/luci/admin/nas/samba">https://192.168.1.1/cgi-bin/luci/admin/nas/samba</a>.</li>
+<li>Add shared directory, fill name, path with your shared directory.</li>
+<li>Fill <strong>Allowed users</strong> with <strong>USER</strong>, check <strong>Browseable</strong>, uncheck <strong>Allowed Guests</strong> and <strong>Read-Only</strong>.</li>
+<li>Save and Apply.</li>
+</ul>
+</li>
+</ul>
 </p>
 </details>
+
+### Previews & Video
+
+See [video preview here](https://www.youtube.com/embed/HsDEWwgy-xg)
+</iframe>
+
+<details><summary>Click to show screenshots preview</summary>
+<p>
+
+<img src="https://github.com/helmiau/OpenWrt-Rpi/raw/main/preview/openwrt-rpi-1.png">
+<br>
+<img src="https://github.com/helmiau/OpenWrt-Rpi/raw/main/preview/openwrt-rpi-2.png">
+<br>
+<img src="https://github.com/helmiau/OpenWrt-Rpi/raw/main/preview/openwrt-rpi-3.png">
+<br>
+<img src="https://github.com/helmiau/OpenWrt-Rpi/raw/main/preview/openwrt-rpi-4.png">
+<br>
+<img src="https://github.com/helmiau/OpenWrt-Rpi/raw/main/preview/openwrt-rpi-5.png">
+<br>
+<img src="https://github.com/helmiau/OpenWrt-Rpi/raw/main/preview/openwrt-rpi-6.png">
+<br>
+<img src="https://github.com/helmiau/OpenWrt-Rpi/raw/main/preview/openwrt-rpi-7.png">
+<br>
+<img src="https://github.com/helmiau/OpenWrt-Rpi/raw/main/preview/openwrt-rpi-8.png">
+<br>
+<img src="https://github.com/helmiau/OpenWrt-Rpi/raw/main/preview/openwrt-rpi-9.png">
+<br>
+<img src="https://github.com/helmiau/OpenWrt-Rpi/raw/main/preview/openwrt-rpi-10.png">
+<br>
+<img src="https://github.com/helmiau/OpenWrt-Rpi/raw/main/preview/openwrt-rpi-11.png">
+<br>
+<img src="https://github.com/helmiau/OpenWrt-Rpi/raw/main/preview/openwrt-rpi-13.png">
+<br>
+<img src="https://github.com/helmiau/OpenWrt-Rpi/raw/main/preview/openwrt-rpi-14.png">
+<br>
+<img src="https://github.com/helmiau/OpenWrt-Rpi/raw/main/preview/openwrt-rpi-15.png">
+<br>
+<img src="https://github.com/helmiau/OpenWrt-Rpi/raw/main/preview/openwrt-rpi-16.png">
+<br>
+<img src="https://github.com/helmiau/OpenWrt-Rpi/raw/main/preview/openwrt-rpi-17.png">
+<br>
+	
+</p>
+</details>
+
 
 ### Firmware Requirements and Installation
 
