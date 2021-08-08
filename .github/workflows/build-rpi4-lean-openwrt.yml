@@ -284,10 +284,10 @@ jobs:
           transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
           echo "::warning file=Firmware-Wetransfer.com::$(cat wetransfer.log | grep https)"
 
-    - name: 电报机器人信息通知
-      if: steps.organize.outputs.ORGANIZE_STATUS == 'success'    
-      run: |
-        curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的✨主人✨：您的4b固件顺利编译完成了！💐https://github.com/hx210/OpenWrt-Rpi/actions" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+      - name: 电报机器人信息通知
+        if: steps.organize.outputs.ORGANIZE_STATUS == 'success'    
+        run: |
+          curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的✨主人✨：您的4b固件顺利编译完成了！💐https://github.com/hx210/OpenWrt-Rpi/actions" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
 
       - name: Delete Artifacts
         uses: geekyeggo/delete-artifact@v1
