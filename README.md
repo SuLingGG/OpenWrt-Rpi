@@ -86,11 +86,16 @@ Contains scientific Internet tools:
 | 4/4B | [📂](https://github.com/helmiau/OpenWrt-Rpi/releases/tag/openwrt-rpi-4) | [🔽](https://github.com/helmiau/OpenWrt-Rpi/releases/download/openwrt-rpi-4/openwrt-bcm27xx-bcm2711-rpi-4-squashfs-factory.img.gz) | [🔽](https://github.com/helmiau/OpenWrt-Rpi/releases/download/openwrt-rpi-4/openwrt-bcm27xx-bcm2711-rpi-4-squashfs-sysupgrade.img.gz) | [🔽](https://github.com/helmiau/OpenWrt-Rpi/releases/download/openwrt-rpi-4/openwrt-bcm27xx-bcm2711-rpi-4-ext4-factory.img.gz) | [🔽](https://github.com/helmiau/OpenWrt-Rpi/releases/download/openwrt-rpi-4/openwrt-bcm27xx-bcm2711-rpi-4-ext4-sysupgrade.img.gz) | [🔽](https://github.com/helmiau/OpenWrt-Rpi/releases/download/openwrt-rpi-4/openwrt-bcm27xx-bcm2711-rpi-4-rootfs.tar.gz) |
 
 2. Download [Rufus Portable](https://github.com/pbatard/rufus/releases/download/v3.15/rufus-3.15p.exe) or [Balena Etcher Portable](https://github.com/balena-io/etcher/releases/download/v1.5.121/balenaEtcher-Portable-1.5.121.exe)
-3. Insert SdCard
-4. Open Rufus/Etcher
-5. Select disk (sdcard)
-6. Drag and drop downloaded firmware to Rufus window
-7. Start
+3. Insert SdCard.
+4. Open Rufus/Etcher.
+5. Select disk (sdcard).
+6. Drag and drop downloaded firmware to Rufus/Etcher window.
+7. Start and wait until it finished.
+8. Eject your sdcard.
+9. Put it in to your Raspberry Pi sdcard slot.
+10. Turn your Pi on, then open [LuCI TTYD Terminal](http://192.168.1.1/cgi-bin/luci/admin/system/terminal) or Putty
+11. Run available commands such as helmilb, sambaset, etc. (Optional)
+
 
 ### Login Information
 ```
@@ -101,9 +106,10 @@ Password	: password
 
 ### Note :
 - Raspberry Pi will reboot automatically when first boot up after firmware installation.
-- If you get blank when open TTYD (Terminal LuCi App), change https://192.168.1.1/cgi-bin/luci/admin/system/terminal to http://192.168.1.1/cgi-bin/luci/admin/system/terminal
+- If you get blank when open TTYD (Terminal LuCi App), change [https://192.168.1.1/.../terminal](https://192.168.1.1/cgi-bin/luci/admin/system/terminal) to [http://192.168.1.1/.../terminal](http://192.168.1.1/cgi-bin/luci/admin/system/terminal)
 - **ONLY ACCEPT DONATIONS BY CONTACTING ME FOR CONFIRMATION www.helmiau.com/about**
 - **I REFUSE FEATURE REQUEST OR BUG FIX WITHOUT SUGGESTION, CODES OR ANYTHING.**
+
 
 ### Credits
 - [OpenWrt Official](https://github.com/openwrt/openwrt) for main OpenWrt source.
