@@ -89,6 +89,10 @@ pushd package/lean/default-settings/files
 sed -i '/http/d' zzz-default-settings
 export orig_version="$(cat "zzz-default-settings" | grep DISTRIB_REVISION= | awk -F "'" '{print $2}')"
 sed -i "s/${orig_version}/${orig_version} ($(date +"%Y-%m-%d"))/g" zzz-default-settings
+
+
+sed -i '/CYXluq4wUazHjmCDBCqXF/d' zzz-default-settings                                                            # 设置密码为空
+
 popd
 
 # Use Lienol's https-dns-proxy package
@@ -111,7 +115,3 @@ popd
 # Change default shell to zsh
 sed -i 's/\/bin\/ash/\/usr\/bin\/zsh/g' package/base-files/files/etc/passwd
 
-
-sed -i "s/OpenWrt /R compiled in $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" package/default-settings/files/zzz-default-settings         # 增加个性名字${Author}默认为你的github账号
-
-sed -i '/CYXluq4wUazHjmCDBCqXF/d' package/default-settings/files/zzz-default-settings                                                            # 设置密码为空
