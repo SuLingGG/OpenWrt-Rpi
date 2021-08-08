@@ -61,6 +61,7 @@ Contains scientific Internet tools:</li>
 <li>VMESS Account Creation (3 days) from racevpn.com via  Terminal by command <strong><code>vmess</code></strong>.</li>
 <li>Fix browser always download file index.php (like xderm and libernet) via  Terminal by command <strong><code>fixphp</code></strong>.</li>
 <li>Add IP Address Info Checker. run <strong><code>myip</code></strong> using terminal for use.</li>
+<li>Add IPV6 helper tool. run <strong><code>ipv6-helper</code></strong> using terminal for use.</li>
 <li>Add Samba Allowed user setup. This tool will help you to add Allowed User for Samba Directory.<ul>
 <li>Run <strong><code>sambaset</code></strong> using terminal for use, then follow instruction.</li>
 <li>Open Network Share <a href="https://192.168.1.1/cgi-bin/luci/admin/nas/samba">https://192.168.1.1/cgi-bin/luci/admin/nas/samba</a>.</li>
