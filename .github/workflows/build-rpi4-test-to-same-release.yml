@@ -1,0 +1,246 @@
+#=================================================
+# https://github.com/P3TERX/Actions-OpenWrt
+# Description: Build OpenWrt using GitHub Actions
+# Lisence: MIT
+# Author: P3TERX
+# Blog: https://p3terx.com
+#=================================================
+
+name: Build Test Raspberry Pi 4
+
+on:
+  repository_dispatch:
+    types: [lean, rpi4]
+  workflow_dispatch:
+#  schedule:
+#    - cron: 0 17 * * *
+#  watch:
+#    types: started
+
+env:
+  REPO_URL: https://github.com/coolsnowwolf/lede
+  REPO_BRANCH: master
+  CONFIG_FILE: config/rpi4-lean-target.config
+  DIY_SH: scripts/lean-openwrt.sh
+  IPV6MOD_IN_FIRMWARE: true
+  KMODS_IN_FIRMWARE: true
+  WEBROOT: /data/dnmp/www/openwrt.cc
+  UPLOAD_FIRMWARE: true
+  UPLOAD_BIN_DIR: true
+  UPLOAD_RELEASE: true
+  TZ: Asia/Jakarta
+
+jobs:
+  Build:
+    runs-on: ubuntu-18.04
+
+    outputs:
+      OPENWRTROOT: ${{ steps.update.outputs.OPENWRTROOT }}
+      PLATFORM: ${{ steps.compile.outputs.PLATFORM }}
+      TARGET: ${{ steps.compile.outputs.TARGET }}
+      SUBTARGET: ${{ steps.compile.outputs.SUBTARGET }}
+      FIRMWARE: ${{ steps.compile.outputs.FIRMWARE }}
+      GENERATE_STATUS: ${{ steps.generate.outputs.GENERATE_STATUS }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Initialization Environment
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+          sudo -E apt-get -qq update
+          sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-1804) tree
+          sudo -E apt-get -qq autoremove --purge
+          sudo -E apt-get -qq clean
+          sudo ln -sf /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
+
+      - name: Clone Source Code
+        run: |
+          df -hT $PWD
+          git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
+
+      - name: Update Feeds
+        id: update
+        run: |
+          cd openwrt
+          echo "OPENWRTROOT=$PWD" >> $GITHUB_ENV
+          echo "::set-output name=OPENWRTROOT::$(echo $PWD)"
+          mkdir customfeeds
+          git clone --depth=1 https://github.com/coolsnowwolf/packages customfeeds/packages
+          git clone --depth=1 https://github.com/coolsnowwolf/luci customfeeds/luci
+          chmod +x ../scripts/*.sh
+          ../scripts/hook-feeds.sh
+
+      - name: Install Feeds
+        run: |
+          cd $OPENWRTROOT
+          ./scripts/feeds install -a
+
+      - name: Load Custom Configuration
+        run: |
+          [ -e files ] && mv files $OPENWRTROOT/files
+          [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
+          cat config/rpi-lean-extra.config >> $OPENWRTROOT/.config
+          cd $OPENWRTROOT
+          echo -e "CONFIG_USB_LAN78XX=y\nCONFIG_USB_NET_DRIVERS=y" >> target/linux/bcm27xx/bcm2711/config-5.4
+          mkdir -p files/lib/firmware/brcm/
+          wget -q https://raw.githubusercontent.com/openwrt/cypress-nvram/master/brcmfmac43455-sdio.raspberrypi%2C4-model-b.txt -O files/lib/firmware/brcm/brcmfmac43455-sdio.raspberrypi,4-compute-module.txt
+          ../$DIY_SH
+          ../scripts/preset-clash-core.sh armv8
+          ../scripts/preset-terminal-tools.sh
+          ../scripts/enable-rpi4-wifi.sh
+
+      - name: Download Package
+        id: package
+        run: |
+          cd $OPENWRTROOT
+          if "$KMODS_IN_FIRMWARE" = 'true'
+          then
+              echo "CONFIG_ALL_KMODS=y" >> .config
+              echo "CONFIG_ALL_NONSHARED=y" >> .config
+          fi
+          make defconfig
+          make download -j8
+          find dl -size -1024c -exec ls -l {} \;
+          find dl -size -1024c -exec rm -f {} \;
+
+      - name: Compile Packages
+        id: compile
+        run: |
+          cd $OPENWRTROOT
+          echo -e "$(nproc) thread compile"
+          make tools/compile -j$(nproc) || make tools/compile -j1 V=s
+          make toolchain/compile -j$(nproc) || make toolchain/compile -j1 V=s
+          make target/compile -j$(nproc) || make target/compile -j1 V=s IGNORE_ERRORS=1
+          make diffconfig
+          make package/compile -j$(nproc) IGNORE_ERRORS=1 || make package/compile -j1 V=s IGNORE_ERRORS=1
+          make package/index
+          cd $OPENWRTROOT/bin/packages/*
+          PLATFORM=$(basename `pwd`)
+          echo "PLATFORM=$PLATFORM" >> $GITHUB_ENV
+          echo "::set-output name=PLATFORM::$(echo $PLATFORM)"
+          cd $OPENWRTROOT/bin/targets/*
+          TARGET=$(basename `pwd`)
+          echo "TARGET=$TARGET" >> $GITHUB_ENV
+          echo "::set-output name=TARGET::$(echo $TARGET)"
+          cd *
+          SUBTARGET=$(basename `pwd`)
+          echo "SUBTARGET=$SUBTARGET" >> $GITHUB_ENV
+          echo "::set-output name=SUBTARGET::$(echo $SUBTARGET)"
+          echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+          echo "::set-output name=FIRMWARE::$(echo $PWD)"
+          echo "::set-output name=COMPILE_STATUS::success"
+
+      - name: Generate Firmware
+        if: steps.compile.outputs.COMPILE_STATUS == 'success'
+        id: generate
+        run: |
+          cd data/opkg
+          sed -i "s/subtarget/$SUBTARGET/g" distfeeds*.conf
+          sed -i "s/target\//$TARGET\//g" distfeeds*.conf
+          sed -i "s/platform/$PLATFORM/g" distfeeds*.conf
+          cd $OPENWRTROOT
+          echo "dtparam=i2c_arm=on,audio=on" >> target/linux/bcm27xx/image/config.txt
+          mkdir -p files/etc/uci-defaults/
+          cp ../scripts/init-settings.sh files/etc/uci-defaults/99-init-settings
+          mkdir -p files/etc/opkg
+          cp ../data/opkg/distfeeds-packages-server.conf files/etc/opkg/distfeeds.conf.server
+          if "$KMODS_IN_FIRMWARE" = 'true'
+          then
+              mkdir -p files/www/snapshots
+              cp -r bin/targets files/www/snapshots
+              cp ../data/opkg/distfeeds-18.06-local.conf files/etc/opkg/distfeeds.conf
+          else
+              cp ../data/opkg/distfeeds-18.06-remote.conf files/etc/opkg/distfeeds.conf
+          fi
+          cp files/etc/opkg/distfeeds.conf.server files/etc/opkg/distfeeds.conf.mirror
+          sed -i "s/http:\/\/192.168.123.100:2345\/snapshots/https:\/\/openwrt.cc\/snapshots\/$(date +"%Y-%m-%d")\/lean/g" files/etc/opkg/distfeeds.conf.mirror
+          if "$IPV6MOD_IN_FIRMWARE" = 'true'
+          then
+              mkdir -p files/www/ipv6-modules
+              cp bin/packages/$PLATFORM/luci/luci-proto-ipv6* files/www/ipv6-modules
+              cp bin/packages/$PLATFORM/base/{ipv6helper*,odhcpd-ipv6only*,odhcp6c*,6in4*} "files/www/ipv6-modules"
+              cp bin/targets/$TARGET/$SUBTARGET/packages/{ip6tables*,kmod-nf-nat6*,kmod-ipt-nat6*,kmod-sit*,kmod-ip6tables-extra*} "files/www/ipv6-modules"
+              mkdir -p files/bin
+              cp ../scripts/ipv6-helper.sh files/bin/ipv6-helper
+          fi
+          make package/install -j$(nproc) || make package/install -j1 V=s
+          make target/install -j$(nproc) || make target/install -j1 V=s
+          make checksum
+          grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
+          [ -s DEVICE_NAME ] && echo "DEVICE_NAME=$(cat DEVICE_NAME)" >> $GITHUB_ENV
+          echo "FILE_DATE=$(date +"%Y.%m.%d")" >> $GITHUB_ENV
+          echo "::set-output name=GENERATE_STATUS::success"
+
+      - name: Upload Bin Folder
+        uses: actions/upload-artifact@main
+        if: steps.generate.outputs.GENERATE_STATUS == 'success'
+        with:
+          name: bin-archive
+          path: openwrt/bin
+
+      - name: Organize Files
+        id: organize
+        if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+        run: |
+          cd openwrt/bin/targets/*/*
+          rm -rf packages
+          echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+          echo "::set-output name=status::success"
+          echo "::set-output name=ORGANIZE_STATUS::success"
+
+      - name: Upload Firmware Directory to GitHub Actions
+        uses: actions/upload-artifact@main
+        if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.organize.outputs.status == 'success' && !cancelled()
+        with:
+          name: openwrt-${{ env.DEVICE_NAME }}-${{ env.FILE_DATE }}-all-test.zip
+          path: ${{ env.FIRMWARE }}
+
+      - name: Upload Firmware Files to GitHub Actions
+        uses: kittaakos/upload-artifact-as-is@master
+        if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.organize.outputs.status == 'success' && !cancelled()
+        with:
+          path: ${{ env.FIRMWARE }}/*
+        
+      - name: Delete Older Releases and Tags
+        uses: dev-drprasad/delete-older-releases@v0.2.0
+        if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.organize.outputs.status == 'success' && !cancelled()
+        with:
+          keep_latest: 2
+          delete_tags: true
+          delete_tag_pattern: test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate New Release Tag
+        id: tag
+        if: steps.organize.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
+        run: |
+          echo "::set-output name=release_tag::openwrt-test-$(date +"%Y.%m.%d")"
+          touch release.txt
+          echo "::set-output name=status::success"
+
+      - name: Upload Firmware Files to GitHub Release
+        uses: softprops/action-gh-release@59c3b4891632ff9a897f99a91d7bc557467a3a22
+        if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.tag.outputs.status == 'success' && !cancelled()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          body_path: release.txt
+          files: ${{ env.FIRMWARE }}/*
+
+      - name: Delete Workflow Runs
+        uses: GitRML/delete-workflow-runs@main
+        with:
+          retain_days: 1
+          keep_minimum_runs: 3
+
+      - name: Delete Artifacts
+        uses: geekyeggo/delete-artifact@v1
+        with:
+          name: |
+            bin-archive

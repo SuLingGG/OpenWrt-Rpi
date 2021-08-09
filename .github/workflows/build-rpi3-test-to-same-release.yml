@@ -6,11 +6,11 @@
 # Blog: https://p3terx.com
 #=================================================
 
-name: Build Test RasPi 4 Lean's OpenWrt
+name: Build Test Raspberry Pi 3
 
 on:
   repository_dispatch:
-    types: [lean, rpi4]
+    types: [lean, rpi3]
   workflow_dispatch:
 #  schedule:
 #    - cron: 0 17 * * *
@@ -20,7 +20,7 @@ on:
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  CONFIG_FILE: config/rpi4-lean-target.config
+  CONFIG_FILE: config/rpi3-lean-target.config
   DIY_SH: scripts/lean-openwrt.sh
   IPV6MOD_IN_FIRMWARE: true
   KMODS_IN_FIRMWARE: true
@@ -85,13 +85,9 @@ jobs:
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
           cat config/rpi-lean-extra.config >> $OPENWRTROOT/.config
           cd $OPENWRTROOT
-          echo -e "CONFIG_USB_LAN78XX=y\nCONFIG_USB_NET_DRIVERS=y" >> target/linux/bcm27xx/bcm2711/config-5.4
-          mkdir -p files/lib/firmware/brcm/
-          wget -q https://raw.githubusercontent.com/openwrt/cypress-nvram/master/brcmfmac43455-sdio.raspberrypi%2C4-model-b.txt -O files/lib/firmware/brcm/brcmfmac43455-sdio.raspberrypi,4-compute-module.txt
           ../$DIY_SH
           ../scripts/preset-clash-core.sh armv8
           ../scripts/preset-terminal-tools.sh
-          ../scripts/enable-rpi4-wifi.sh
 
       - name: Download Package
         id: package
@@ -209,7 +205,7 @@ jobs:
         uses: dev-drprasad/delete-older-releases@v0.2.0
         if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.organize.outputs.status == 'success' && !cancelled()
         with:
-          keep_latest: 0
+          keep_latest: 2
           delete_tags: true
           delete_tag_pattern: test
         env:
@@ -219,12 +215,12 @@ jobs:
         id: tag
         if: steps.organize.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
         run: |
-          echo "::set-output name=release_tag::openwrt-raspi-4-test"
+          echo "::set-output name=release_tag::openwrt-test-$(date +"%Y.%m.%d")"
           touch release.txt
           echo "::set-output name=status::success"
 
       - name: Upload Firmware Files to GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@59c3b4891632ff9a897f99a91d7bc557467a3a22
         if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.tag.outputs.status == 'success' && !cancelled()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
