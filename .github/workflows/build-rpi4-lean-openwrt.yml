@@ -194,6 +194,9 @@ jobs:
           echo "FIRMWARE=$(echo '${{needs.Build.outputs.FIRMWARE}}')" >> $GITHUB_ENV
           echo "GENERATE_STATUS=$(echo '${{needs.Build.outputs.GENERATE_STATUS}}')" >> $GITHUB_ENV
 
+          echo "Home=${GITHUB_WORKSPACE}/openwrt" >> $GITHUB_ENV
+          echo "PATH1=${GITHUB_WORKSPACE}/openwrt/build/${{matrix.target}}" >> $GITHUB_ENV          
+
       - name: Download Bin Folder
         uses: actions/download-artifact@v2
         if: env.GENERATE_STATUS == 'success'
@@ -284,23 +287,29 @@ jobs:
           transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
           echo "::warning file=Firmware-Wetransfer.com::$(cat wetransfer.log | grep https)"
 
-      - name: 整理发布信息
-        if: steps.organizer.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true'
+      - name: 整理固件文件夹
+        id: organizer
         run: |
-          echo "### $(date +"%Y年%m月%d号-%H点%M分")" > update_log.txt
-          curl -fsSL git.io/file-transfer | sh
-          ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
-          echo "##### WETRANSFER：$(cat wetransfer.log | grep https | cut -f3 -d" ")" >> update_log.txt
+          cd openwrt
+          cp -Rf bin/targets/*/* "${Home}"/upgrade
+          cd bin && mkdir config
+          cp -Rf targets/*/*/config.buildinfo "${Home}"/bin/config/config.txt
+          cd targets/*/*
+          
+          find -name "*sysupgrade.img*" | xargs -i rm -rf {}
+          find -name "*rootfs*" | xargs -i rm -rf {}
 
-      - name: 发布固件
-        uses: ncipollo/release-action@v1
-        if: steps.organizer.outputs.status == 'success'
-        with:
-          name: x
-          tag: 4b
-          token: ${{ secrets.REPO_TOKEN }}
-          bodyFile: "update_log.txt"
-          artifacts: "${{ env.FIRMWARE }}/*"
+          rm -rf packages
+
+          echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+
+          echo "::set-output name=status::success"
+ 
+      - name: Upload Firmware To WeTransfer精简
+        if: steps.organize.outputs.ORGANIZE_STATUS == 'success' && env.UPLOAD_WETRANSFER == 'true'
+        run: |
+          transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
+          echo "::warning file=Firmware-Wetransfer.com::$(cat wetransfer.log | grep https)"
 
       - name: 电报机器人信息通知
         run: |
