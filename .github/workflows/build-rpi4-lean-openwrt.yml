@@ -296,6 +296,7 @@ jobs:
           cp -Rf targets/*/*/config.buildinfo "${Home}"/bin/config/config.txt
           cd targets/*/*
           find -name "*buildinfo*" | xargs -i rm -rf {}
+          find -name "*manifest*" | xargs -i rm -rf {}         
           find -name "*sysupgrade.img*" | xargs -i rm -rf {}
           find -name "*rootfs*" | xargs -i rm -rf {}
 
