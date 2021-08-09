@@ -313,7 +313,7 @@ jobs:
 
       - name: 电报机器人信息通知
         run: |
-          curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的✨主人✨：您的4b固件顺利编译完成了！💐https://github.com/hx210/OpenWrt-Rpi/actions" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+          curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的✨主人✨：您的4b固件顺利编译完成了！💐https://github.com/hx210/OpenWrt-Rpi/actions -$(cat wetransfer.log | grep https)" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
 
       - name: Delete Artifacts
         uses: geekyeggo/delete-artifact@v1
