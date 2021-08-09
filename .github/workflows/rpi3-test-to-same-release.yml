@@ -207,7 +207,7 @@ jobs:
         with:
           keep_latest: 2
           delete_tags: true
-          delete_tag_pattern: test
+          delete_tag_pattern: openwrt-rpi-test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -215,12 +215,12 @@ jobs:
         id: tag
         if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.organize.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
         run: |
-          echo "::set-output name=release_tag::openwrt-test-$(date +"%Y.%m.%d")"
+          echo "::set-output name=release_tag::openwrt-rpi-test-$(date +"%Y.%m.%d")"
           touch release.txt
           echo "::set-output name=status::success"
 
       - name: Upload Firmware Files to GitHub Release
-        uses: softprops/action-gh-release@59c3b4891632ff9a897f99a91d7bc557467a3a22
+        uses: softprops/action-gh-release@v0.1.7
         if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.tag.outputs.status == 'success' && !cancelled()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
