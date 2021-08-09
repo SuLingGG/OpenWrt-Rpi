@@ -180,7 +180,7 @@ jobs:
 
       - name: Organize Files
         id: organize
-        if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+        if: env.UPLOAD_FIRMWARE == 'true' && steps.generate.outputs.GENERATE_STATUS == 'success' && !cancelled()
         run: |
           cd openwrt/bin/targets/*/*
           rm -rf packages
@@ -213,7 +213,7 @@ jobs:
 
       - name: Generate New Release Tag
         id: tag
-        if: steps.organize.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
+        if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.organize.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
         run: |
           echo "::set-output name=release_tag::openwrt-test-$(date +"%Y.%m.%d")"
           touch release.txt
