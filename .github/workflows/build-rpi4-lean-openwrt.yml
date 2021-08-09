@@ -295,7 +295,7 @@ jobs:
           cd bin && mkdir config
           cp -Rf targets/*/*/config.buildinfo "${Home}"/bin/config/config.txt
           cd targets/*/*
-          
+
           find -name "*sysupgrade.img*" | xargs -i rm -rf {}
           find -name "*rootfs*" | xargs -i rm -rf {}
 
@@ -309,7 +309,7 @@ jobs:
         if: steps.organize.outputs.ORGANIZE_STATUS == 'success' && env.UPLOAD_WETRANSFER == 'true'
         run: |
           transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
-          echo "::warning file=Firmware-Wetransfer.com::$(cat wetransfer.log | grep https)"
+          echo "精简::warning file=Firmware-Wetransfer.com::$(cat wetransfer.log | grep https)"
 
       - name: 电报机器人信息通知
         run: |
