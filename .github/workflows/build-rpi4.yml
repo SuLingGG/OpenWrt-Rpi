@@ -205,30 +205,29 @@ jobs:
         if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.organize.outputs.status == 'success' && !cancelled()
         with:
           path: ${{ env.FIRMWARE }}/*
-        
+
       - name: Delete Older Releases and Tags
         uses: dev-drprasad/delete-older-releases@v0.2.0
         if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.organize.outputs.status == 'success' && !cancelled()
         with:
           keep_latest: 2
           delete_tags: true
-          delete_tag_pattern: openwrt-rpi
+          delete_tag_pattern: helmiwrt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-       - name: Upload Firmware Files to GitHub Release
-         uses: ncipollo/release-action@v1
-         if: steps.generate.outputs.GENERATE_STATUS == 'success' && !cancelled()
-         with:
-           allowUpdates: true
-           replacesArtifacts: true
-           omitBodyDuringUpdate: true
-           token: ${{ secrets.GITHUB_TOKEN }}
-           name: HelmiWrt $(date +"%Y.%m.%d")
-           tag: $(date +"%Y.%m.%d")
-           artifacts: ${{ env.FIRMWARE }}/*
-           body: HelmiWrt is custom OpenWrt build for Raspberry Pi • [Installation here](https://www.helmiau.com/blog/openwrt-rpi)
-      
+        uses: ncipollo/release-action@v1
+        if: steps.generate.outputs.GENERATE_STATUS == 'success' && !cancelled()
+        with: 
+          allowUpdates: true
+          replacesArtifacts: true
+          omitBodyDuringUpdate: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: HelmiWrt $(date +"%Y.%m.%d")
+          tag: helmiwrt-$(date +"%Y.%m.%d")
+          artifacts: ${{ env.FIRMWARE }}/*
+          body: HelmiWrt is custom OpenWrt build for Raspberry Pi • [Installation here](https://www.helmiau.com/blog/openwrt-rpi)
+
       - name: Delete Workflow Runs
         uses: GitRML/delete-workflow-runs@main
         with:
