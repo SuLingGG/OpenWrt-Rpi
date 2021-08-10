@@ -193,7 +193,7 @@ jobs:
         uses: actions/upload-artifact@main
         if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.organize.outputs.status == 'success' && !cancelled()
         with:
-          name: openwrt-${{ env.DEVICE_NAME }}-${{ env.FILE_DATE }}-all.zip
+          name: helmiwrt-${{ env.DEVICE_NAME }}-${{ env.FILE_DATE }}-all.zip
           path: ${{ env.FIRMWARE }}
 
       - name: Upload Firmware Files to GitHub Actions
@@ -217,7 +217,7 @@ jobs:
         if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.organize.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
         run: |
           sleep 20
-          echo "::set-output name=release_tag::helmiwrt-$(date +"%Y.%m.%d")"
+          echo "::set-output name=release_tag::helmiwrt-${{ env.FILE_DATE }}"
           touch release.txt
           echo "::set-output name=status::success"
 
@@ -227,7 +227,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: HelmiWrt $(date +"%Y.%m.%d")
+          name: HelmiWrt ${{ env.FILE_DATE }}
           tag_name: ${{ steps.tag.outputs.release_tag }}
           files: ${{ env.FIRMWARE }}/*
           body: |
