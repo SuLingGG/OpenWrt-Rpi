@@ -224,7 +224,8 @@ jobs:
            tag: $(date +"%Y.%m.%d")
            artifacts: ${{ env.FIRMWARE }}/*
            body: |
-              **HelmiWrt is custom OpenWrt build for Raspberry Pi**<br><br>Firmware information :<br>LuCI IP   : http://192.168.1.1<br>username  : root<br>password  : password<br>WIFI name : OpenWrt<br><br>[Installation here](https://www.helmiau.com/blog/openwrt-rpi)
+              **HelmiWrt is custom OpenWrt build for Raspberry Pi**
+              [Installation here](https://www.helmiau.com/blog/openwrt-rpi)
               
       - name: Delete Workflow Runs
         uses: GitRML/delete-workflow-runs@main
