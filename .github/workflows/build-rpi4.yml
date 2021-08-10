@@ -215,24 +215,38 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate New Release Tag
-        id: tag
-        if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.organize.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
-        run: |
-          echo "::set-output name=release_tag::openwrt-rpi-$(date +"%Y.%m.%d")"
-          touch release.txt
-          echo "::set-output name=status::success"
+#      - name: Generate New Release Tag
+#        id: tag
+#        if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.organize.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
+#        run: |
+#          echo "::set-output name=release_tag::openwrt-rpi-$(date +"%Y.%m.%d")"
+#          touch release.txt
+#          echo "::set-output name=status::success"
 
-      - name: Upload Firmware Files to GitHub Release
-        uses: softprops/action-gh-release@v0.1.7
-        if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.tag.outputs.status == 'success' && !cancelled()
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.tag.outputs.release_tag }}
-          body_path: release.txt
-          files: ${{ env.FIRMWARE }}/*
+#      - name: Upload Firmware Files to GitHub Release
+#        uses: softprops/action-gh-release@v0.1.7
+#        if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.tag.outputs.status == 'success' && !cancelled()
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          tag_name: ${{ steps.tag.outputs.release_tag }}
+#          body_path: release.txt
+#          files: ${{ env.FIRMWARE }}/*
 
+       - name: Upload Firmware Files to GitHub Release
+         uses: ncipollo/release-action@v1
+         if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.tag.outputs.status == 'success' && !cancelled()
+         with:
+           allowUpdates: true
+           replacesArtifacts: true
+           omitBodyDuringUpdate: true
+           token: ${{ secrets.GITHUB_TOKEN }}
+           name: HelmiWrt $(date +"%Y.%m.%d")
+           tag: $(date +"%Y.%m.%d")
+           artifacts: ${{ env.FIRMWARE }}/*
+           body: |
+              **HelmiWrt is custom OpenWrt build for Raspberry Pi**<br><br>Firmware information :<br>LuCI IP   : http://192.168.1.1<br>username  : root<br>password  : password<br>WIFI name : OpenWrt<br><br>[Installation here](https://www.helmiau.com/blog/openwrt-rpi)
+              
       - name: Delete Workflow Runs
         uses: GitRML/delete-workflow-runs@main
         with:
