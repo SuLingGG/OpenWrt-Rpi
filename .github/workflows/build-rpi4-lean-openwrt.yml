@@ -195,7 +195,7 @@ jobs:
           echo "GENERATE_STATUS=$(echo '${{needs.Build.outputs.GENERATE_STATUS}}')" >> $GITHUB_ENV
 
           echo "Home=${GITHUB_WORKSPACE}/openwrt" >> $GITHUB_ENV
-          echo "PATH1=${GITHUB_WORKSPACE}/openwrt/build/${{matrix.target}}" >> $GITHUB_ENV          
+    
 
       - name: Download Bin Folder
         uses: actions/download-artifact@v2
@@ -302,14 +302,14 @@ jobs:
 
           rm -rf packages
 
-          echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+          echo "FIRMWAREQ=$PWD" >> $GITHUB_ENV
 
           echo "::set-output name=status::success"
  
       - name: Upload Firmware To WeTransfer精简
         if: steps.organize.outputs.ORGANIZE_STATUS == 'success' && env.UPLOAD_WETRANSFER == 'true'
         run: |
-          transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
+          transfer wet -s -p 16 --no-progress ${FIRMWAREQ} 2>&1 | tee wetransfer.log
           echo "精简::warning file=Firmware-Wetransfer.com::$(cat wetransfer.log | grep https)"
 
       - name: 电报机器人信息通知
