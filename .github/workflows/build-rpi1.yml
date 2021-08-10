@@ -201,7 +201,6 @@ jobs:
         if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.organize.outputs.status == 'success' && !cancelled()
         with:
           path: ${{ env.FIRMWARE }}/*
-      - name: Upload Firmware Files to GitHub Release
 
       - name: Delete Older Releases and Tags
         uses: dev-drprasad/delete-older-releases@v0.2.0
