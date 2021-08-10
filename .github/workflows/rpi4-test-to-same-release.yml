@@ -196,7 +196,7 @@ jobs:
         uses: actions/upload-artifact@main
         if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.organize.outputs.status == 'success' && !cancelled()
         with:
-          name: openwrt-${{ env.DEVICE_NAME }}-${{ env.FILE_DATE }}-all-test.zip
+          name: helmiwrt-${{ env.DEVICE_NAME }}-${{ env.FILE_DATE }}-all-test.zip
           path: ${{ env.FIRMWARE }}
 
       - name: Upload Firmware Files to GitHub Actions
@@ -215,18 +215,34 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload Firmware to GitHub Release
-        uses: ncipollo/release-action@v1
-        if: steps.generate.outputs.GENERATE_STATUS == 'success' && !cancelled()
-        with: 
-          allowUpdates: true
-          replacesArtifacts: true
-          omitBodyDuringUpdate: true
-          token: ${{ secrets.GITHUB_TOKEN }}
-          name: HelmiWrt Test $(date +"%Y.%m.%d")
-          tag: helmiwrt-test-$(date +"%Y.%m.%d")
-          artifacts: ${{ env.FIRMWARE }}/*
-          body: HelmiWrt is custom OpenWrt build for Raspberry Pi • [Installation here](https://www.helmiau.com/blog/openwrt-rpi)
+      - name: Generate New Release Tag
+        id: tag
+        if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.organize.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
+        run: |
+          sleep 20
+          echo "::set-output name=release_tag::helmiwrt-test-${{ env.FILE_DATE }}"
+          touch release.txt
+          echo "::set-output name=status::success"
+
+      - name: Upload Firmware Files to GitHub Release
+        uses: softprops/action-gh-release@v1
+        if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.tag.outputs.status == 'success' && !cancelled()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          prerelease: true
+          name: HelmiWrt Test ${{ env.FILE_DATE }}
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          files: ${{ env.FIRMWARE }}/*
+          body: |
+            HelmiWrt is custom OpenWrt build for Raspberry Pi
+            **Firmware Information**
+            LuCI IP Address   : 192.168.1.1
+            LuCI Username     : root
+            LuCI Password     : password
+            WiFi SSID         : OpenWrt
+            WiFi Password     : none
+            [Installation here](https://www.helmiau.com/blog/openwrt-rpi)
 
       - name: Delete Workflow Runs
         uses: GitRML/delete-workflow-runs@main
