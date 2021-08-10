@@ -4,7 +4,6 @@
 # Lisence: MIT
 # Author: P3TERX
 # Blog: https://p3terx.com
-# HelmiWrt by helmiau.com
 #=================================================
 
 name: Raspberry Pi 1 Lean's OpenWrt
@@ -211,6 +210,24 @@ jobs:
           delete_tag_pattern: openwrt-rpi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+#      - name: Generate New Release Tag
+#        id: tag
+#        if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.organize.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
+#        run: |
+#          echo "::set-output name=release_tag::openwrt-rpi-$(date +"%Y.%m.%d")"
+#          touch release.txt
+#          echo "::set-output name=status::success"
+
+#      - name: Upload Firmware Files to GitHub Release
+#        uses: softprops/action-gh-release@v0.1.7
+#        if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.tag.outputs.status == 'success' && !cancelled()
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          tag_name: ${{ steps.tag.outputs.release_tag }}
+#          body_path: release.txt
+#          files: ${{ env.FIRMWARE }}/*
 
        - name: Upload Firmware Files to GitHub Release
          uses: ncipollo/release-action@v1
