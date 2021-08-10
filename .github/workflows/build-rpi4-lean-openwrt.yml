@@ -309,12 +309,12 @@ jobs:
       - name: Upload Firmware To WeTransfer精简
         if: steps.organize.outputs.ORGANIZE_STATUS == 'success' && env.UPLOAD_WETRANSFER == 'true'
         run: |
-          transfer wet -s -p 16 --no-progress ${FIRMWAREQ} 2>&1 | tee wetransfer.log
-          echo "精简::warning file=Firmware-Wetransfer.com::$(cat wetransfer.log | grep https)"
+          transfer wet -s -p 16 --no-progress ${FIRMWAREQ} 2>&1 | tee wetransfer1.log
+          echo "精简::warning file=Firmware-Wetransfer.com::$(cat wetransfer1.log | grep https)"
 
       - name: 电报机器人信息通知
         run: |
-          curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的✨主人✨：您的4b固件顺利编译完成了！💐https://github.com/hx210/OpenWrt-Rpi/actions -$(cat wetransfer.log | grep https)" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+          curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的✨主人✨：您的4b固件顺利编译完成了！💐https://github.com/hx210/OpenWrt-Rpi/actions -$(cat wetransfer1.log | grep https)" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
 
       - name: Delete Artifacts
         uses: geekyeggo/delete-artifact@v1
