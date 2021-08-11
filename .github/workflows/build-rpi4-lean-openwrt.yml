@@ -194,6 +194,7 @@ jobs:
           echo "FIRMWARE=$(echo '${{needs.Build.outputs.FIRMWARE}}')" >> $GITHUB_ENV
           echo "GENERATE_STATUS=$(echo '${{needs.Build.outputs.GENERATE_STATUS}}')" >> $GITHUB_ENV
 
+          echo "Home=${GITHUB_WORKSPACE}/openwrt" >> $GITHUB_ENV
     
 
       - name: Download Bin Folder
@@ -290,16 +291,15 @@ jobs:
         id: organizer
         run: |
           cd openwrt
+          cp -Rf bin/targets/*/* "${Home}"/upgrade
           cd bin && mkdir config
-          cp -Rf targets/*/*/config.buildinfo targets/*/*/config.txt
+          cp -Rf targets/*/*/config.buildinfo "${Home}"/bin/config/config.txt
           cd targets/*/*
           find -name "*buildinfo*" | xargs -i rm -rf {}
           find -name "*manifest*" | xargs -i rm -rf {}         
           find -name "*sysupgrade.img*" | xargs -i rm -rf {}
           find -name "*rootfs*" | xargs -i rm -rf {}
-          find -name "*imagebuilder*" | xargs -i rm -rf {}
-          find -name "*server*" | xargs -i rm -rf {}             
-          find -name "*toolchain*" | xargs -i rm -rf {}               
+
           rm -rf packages
 
           echo "FIRMWAREQ=$PWD" >> $GITHUB_ENV
@@ -310,7 +310,7 @@ jobs:
         if: steps.organize.outputs.ORGANIZE_STATUS == 'success' && env.UPLOAD_WETRANSFER == 'true'
         run: |
           transfer wet -s -p 16 --no-progress ${FIRMWAREQ} 2>&1 | tee wetransfer1.log
-          echo "::warning file=Firmware-Wetransfer.com::$(cat wetransfer1.log | grep https)精简"
+          echo "精简::warning file=Firmware-Wetransfer.com::$(cat wetransfer1.log | grep https)"
 
       - name: 电报机器人信息通知
         run: |
