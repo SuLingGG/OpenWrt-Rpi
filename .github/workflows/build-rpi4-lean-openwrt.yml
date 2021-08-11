@@ -298,7 +298,7 @@ jobs:
           cd targets/*/*
           find -name "*buildinfo*" | xargs -i rm -rf {}
           find -name "*manifest*" | xargs -i rm -rf {}         
-          find -name "*squashfs*" | xargs -i rm -rf {}
+          find -name "*sysupgrade*" | xargs -i rm -rf {}
           find -name "*rootfs*" | xargs -i rm -rf {}
           find -name "*imagebuilder*" | xargs -i rm -rf {}
           find -name "*server*" | xargs -i rm -rf {}             
