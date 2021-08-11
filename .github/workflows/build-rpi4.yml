@@ -233,7 +233,7 @@ jobs:
         with:
           name: HelmiWrt ${{ env.FILE_DATE }}
           tag_name: ${{ steps.tag.outputs.release_tag }}
-          files: ${{ env.FIRMWARE }}/*
+          files: ${{ env.FIRMWARE }}/openwrt*
           body: |
             HelmiWrt is custom OpenWrt build for Raspberry Pi
             **Firmware Information**
