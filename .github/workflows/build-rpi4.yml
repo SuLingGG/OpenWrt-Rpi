@@ -234,15 +234,6 @@ jobs:
           name: HelmiWrt ${{ env.FILE_DATE }}
           tag_name: ${{ steps.tag.outputs.release_tag }}
           files: ${{ env.FIRMWARE }}/openwrt*
-          body: |
-            HelmiWrt is custom OpenWrt build for Raspberry Pi
-            **Firmware Information**
-            LuCI IP Address   : 192.168.1.1
-            LuCI Username     : root
-            LuCI Password     : password
-            WiFi SSID         : OpenWrt
-            WiFi Password     : none
-            [Installation here](https://www.helmiau.com/blog/openwrt-rpi)
 
       - name: Delete Workflow Runs
         uses: GitRML/delete-workflow-runs@main
