@@ -292,13 +292,17 @@ jobs:
         run: |
           cd openwrt
           cp -Rf bin/targets/*/* "${Home}"/upgrade
-          cd bin && mkdir config
+          cd bin && mkdir config && mkdir config1
           cp -Rf targets/*/*/config.buildinfo "${Home}"/bin/config/config.txt
+          cp -Rf targets/*/*/openwrt-bcm27xx-bcm2711-rpi-4-ext4-factory.img "${Home}"/bin/config1/rpi-4-ext4-factory.img
           cd targets/*/*
           find -name "*buildinfo*" | xargs -i rm -rf {}
           find -name "*manifest*" | xargs -i rm -rf {}         
-          find -name "*sysupgrade.img*" | xargs -i rm -rf {}
+          find -name "*squashfs*" | xargs -i rm -rf {}
           find -name "*rootfs*" | xargs -i rm -rf {}
+          find -name "*imagebuilder*" | xargs -i rm -rf {}
+          find -name "*server*" | xargs -i rm -rf {}             
+          find -name "*toolchain*" | xargs -i rm -rf {}               
 
           rm -rf packages
 
@@ -306,6 +310,21 @@ jobs:
 
           echo "::set-output name=status::success"
  
+      - name: 上传.config配置文件在 github actions
+        uses: actions/upload-artifact@v2
+        if: steps.organizer.outputs.status == 'success'
+        with:
+          name: .config
+          path: openwrt/bin/config
+
+      - name: 上传固件在 github actions
+        uses: actions/upload-artifact@v2
+        if: steps.organizer.outputs.status == 'success' 
+        with:
+          name: pi_4b
+          path: openwrt/bin/config1
+
+
       - name: Upload Firmware To WeTransfer精简
         if: steps.organize.outputs.ORGANIZE_STATUS == 'success' && env.UPLOAD_WETRANSFER == 'true'
         run: |
