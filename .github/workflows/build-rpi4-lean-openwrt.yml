@@ -294,7 +294,7 @@ jobs:
           cp -Rf bin/targets/*/* "${Home}"/upgrade
           cd bin && mkdir config && mkdir config1
           cp -Rf targets/*/*/config.buildinfo "${Home}"/bin/config/config.txt
-          cp -Rf targets/*/*/openwrt-bcm27xx-bcm2711-rpi-4-ext4-factory.img "${Home}"/bin/config1/rpi-4-ext4-factory.img
+          cp -Rf targets/*/*/openwrt-bcm27xx-bcm2711-rpi-4-ext4-factory.img.gz "${Home}"/bin/config1/rpi-4-ext4-factory.img
           cd targets/*/*
           find -name "*buildinfo*" | xargs -i rm -rf {}
           find -name "*manifest*" | xargs -i rm -rf {}         
