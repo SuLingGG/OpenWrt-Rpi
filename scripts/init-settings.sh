@@ -36,28 +36,8 @@ chmod +x /bin/ssr-stop
 
 # Added neofetch on oh-my-zsh
 echo "neofetch" > /root/.oh-my-zsh/custom/example.zsh
-echo 'echo -e "\033[0;36m======================================================\033[1;31m"' >> /root/.oh-my-zsh/custom/example.zsh
-echo 'echo "       Additional command lists by helmiau.com"' >> /root/.oh-my-zsh/custom/example.zsh
-echo 'echo -e "\033[0;36m======================================================\033[1;32m"' >> /root/.oh-my-zsh/custom/example.zsh
-echo 'echo "  helmilb     : Install helmiau loadbalance 4 USB ISP."' >> /root/.oh-my-zsh/custom/example.zsh
-echo 'echo "  ram         : Check ram usage and running apps."' >> /root/.oh-my-zsh/custom/example.zsh
-echo 'echo "  sambaset    : Add USER samba as Allowed Guest."' >> /root/.oh-my-zsh/custom/example.zsh
-echo 'echo "  fixphp      : Fix download index.php xderm/libernet."' >> /root/.oh-my-zsh/custom/example.zsh
-echo 'echo "  myip        : Check your public IP Address Info."' >> /root/.oh-my-zsh/custom/example.zsh
-echo 'echo "  ipqmi       : refresh IP Address for QMI Modems."' >> /root/.oh-my-zsh/custom/example.zsh
-echo 'echo "  vmess       : Free vmess account for 3 days."' >> /root/.oh-my-zsh/custom/example.zsh
-echo 'echo "  ipv6-helper : This tool help you install IPV6 modules."' >> /root/.oh-my-zsh/custom/example.zsh
-echo 'echo -e "\033[0;36m======================================================\033[1;33m"' >> /root/.oh-my-zsh/custom/example.zsh
-echo "echo -e xdaLuCI IPxdaxda : $(uci show network | grep network.lan.ipaddr | cut -d \' -f2) | sed 's/xda/  /g'" >> /root/.oh-my-zsh/custom/example.zsh
-echo "if curl -s --max-time 5 --connect-timeout 5 ip-api.com/line\?fields=query,isp -v 2>&1 | grep -q 'HTTP/1.1 200 OK'; then" >> /root/.oh-my-zsh/custom/example.zsh
-	echo 'echo "  Public IP   : $(curl -s --max-time 5 --connect-timeout 5 ip-api.com/line/\?fields=query)"' >> /root/.oh-my-zsh/custom/example.zsh
-	echo 'echo "  ISP         : $(curl -s --max-time 5 --connect-timeout 5 ip-api.com/line/\?fields=isp)"' >> /root/.oh-my-zsh/custom/example.zsh
-echo "else" >> /root/.oh-my-zsh/custom/example.zsh
-	echo 'echo "  Public IP   : Not Available - No Connection"' >> /root/.oh-my-zsh/custom/example.zsh
-	echo 'echo "  ISP         : Not Available - No Connection"' >> /root/.oh-my-zsh/custom/example.zsh
-echo "fi" >> /root/.oh-my-zsh/custom/example.zsh
-echo 'echo -e "\033[0;36m======================================================"' >> /root/.oh-my-zsh/custom/example.zsh
 chmod +x /bin/neofetch
+./bin/neofetch #run neofetch
 
 # Vmess creator shortcut
 chmod +x /bin/vmess
