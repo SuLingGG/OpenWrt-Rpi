@@ -5100,7 +5100,7 @@ if [ -f /usr/lib/os-release ];then
 	if [[ $(grep -c Helmi /usr/lib/os-release) = "0" ]];then
 		#HelmiOO echo "  helmilog : os-release file available, patching..." #HelmiOO
 		sed -i -e 's/"openwrt/"helmiwrt/g' -i -e 's/openwrt"/helmiwrt"/g' -i -e 's/"OpenWrt/"HelmiWrt/g' -i -e 's/"snapshot/"Beta/g' -i -e 's/"SNAPSHOT/"Beta/g' -i -e 's/ SNAPSHOT/ Beta/g' /usr/lib/os-release
-		#HelmiOO echo "  helmilog : patching os-release done..."	
+		#HelmiOO echo "  helmilog : patching os-release done..." #HelmiOO
 	else
 		#HelmiOO echo "  helmilog : os-release file already patched. Skipping..." #HelmiOO
 	fi
