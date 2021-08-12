@@ -5129,7 +5129,7 @@ if curl -s --max-time 5 --connect-timeout 5 ip-api.com/line\?fields=query,isp -v
 	echo -e "  Public IP   : ${N}$(curl -s --max-time 5 --connect-timeout 5 ip-api.com/line/\?fields=query)"
 	echo -e "  ISP         : ${N}$(curl -s --max-time 5 --connect-timeout 5 ip-api.com/line/\?fields=isp)"
 else
-	echo -e "  Public IP   : ${R}Not Available - No Connection"
+	echo -e "  Public IP   : ${R}Not Available - No Connection${N}"
 	echo -e "  ISP         : ${R}Not Available - No Connection"
 fi
 echo -e "${R}======================================================${Y}"
