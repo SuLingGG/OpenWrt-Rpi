@@ -190,6 +190,9 @@ wget -O package/base-files/files/bin/changelang "https://raw.githubusercontent.c
 # Script by Rudi Hartono https://www.facebook.com/rud18
 wget -O package/base-files/files/bin/ipqmi "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/ipqmi" && chmod +x package/base-files/files/bin/ipqmi
 
+# Add clashcs script : OpenClash Core switcher
+wget -O package/base-files/files/bin/clashcs "https://raw.githubusercontent.com/helmiau/OpenWrt-Rpi/main/files/bin/clashcs" && chmod +x package/base-files/files/bin/clashcs
+
 #-----------------------------------------------------------------------------
 #   End of @helmiau terminal scripts additionals menu
 #-----------------------------------------------------------------------------

@@ -1,0 +1,93 @@
+#!/bin/bash
+#--------------------------------------------------------
+#   Don't remove this section for credits
+#   Don't rename this file
+#--------------------------------------------------------
+#   This script function is to switch between clash_core
+#   and clash_premium_core
+#   by Helmi Amirudin a.k.a helmiau
+#   my profile page https://wwww.helmiau.com
+#   my github https://github.com/helmiau
+#--------------------------------------------------------
+CORE="/etc/openclash/core/clash"
+ORI="/etc/openclash/core/clash_original"
+PREM="/etc/openclash/core/clash_premium"
+ARCH=$(grep core_version /etc/config/openclash | awk -F"'" '$0=$2')
+#ORILINK=$(curl -sL http://api.github.com/repos/Dreamacro/clash/releases/tags/premium | grep /clash-linux-$1 | sed 's/.*url\": \"//g' | sed 's/\"//g')
+#PREMLINK=$(curl -sL http://api.github.com/repos/vernesong/OpenClash/releases/tags/Clash | grep /clash-linux-$1 | sed 's/.*url\": \"//g' | sed 's/\"//g')
+ORIEXT=".tar.gz -o /tmp/clash.tar.gz"
+PREMEXT=".gz -o /tmp/clash.gz"
+
+echo -e "\033[1;32m"
+echo "==============================="
+echo "   Clash Core Switcher Script  "
+echo "      Created by helmiau       "
+echo "==============================="
+echo -e "  Architecture : $ARCH"
+
+function helmi_clash_cemod() {
+	chmod +x /etc/openclash/core/clash*
+}
+
+function helmi_clash_start() {
+	/etc/init.d/openclash start
+	uci set openclash.config.enable=1
+	uci commit openclash
+}
+
+function helmi_clash_stop() {
+	/etc/init.d/openclash stop
+	uci set openclash.config.enable=0
+	uci commit openclash
+}
+
+	echo "==============================="
+if [[ -f $CORE ]] && [[ -f $PREM ]];then
+	echo "  Current Clash Core : Original"
+	echo "  Switch to Premium Core? (y/n)"
+	echo "==============================="
+	echo -n "  "
+	read -r jawab
+	if [[ $jawab == "y" ]]; then
+		helmi_clash_stop \ &&
+		mv /etc/openclash/core/clash /etc/openclash/core/clash_original
+		mv /etc/openclash/core/clash_premium /etc/openclash/core/clash
+		helmi_clash_cemod \ &&
+		helmi_clash_start
+	else
+		exit
+	fi
+elif [[ -f $CORE ]] && [[ -f $ORI ]];then
+	echo "  Current Clash Core : Premium"
+	echo "  Switch to Original Core? (y/n)"
+	echo "==============================="
+	echo -n "  "
+	read -r jawab
+	if [[ $jawab == "y" ]]; then
+		helmi_clash_stop \ &&
+		mv /etc/openclash/core/clash /etc/openclash/core/clash_premium
+		mv /etc/openclash/core/clash_original /etc/openclash/core/clash
+		helmi_clash_cemod \ &&
+		helmi_clash_start
+	else
+		exit
+	fi
+elif [[ ! -f $ORI ]] && [[ ! -f $PREM ]];then
+	echo "  Current Clash Core = Unknown"
+	echo "  Download Premium Core Now? (y/n)"
+	echo "==============================="
+	echo -n "  "
+	read -r jawab
+	if [[ $jawab == "y" ]]; then
+		helmi_clash_stop \ &&
+		wget -qO- $(curl -sL http://api.github.com/repos/Dreamacro/clash/releases/tags/premium | grep /clash-$ARCH | sed 's/.*url\": \"//g' | sed 's/\"//g') | gunzip -c > /etc/openclash/core/clash
+		wget -qO- $(curl -sL http://api.github.com/repos/vernesong/OpenClash/releases/tags/Clash | grep /clash-$ARCH | sed 's/.*url\": \"//g' | sed 's/\"//g') | tar xOvz > /etc/openclash/core/clash_original
+		helmi_clash_cemod \ &&
+		helmi_clash_start
+	else
+		exit
+	fi
+else
+	echo "  Exiting bro. see yu suun !"
+	exit
+fi

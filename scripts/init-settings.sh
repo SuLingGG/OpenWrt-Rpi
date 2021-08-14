@@ -160,6 +160,9 @@ config ttyd
 
 EOF
 
+# Add clashcs script : OpenClash Core switcher
+chmod +x /bin/clashcs
+
 #-----------------------------------------------------------------------------
 #   Start of @helmiau additionals menu
 #-----------------------------------------------------------------------------
