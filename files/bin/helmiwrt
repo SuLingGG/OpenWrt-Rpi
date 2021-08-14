@@ -1,0 +1,32 @@
+#!/bin/bash
+#--------------------------------------------------------
+#   Don't remove this section for credits
+#   Don't rename this file
+#--------------------------------------------------------
+#   My command lists
+#   by Helmi Amirudin a.k.a helmiau
+#   my profile page https://wwww.helmiau.com
+#   my github https://github.com/helmiau
+#--------------------------------------------------------
+
+#--- Warna Warna
+R='\033[1;31m' # Merah Muda
+G='\033[1;32m' # Hijau Muda
+C='\033[0;36m' # Biru Muda
+Y='\033[1;33m' # Kuning
+N='\033[1;37m' # Putih
+
+echo -e "${R}======================================================"
+echo -e "       ${Y}HelmiWrt Command lists by Helmi Amirudin"
+echo -e "            ${Y}Copyright(R)2021 â€¢ helmiau.com"
+echo -e "${R}======================================================${N}"
+echo -e "  helmilb     : Install helmiau loadbalance 4 USB ISP."
+echo -e "  ram         : Check ram usage and running apps."
+echo -e "  sambaset    : Add USER samba as Allowed Guest."
+echo -e "  fixphp      : Fix download index.php xderm/libernet."
+echo -e "  myip        : Check your public IP Address Info."
+echo -e "  ipqmi       : Refresh IP Address for QMI Modems."
+echo -e "  vmess       : Free vmess account for 3 days."
+echo -e "  ipv6-helper : This tool help you install IPV6 modules."
+echo -e "  clashcs     : Openclash core switcher script."
+echo -e "${R}======================================================"
