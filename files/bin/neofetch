@@ -5130,8 +5130,8 @@ else
 	echo -e "  ISP         : ${R}Not Available - No Connection"
 fi
 echo -e "${R}======================================================${Y}"
-echo -e "         ${Y}Run ${R}helmiwrt${Y} command to see command lists"
-echo -e "               ${Y}Copyright(R)2021 • helmiau.com"
+echo -e "      ${Y}Run ${R}helmiwrt${Y} command to see command lists"
+echo -e "            ${Y}Copyright(R)2021 • helmiau.com"
 echo -e "${R}======================================================"
 
 

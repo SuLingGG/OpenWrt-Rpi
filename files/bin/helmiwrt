@@ -18,7 +18,7 @@ N='\033[1;37m' # Putih
 
 echo -e "${R}======================================================"
 echo -e "       ${Y}HelmiWrt Command lists by Helmi Amirudin"
-echo -e "            ${Y}Copyright(R)2021 â€¢ helmiau.com"
+echo -e "            ${Y}Copyright(R)2021 • helmiau.com"
 echo -e "${R}======================================================${N}"
 echo -e "  helmilb     : Install helmiau loadbalance 4 USB ISP."
 echo -e "  ram         : Check ram usage and running apps."
