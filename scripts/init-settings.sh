@@ -163,6 +163,9 @@ EOF
 # Add clashcs script : OpenClash Core switcher
 chmod +x /bin/clashcs
 
+# Add helmiwrt script : lists of command lines provided by helmiau.com
+chmod +x /bin/helmiwrt
+
 #-----------------------------------------------------------------------------
 #   Start of @helmiau additionals menu
 #-----------------------------------------------------------------------------
