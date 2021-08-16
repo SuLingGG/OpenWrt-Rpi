@@ -92,6 +92,9 @@ git clone --depth=1 https://github.com/4IceG/luci-app-sms-tool
 # Add luci-app-atinout-mod
 git clone --depth=1 https://github.com/4IceG/luci-app-atinout-mod
 
+# Add luci-app-cpu-status
+git clone --depth=1 https://github.com/gSpotx2f/luci-app-cpu-status
+
 #-----------------------------------------------------------------------------
 #   End of @helmiau additionals packages for cloning repo 
 #-----------------------------------------------------------------------------
