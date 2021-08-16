@@ -98,6 +98,9 @@ git clone --depth=1 https://github.com/gSpotx2f/luci-app-cpu-status
 # Add luci-app-internet-detector
 git clone --depth=1 https://github.com/4IceG/luci-app-internet-detector
 
+# Add luci-theme-tano
+git clone --depth=1 https://github.com/tano-systems/luci-theme-tano
+
 #-----------------------------------------------------------------------------
 #   End of @helmiau additionals packages for cloning repo 
 #-----------------------------------------------------------------------------
