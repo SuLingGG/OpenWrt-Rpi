@@ -95,6 +95,9 @@ git clone --depth=1 https://github.com/4IceG/luci-app-atinout-mod
 # Add luci-app-cpu-status
 git clone --depth=1 https://github.com/gSpotx2f/luci-app-cpu-status
 
+# Add luci-app-internet-detector
+git clone --depth=1 https://github.com/4IceG/luci-app-internet-detector
+
 #-----------------------------------------------------------------------------
 #   End of @helmiau additionals packages for cloning repo 
 #-----------------------------------------------------------------------------
