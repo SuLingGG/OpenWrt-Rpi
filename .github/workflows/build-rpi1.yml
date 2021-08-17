@@ -206,7 +206,7 @@ jobs:
         uses: dev-drprasad/delete-older-releases@v0.2.0
         if: steps.generate.outputs.GENERATE_STATUS == 'success' && steps.organize.outputs.status == 'success' && !cancelled()
         with:
-          keep_latest: 2
+          keep_latest: 4
           delete_tags: true
           delete_tag_pattern: helmiwrt
         env:
