@@ -166,6 +166,25 @@ chmod +x /bin/clashcs
 # Add helmiwrt script : lists of command lines provided by helmiau.com
 chmod +x /bin/helmiwrt
 
+# Autofix download index.php
+helmiooo=$(cat /etc/config/uhttpd)
+if [[ $helmiooo == *"uhttpd 'mai"* ]]; then
+	echo -e "Step 1 done ! Resuming to step 2..."
+	sed -i "/config uhttpd 'main'/a list interpreter '.php=/usr/bin/php-cgi'" /etc/config/uhttpd
+fi
+if [[ $helmiooo == *"uhttpd 'mai"* ]]; then
+	echo -e "Step 2 done ! Resuming to step 3..."
+	sed -i "/config uhttpd 'main'/a option ubus_prefix '/ubus'" /etc/config/uhttpd
+fi
+if [[ $helmiooo == *"uhttpd mai"* ]]; then
+	echo -e "Step 3 done ! Resuming to last step..."
+	sed -i "/config uhttpd main/a list interpreter '.php=/usr/bin/php-cgi'" /etc/config/uhttpd
+fi
+if [[ $helmiooo == *"uhttpd mai"* ]]; then
+	echo -e "Everything has been done..."
+	sed -i "/config uhttpd main/a option ubus_prefix '/ubus'" /etc/config/uhttpd
+fi
+
 #-----------------------------------------------------------------------------
 #   Start of @helmiau additionals menu
 #-----------------------------------------------------------------------------
