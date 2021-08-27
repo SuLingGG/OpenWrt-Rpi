@@ -6,11 +6,9 @@
 # Blog: https://p3terx.com
 #=================================================
 
-name: Build x86_generic Lean's OpenWrt
+name: Build x86_generic OpenWrt
 
 on:
-  repository_dispatch:
-    types: [lean, x86_generic]
   workflow_dispatch:
   schedule:
     - cron: 0 18 * * *
@@ -18,12 +16,10 @@ on:
 #    types: started
 
 env:
-  REPO_URL: https://github.com/coolsnowwolf/lede
-  REPO_BRANCH: master
+  TOOLCHAIN_TAG: coolsnowwolf-lede-master
+  TOOLCHAIN_NAME: toolchain-image-coolsnowwolf-lede-master-x86-generic.img
   CONFIG_FILE: config/x86/x86_generic-lean-target.config
   DIY_SH: scripts/lean-openwrt.sh
-  IPV6MOD_IN_FIRMWARE: true
-  KMODS_IN_FIRMWARE: true
   WEBROOT: /data/dnmp/www/openwrt.cc
   UPLOAD_RCLONE: true
   UPLOAD_WETRANSFER: true
@@ -56,10 +52,17 @@ jobs:
           sudo -E apt-get -qq clean
           sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-      - name: Clone Source Code
+      - name: Prepare Toolchain Image
+        id: prepare
         run: |
           df -hT $PWD
-          git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
+          sudo swapoff -a
+          sudo chown -R runner:runner /mnt
+          sudo rm -f /mnt/swapfile
+          wget -q https://github.com/SuLingGG/OpenWrt-Toolchain/releases/download/$TOOLCHAIN_TAG/$TOOLCHAIN_NAME -O /mnt/toolchain-image.img
+          mkdir /mnt/openwrt-ro openwrt workdir overlay
+          sudo mount -o loop /mnt/toolchain-image.img /mnt/openwrt-ro
+          sudo mount -t overlay overlay -o lowerdir=/mnt/openwrt-ro,upperdir=overlay,workdir=workdir openwrt
 
       - name: Update Feeds
         id: update
@@ -92,12 +95,8 @@ jobs:
         id: package
         run: |
           cd $OPENWRTROOT
-          if "$KMODS_IN_FIRMWARE" = 'true'
-          then
-              echo "CONFIG_ALL_NONSHARED=y" >> .config
-          fi
           make defconfig
-          make download -j8
+          make download -j16
           find dl -size -1024c -exec ls -l {} \;
           find dl -size -1024c -exec rm -f {} \;
 
@@ -106,8 +105,6 @@ jobs:
         run: |
           cd $OPENWRTROOT
           echo -e "$(nproc) thread compile"
-          make tools/compile -j$(nproc) || make tools/compile -j1 V=s
-          make toolchain/compile -j$(nproc) || make toolchain/compile -j1 V=s
           make target/compile -j$(nproc) || make target/compile -j1 V=s IGNORE_ERRORS=1
           make diffconfig
           make package/compile -j$(nproc) IGNORE_ERRORS=1 || make package/compile -j1 V=s IGNORE_ERRORS=1
@@ -140,26 +137,16 @@ jobs:
           mkdir -p files/etc/uci-defaults/
           cp ../scripts/init-settings.sh files/etc/uci-defaults/99-init-settings
           mkdir -p files/etc/opkg
-          cp ../data/opkg/distfeeds-packages-server.conf files/etc/opkg/distfeeds.conf.server
-          if "$KMODS_IN_FIRMWARE" = 'true'
-          then
-              mkdir -p files/www/snapshots
-              cp -r bin/targets files/www/snapshots
-              cp ../data/opkg/distfeeds-18.06-local.conf files/etc/opkg/distfeeds.conf
-          else
-              cp ../data/opkg/distfeeds-18.06-remote.conf files/etc/opkg/distfeeds.conf
-          fi
-          cp files/etc/opkg/distfeeds.conf.server files/etc/opkg/distfeeds.conf.mirror
-          sed -i "s/http:\/\/192.168.123.100:2345\/snapshots/https:\/\/openwrt.cc\/snapshots\/$(date +"%Y-%m-%d")\/lean/g" files/etc/opkg/distfeeds.conf.mirror
-          if "$IPV6MOD_IN_FIRMWARE" = 'true'
-          then
-              mkdir -p files/www/ipv6-modules
-              cp bin/packages/$PLATFORM/luci/luci-proto-ipv6* files/www/ipv6-modules
-              cp bin/packages/$PLATFORM/base/{ipv6helper*,odhcpd-ipv6only*,odhcp6c*,6in4*} "files/www/ipv6-modules"
-              cp bin/targets/$TARGET/$SUBTARGET/packages/{ip6tables*,kmod-nf-nat6*,kmod-ipt-nat6*,kmod-sit*,kmod-ip6tables-extra*} "files/www/ipv6-modules"
-              mkdir -p files/bin
-              cp ../scripts/ipv6-helper.sh files/bin/ipv6-helper
-          fi
+          cp ../data/opkg/distfeeds.conf.mirror files/etc/opkg
+          mkdir -p files/www/snapshots
+          cp -r bin/targets files/www/snapshots
+          cp ../data/opkg/distfeeds.conf files/etc/opkg
+          mkdir -p files/www/ipv6-modules
+          cp bin/packages/$PLATFORM/luci/luci-proto-ipv6* files/www/ipv6-modules
+          cp bin/packages/$PLATFORM/base/{ipv6helper*,odhcpd-ipv6only*,odhcp6c*,6in4*} "files/www/ipv6-modules"
+          cp bin/targets/$TARGET/$SUBTARGET/packages/{ip6tables*,kmod-nf-nat6*,kmod-ipt-nat6*,kmod-sit*,kmod-ip6tables-extra*} "files/www/ipv6-modules"
+          mkdir -p files/bin
+          cp ../scripts/ipv6-helper.sh files/bin/ipv6-helper
           make package/install -j$(nproc) || make package/install -j1 V=s
           make target/install -j$(nproc) || make target/install -j1 V=s
           make checksum
