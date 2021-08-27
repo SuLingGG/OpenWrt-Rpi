@@ -32,6 +32,9 @@ cp -r temp/luci/applications/luci-app-eqos luci/applications/luci-app-eqos
 cp -r temp/luci/applications/luci-app-gowebdav luci/applications/luci-app-gowebdav
 cp -r temp/packages/net/gowebdav packages/net/gowebdav
 
+# Add luci-proto-modemmanager
+cp -r temp/luci/protocols/luci-proto-modemmanager luci/protocols/luci-proto-modemmanager
+
 # Add netdata
 rm -rf packages/admin/netdata
 rm -rf ../package/lean/luci-app-netdata
