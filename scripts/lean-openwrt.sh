@@ -37,9 +37,6 @@ git clone --depth=1 https://github.com/tty228/luci-app-serverchan
 # Add OpenClash
 git clone --depth=1 -b master https://github.com/vernesong/OpenClash
 
-# Add luci-app-onliner
-git clone --depth=1 https://github.com/rufengsuixing/luci-app-onliner
-
 # Add luci-app-diskman
 git clone --depth=1 https://github.com/SuLingGG/luci-app-diskman
 mkdir parted
@@ -57,7 +54,7 @@ rm -rf ../lean/luci-app-wrtbwmon
 
 # Add luci-app-unblockneteasemusic
 git clone --depth=1 https://github.com/immortalwrt/luci-app-unblockneteasemusic
-rm -rf ../lean/luci-app-unblockneteasemusic
+rm -rf ../lean/luci-app-unblockmusic
 
 # Add luci-theme-argon
 git clone --depth=1 -b 18.06 https://github.com/jerrykuku/luci-theme-argon
