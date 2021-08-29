@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-18.04
 
     outputs:
-      OPENWRTROOT: ${{ steps.update.outputs.OPENWRTROOT }}
+      OPENWRTROOT: ${{ steps.prepare.outputs.OPENWRTROOT }}
       PLATFORM: ${{ steps.compile.outputs.PLATFORM }}
       TARGET: ${{ steps.compile.outputs.TARGET }}
       SUBTARGET: ${{ steps.compile.outputs.SUBTARGET }}
@@ -63,13 +63,15 @@ jobs:
           mkdir /mnt/openwrt-ro openwrt workdir overlay
           sudo mount -o loop /mnt/toolchain-image.img /mnt/openwrt-ro
           sudo mount -t overlay overlay -o lowerdir=/mnt/openwrt-ro,upperdir=overlay,workdir=workdir openwrt
+          cd openwrt
+          echo "OPENWRTROOT=$PWD" >> $GITHUB_ENV
+          echo "::set-output name=OPENWRTROOT::$(echo $PWD)"
+          git pull
 
       - name: Update Feeds
         id: update
         run: |
-          cd openwrt
-          echo "OPENWRTROOT=$PWD" >> $GITHUB_ENV
-          echo "::set-output name=OPENWRTROOT::$(echo $PWD)"
+          cd $OPENWRTROOT
           mkdir customfeeds
           git clone --depth=1 https://github.com/coolsnowwolf/packages customfeeds/packages
           git clone --depth=1 https://github.com/coolsnowwolf/luci customfeeds/luci
@@ -100,7 +102,7 @@ jobs:
         run: |
           cd $OPENWRTROOT
           make defconfig
-          make download -j16
+          make download -j16 && make download -j16
           find dl -size -1024c -exec ls -l {} \;
           find dl -size -1024c -exec rm -f {} \;
 
