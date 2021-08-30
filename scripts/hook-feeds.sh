@@ -35,7 +35,7 @@ cp -r temp/packages/net/gowebdav packages/net/gowebdav
 # Add luci-proto-modemmanager
 cp -r temp/luci/protocols/luci-proto-modemmanager luci/protocols/luci-proto-modemmanager
 
-# Add netdata
+# Add luci-app-netdata
 rm -rf packages/admin/netdata
 rm -rf ../package/lean/luci-app-netdata
 cp -r temp/luci/applications/luci-app-netdata luci/applications/luci-app-netdata
@@ -44,6 +44,10 @@ cp -r temp/packages/admin/netdata packages/admin/netdata
 # Add luci-app-smartdns
 cp -r temp/luci/applications/luci-app-smartdns luci/applications/luci-app-smartdns
 cp -r temp/packages/net/smartdns packages/net/smartdns
+
+# Add luci-app-verysync
+cp -r temp/luci/applications/luci-app-smartdns luci/applications/luci-app-verysync
+cp -r temp/packages/net/verysync packages/net/verysync
 
 # Add tmate
 cp -r temp/packages/net/tmate packages/net/tmate
