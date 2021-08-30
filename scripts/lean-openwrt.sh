@@ -85,8 +85,9 @@ popd
 pushd package/lean/default-settings/files
 sed -i '/http/d' zzz-default-settings
 sed -i '/18.06/d' zzz-default-settings
-export orig_version="$(cat "zzz-default-settings" | grep DISTRIB_REVISION= | awk -F "'" '{print $2}')"
-sed -i "s/${orig_version}/${orig_version} ($(date +"%Y-%m-%d"))/g" zzz-default-settings
+export orig_version=$(cat "zzz-default-settings" | grep DISTRIB_REVISION= | awk -F "'" '{print $2}')
+export date_version=$(date -d "$(rdate -n -4 -p ntp.aliyun.com)" +'%Y-%m-%d')
+sed -i "s/${orig_version}/${orig_version} ${date_version}/g" zzz-default-settings
 popd
 
 # Use Lienol's https-dns-proxy package
