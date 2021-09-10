@@ -210,24 +210,6 @@ jobs:
           rclone copy bin/targets $RCLONE_FIRMWARE:$(date +"%Y-%m-%d")/lean --exclude "packages/"
           echo "::warning file=Firmware-GoogleDrive::Download Link: https://drive.google.com/drive/folders/1_P2RoPbguY99qJxmCU4SKUgP8Kg0Xr03"
 
-      - name: Deploy Files To Onedrive
-        id: onedrive
-        env:
-          SOURCE_TARGETS: "openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
-          SOURCE_PACKAGES: "openwrt/bin/packages/${{ env.PLATFORM }}/"
-          DEST_TARGETS: "releases/targets/${{ env.TARGET }}"
-          DEST_PACKAGES: "releases/packages"
-          ONEDRIVEUPLOADER_CONF: "${{ secrets.ONEDRIVEUPLOADER_CONF }}"
-        if: env.ONEDRIVEUPLOADER_CONF != null
-        run: |
-          echo -e "${ONEDRIVEUPLOADER_CONF}" | tee ./auth.json > /dev/null
-          wget -q https://raw.githubusercontent.com/MoeClub/OneList/master/OneDriveUploader/amd64/linux/OneDriveUploader
-          chmod +x OneDriveUploader
-          ./OneDriveUploader -f -c "./auth.json" -s $SOURCE_TARGETS -r $DEST_TARGETS
-          ./OneDriveUploader -f -c "./auth.json" -s $SOURCE_PACKAGES -r $DEST_PACKAGES
-          ./OneDriveUploader -f -c "./auth.json" -s $SOURCE_TARGETS -r "archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/targets/$TARGET"
-          ./OneDriveUploader -f -c "./auth.json" -s $SOURCE_PACKAGES -r "archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/packages"
-
       - name: Deploy Files To HostHatch Node
         id: hosthatch
         env:
@@ -280,6 +262,18 @@ jobs:
         run: |
           transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
           echo "::warning file=Firmware-Wetransfer.com::$(cat wetransfer.log | grep https)"
+
+      - name: Deploy Files To OneDrive
+        env:
+          RCLONE_NAME: ${{ secrets.ONEDRIVE_NAME }}
+          SOURCE_TARGETS: "openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}"
+          SOURCE_PACKAGES: "openwrt/bin/packages/${{ env.PLATFORM }}/"
+          DEST_TARGETS: "/releases/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}"
+          DEST_PACKAGES: "/releases/packages/${{ env.PLATFORM }}/"
+        if: env.RCLONE_NAME != null
+        run: |
+          rclone -v copy $SOURCE_TARGETS ${{ secrets.RCLONE_NAME }}:$DEST_TARGETS
+          rclone -v copy $SOURCE_PACKAGES ${{ secrets.RCLONE_NAME }}:$DEST_PACKAGES
 
       - name: Delete Artifacts
         uses: geekyeggo/delete-artifact@v1
