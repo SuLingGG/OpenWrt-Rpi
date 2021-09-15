@@ -46,7 +46,7 @@ cp -r temp/luci/applications/luci-app-smartdns luci/applications/luci-app-smartd
 cp -r temp/packages/net/smartdns packages/net/smartdns
 
 # Add luci-app-verysync
-cp -r temp/luci/applications/luci-app-smartdns luci/applications/luci-app-verysync
+cp -r temp/luci/applications/luci-app-verysync luci/applications/luci-app-verysync
 cp -r temp/packages/net/verysync packages/net/verysync
 
 # Add tmate
