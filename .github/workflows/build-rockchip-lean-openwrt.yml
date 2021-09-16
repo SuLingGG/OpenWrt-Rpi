@@ -246,7 +246,7 @@ jobs:
         if: env.GENERATE_STATUS == 'success'
         run: |
           cd $OPENWRTROOT
-          tar -cvf $TARGET-$SUBTARGET.tar bin
+          zip -qr $TARGET-$SUBTARGET.zip bin
           cd bin/targets/$TARGET/$SUBTARGET
           rm -rf packages
           df -hT $PWD
@@ -264,7 +264,7 @@ jobs:
           wget -q https://raw.githubusercontent.com/MoeClub/OneList/master/OneDriveUploader/amd64/linux/OneDriveUploader
           chmod +x OneDriveUploader
           ./OneDriveUploader -f -c "./auth.json" -s $SOURCE_TARGETS -r $DEST_TARGETS
-          ./OneDriveUploader -f -c "./auth.json" -s $OPENWRTROOT/$TARGET-$SUBTARGET.tar -r "archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases"
+          ./OneDriveUploader -f -c "./auth.json" -s $OPENWRTROOT/$TARGET-$SUBTARGET.zip -r "archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases"
     
       - name: Delete Artifacts
         uses: geekyeggo/delete-artifact@v1
