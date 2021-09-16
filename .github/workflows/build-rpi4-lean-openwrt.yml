@@ -22,7 +22,6 @@ env:
   DIY_SH: scripts/lean-openwrt.sh
   WEBROOT: /data/dnmp/www/openwrt.cc
   UPLOAD_RCLONE: true
-  UPLOAD_WETRANSFER: true
   TZ: Asia/Shanghai
 
 jobs:
@@ -34,7 +33,6 @@ jobs:
       PLATFORM: ${{ steps.compile.outputs.PLATFORM }}
       TARGET: ${{ steps.compile.outputs.TARGET }}
       SUBTARGET: ${{ steps.compile.outputs.SUBTARGET }}
-      FIRMWARE: ${{ steps.compile.outputs.FIRMWARE }}
       GENERATE_STATUS: ${{ steps.generate.outputs.GENERATE_STATUS }}
 
     steps:
@@ -128,8 +126,6 @@ jobs:
           SUBTARGET=$(basename `pwd`)
           echo "SUBTARGET=$SUBTARGET" >> $GITHUB_ENV
           echo "::set-output name=SUBTARGET::$(echo $SUBTARGET)"
-          echo "FIRMWARE=$PWD" >> $GITHUB_ENV
-          echo "::set-output name=FIRMWARE::$(echo $PWD)"
           echo "::set-output name=COMPILE_STATUS::success"
 
       - name: Generate Firmware
@@ -181,7 +177,6 @@ jobs:
           echo "PLATFORM=$(echo '${{needs.Build.outputs.PLATFORM}}')" >> $GITHUB_ENV
           echo "TARGET=$(echo '${{needs.Build.outputs.TARGET}}')" >> $GITHUB_ENV
           echo "SUBTARGET=$(echo '${{needs.Build.outputs.SUBTARGET}}')" >> $GITHUB_ENV
-          echo "FIRMWARE=$(echo '${{needs.Build.outputs.FIRMWARE}}')" >> $GITHUB_ENV
           echo "GENERATE_STATUS=$(echo '${{needs.Build.outputs.GENERATE_STATUS}}')" >> $GITHUB_ENV
 
       - name: Download Bin Folder
@@ -256,33 +251,27 @@ jobs:
         id: organize
         if: env.GENERATE_STATUS == 'success'
         run: |
-          cd ${FIRMWARE}
+          cd $OPENWRTROOT
+          tar -cvf $TARGET-$SUBTARGET.tar bin
+          cd bin/targets/$TARGET/$SUBTARGET
           rm -rf packages
-          cd $OPENWRTROOT/bin/targets/$TARGET/
-          curl -sL https://git.io/file-transfer | bash -s beta
-          sudo mv transfer /usr/bin
-          sudo chmod +x /usr/bin/transfer
           df -hT $PWD
           echo "::set-output name=ORGANIZE_STATUS::success"
 
-      - name: Upload Firmware To WeTransfer
-        if: steps.organize.outputs.ORGANIZE_STATUS == 'success' && env.UPLOAD_WETRANSFER == 'true'
-        run: |
-          transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
-          echo "::warning file=Firmware-Wetransfer.com::$(cat wetransfer.log | grep https)"
-
-      - name: Deploy Files To OneDrive
+      - name: Deploy Files To Onedrive
+        id: onedrive
         env:
-          RCLONE_NAME: ${{ secrets.ONEDRIVE_NAME }}
-          SOURCE_TARGETS: "openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}"
-          SOURCE_PACKAGES: "openwrt/bin/packages/${{ env.PLATFORM }}/"
-          DEST_TARGETS: "/releases/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}"
-          DEST_PACKAGES: "/releases/packages/${{ env.PLATFORM }}/"
-        if: env.RCLONE_NAME != null
+          SOURCE_TARGETS: "openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
+          DEST_TARGETS: "releases/targets/${{ env.TARGET }}"
+          ONEDRIVEUPLOADER_CONF: "${{ secrets.ONEDRIVEUPLOADER_CONF }}"
+        if: env.ONEDRIVEUPLOADER_CONF != null
         run: |
-          rclone -v copy $SOURCE_TARGETS ${{ secrets.RCLONE_NAME }}:$DEST_TARGETS
-          rclone -v copy $SOURCE_PACKAGES ${{ secrets.RCLONE_NAME }}:$DEST_PACKAGES
-
+          echo -e "${ONEDRIVEUPLOADER_CONF}" | tee ./auth.json > /dev/null
+          wget -q https://raw.githubusercontent.com/MoeClub/OneList/master/OneDriveUploader/amd64/linux/OneDriveUploader
+          chmod +x OneDriveUploader
+          ./OneDriveUploader -f -c "./auth.json" -s $SOURCE_TARGETS -r $DEST_TARGETS
+          ./OneDriveUploader -f -c "./auth.json" -s $OPENWRTROOT/$TARGET-$SUBTARGET.tar -r "archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases"
+    
       - name: Delete Artifacts
         uses: geekyeggo/delete-artifact@v1
         with:
