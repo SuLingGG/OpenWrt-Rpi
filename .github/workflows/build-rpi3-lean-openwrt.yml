@@ -250,7 +250,7 @@ jobs:
           cd $OPENWRTROOT
           zip -qr $TARGET-$SUBTARGET.zip bin
           cd bin/targets/$TARGET/$SUBTARGET
-          rm -rf packages
+          rm -rf packages packages-server.zip
           df -hT $PWD
           echo "::set-output name=ORGANIZE_STATUS::success"
 
@@ -266,7 +266,8 @@ jobs:
           wget -q https://raw.githubusercontent.com/MoeClub/OneList/master/OneDriveUploader/amd64/linux/OneDriveUploader
           chmod +x OneDriveUploader
           ./OneDriveUploader -f -c "./auth.json" -s $SOURCE_TARGETS -r $DEST_TARGETS
-          ./OneDriveUploader -f -c "./auth.json" -s $OPENWRTROOT/$TARGET-$SUBTARGET.zip -r "archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases"
+          ./OneDriveUploader -f -c "./auth.json" -s $SOURCE_TARGETS -r "archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/targets/$TARGET/$SUBTARGET"
+          ./OneDriveUploader -f -c "./auth.json" -s $OPENWRTROOT/$TARGET-$SUBTARGET.zip -r "archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/bin-archive"
     
       - name: Delete Artifacts
         uses: geekyeggo/delete-artifact@v1
