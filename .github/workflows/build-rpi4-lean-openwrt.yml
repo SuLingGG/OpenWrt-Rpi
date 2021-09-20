@@ -94,6 +94,7 @@ jobs:
           ../scripts/preset-clash-core.sh armv8
           ../scripts/preset-terminal-tools.sh
           ../scripts/enable-rpi4-wifi.sh
+          sed -i 's/5.10/5.4/g' target/linux/bcm27xx/Makefile
 
       - name: Download Package
         id: package
