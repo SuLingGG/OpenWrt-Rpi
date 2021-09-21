@@ -5,7 +5,12 @@
 # Blog: https://mlapp.cn
 #=================================================
 
-# Svn checkout packages from immortalwrt's repository
+# Clone Lean's feeds
+mkdir customfeeds
+git clone --depth=1 https://github.com/coolsnowwolf/packages customfeeds/packages
+git clone --depth=1 https://github.com/coolsnowwolf/luci customfeeds/luci
+
+# Clone ImmortalWrt's feeds
 pushd customfeeds
 mkdir temp
 git clone --depth=1 https://github.com/immortalwrt/packages -b openwrt-18.06 temp/packages
@@ -75,3 +80,4 @@ echo "src-link luci $luci_feed" >> feeds.conf.default
 
 # Update feeds
 ./scripts/feeds update -a
+./scripts/feeds install -a

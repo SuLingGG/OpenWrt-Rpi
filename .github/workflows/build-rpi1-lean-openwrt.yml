@@ -45,6 +45,7 @@ jobs:
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
           sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+          docker image prune -a -f
 
       - name: Free Up More Space
         uses: easimon/maximize-build-space@master
@@ -72,20 +73,12 @@ jobs:
           echo "::set-output name=OPENWRTROOT::$(echo $PWD)"
           git pull
 
-      - name: Update Feeds
-        id: update
+      - name: Install Feeds
+        id: feeds
         run: |
           cd $OPENWRTROOT
-          mkdir customfeeds
-          git clone --depth=1 https://github.com/coolsnowwolf/packages customfeeds/packages
-          git clone --depth=1 https://github.com/coolsnowwolf/luci customfeeds/luci
           chmod +x ../scripts/*.sh
           ../scripts/hook-feeds.sh
-
-      - name: Install Feeds
-        run: |
-          cd $OPENWRTROOT
-          ./scripts/feeds install -a
 
       - name: Load Custom Configuration
         run: |
@@ -107,12 +100,18 @@ jobs:
           find dl -size -1024c -exec ls -l {} \;
           find dl -size -1024c -exec rm -f {} \;
 
+      - name: Compile Tools
+        id: tools
+        run: |
+          cd $OPENWRTROOT
+          echo -e "$(nproc) thread compile"
+          make tools/compile -j$(nproc) || make tools/compile -j1 V=s
+
       - name: Compile Packages
         id: compile
         run: |
           cd $OPENWRTROOT
           echo -e "$(nproc) thread compile"
-          make tools/compile -j$(nproc) || make tools/compile -j1 V=s
           make target/compile -j$(nproc) || make target/compile -j1 V=s IGNORE_ERRORS=1
           make diffconfig
           make package/compile -j$(nproc) IGNORE_ERRORS=1 || make package/compile -j1 V=s IGNORE_ERRORS=1
