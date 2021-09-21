@@ -36,9 +36,6 @@ jobs:
       GENERATE_STATUS: ${{ steps.generate.outputs.GENERATE_STATUS }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@main
-
       - name: Initialization Environment
         env:
           DEBIAN_FRONTEND: noninteractive
@@ -49,7 +46,7 @@ jobs:
           sudo -E apt-get -qq clean
           sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
-      - name: Feree Up More Space
+      - name: Free Up More Space
         uses: easimon/maximize-build-space@master
         with:
           root-reserve-mb: 256
@@ -58,6 +55,9 @@ jobs:
           remove-android: 'true'
           remove-haskell: 'true'
           overprovision-lvm: 'true'
+
+      - name: Checkout
+        uses: actions/checkout@main
 
       - name: Prepare Toolchain Image
         id: prepare
