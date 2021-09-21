@@ -43,24 +43,30 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
           sudo -E apt-get -qq update
           sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-1804) rdate
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
           sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
+      - name: Feree Up More Space
+        uses: easimon/maximize-build-space@master
+        with:
+          root-reserve-mb: 256
+          swap-size-mb: 1024
+          remove-dotnet: 'true'
+          remove-android: 'true'
+          remove-haskell: 'true'
+          overprovision-lvm: 'true'
+
       - name: Prepare Toolchain Image
         id: prepare
         run: |
           df -hT $PWD
-          sudo swapoff -a
-          sudo chown -R runner:runner /mnt
-          sudo rm -f /mnt/swapfile
-          wget -q https://github.com/SuLingGG/OpenWrt-Toolchain/releases/download/$TOOLCHAIN_TAG/$TOOLCHAIN_NAME -O /mnt/toolchain-image.img
-          mkdir /mnt/openwrt-ro openwrt workdir overlay
-          sudo mount -o loop /mnt/toolchain-image.img /mnt/openwrt-ro
-          sudo mount -t overlay overlay -o lowerdir=/mnt/openwrt-ro,upperdir=overlay,workdir=workdir openwrt
+          wget -q https://github.com/SuLingGG/OpenWrt-Toolchain/releases/download/$TOOLCHAIN_TAG/$TOOLCHAIN_NAME -O toolchain-image.img
+          mkdir openwrt-ro openwrt workdir overlay
+          sudo mount -o loop toolchain-image.img openwrt-ro
+          sudo mount -t overlay overlay -o lowerdir=openwrt-ro,upperdir=overlay,workdir=workdir openwrt
           cd openwrt
           echo "OPENWRTROOT=$PWD" >> $GITHUB_ENV
           echo "::set-output name=OPENWRTROOT::$(echo $PWD)"
