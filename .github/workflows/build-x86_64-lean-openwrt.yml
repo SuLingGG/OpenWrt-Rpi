@@ -157,11 +157,6 @@ jobs:
           make checksum
           echo "::set-output name=GENERATE_STATUS::success"
 
-      - name: Compress Img Files
-        run: |
-          cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
-          gzip *.img
-
       - name: Upload Bin Folder
         uses: actions/upload-artifact@main
         if: steps.generate.outputs.GENERATE_STATUS == 'success'
