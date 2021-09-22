@@ -21,7 +21,7 @@ env:
   CONFIG_FILE: config/ipq40xx/gdock-lean-openwrt.config
   DIY_SH: scripts/lean-openwrt.sh
   WEBROOT: /data/dnmp/www/openwrt.cc
-  UPLOAD_RCLONE: true
+  UPLOAD_RELEASE: false
   TZ: Asia/Shanghai
 
 jobs:
@@ -198,7 +198,7 @@ jobs:
         env:
           RCLONE_PACKAGE: ${{ secrets.RCLONE_PACKAGE }}
           RCLONE_FIRMWARE: ${{ secrets.RCLONE_FIRMWARE }}
-        if: env.GENERATE_STATUS == 'success' && env.UPLOAD_RCLONE == 'true' && env.RCLONE_PACKAGE != ''
+        if: env.GENERATE_STATUS == 'success' && env.RCLONE_PACKAGE != null
         run: |
           cd $OPENWRTROOT
           curl https://rclone.org/install.sh | sudo bash
@@ -217,7 +217,7 @@ jobs:
           SOURCE_TARGETS: "openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
           DEST_TARGETS: "${{ env.WEBROOT }}/releases/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
           REMOTE_PRIVATEKEY: "${{secrets.HOSTHATCH_PRIVATEKEY}}"
-        if: env.REMOTE_PRIVATEKEY != null
+        if: env.GENERATE_STATUS == 'success' && env.REMOTE_PRIVATEKEY != null
         run: |
           mkdir -p ~/.ssh/
           install -m 600 /dev/null ~/.ssh/id_rsa
@@ -234,7 +234,7 @@ jobs:
           SOURCE_TARGETS: "openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
           DEST_TARGETS: "${{ env.WEBROOT }}/releases/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
           REMOTE_PRIVATEKEY: "${{secrets.PACIFICRACK_PRIVATEKEY}}"
-        if: env.REMOTE_PRIVATEKEY != null
+        if: env.GENERATE_STATUS == 'success' && env.REMOTE_PRIVATEKEY != null
         run: |
           mkdir -p ~/.ssh/
           install -m 600 /dev/null ~/.ssh/id_rsa
@@ -251,9 +251,22 @@ jobs:
           cd $OPENWRTROOT
           zip -qr $TARGET-$SUBTARGET.zip bin
           cd bin/targets/$TARGET/$SUBTARGET
-          rm -rf packages packages-server.zip
+          rm -rf packages
           df -hT $PWD
           echo "::set-output name=ORGANIZE_STATUS::success"
+
+      - name: Deploy Files To Release
+        id: release
+        uses: ncipollo/release-action@v1.8.0
+        if: env.GENERATE_STATUS == 'success' && env.UPLOAD_RELEASE == 'true'
+        with:
+          name: OpenWrt-${{ env.TARGET }}-${{ env.SUBTARGET }}
+          allowUpdates: true
+          tag: ${{ env.TARGET }}-${{ env.SUBTARGET }}
+          commit: main
+          replacesArtifacts: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          artifacts: openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/*
 
       - name: Deploy Files To Onedrive
         id: onedrive
@@ -261,7 +274,7 @@ jobs:
           SOURCE_TARGETS: "openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
           DEST_TARGETS: "releases/targets/${{ env.TARGET }}"
           ONEDRIVEUPLOADER_CONF: "${{ secrets.ONEDRIVEUPLOADER_CONF }}"
-        if: env.ONEDRIVEUPLOADER_CONF != null
+        if: env.GENERATE_STATUS == 'success' && env.ONEDRIVEUPLOADER_CONF != null
         run: |
           echo -e "${ONEDRIVEUPLOADER_CONF}" | tee ./auth.json > /dev/null
           wget -q https://raw.githubusercontent.com/MoeClub/OneList/master/OneDriveUploader/amd64/linux/OneDriveUploader
