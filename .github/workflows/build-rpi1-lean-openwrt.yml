@@ -30,9 +30,9 @@ jobs:
 
     outputs:
       OPENWRTROOT: ${{ steps.prepare.outputs.OPENWRTROOT }}
-      PLATFORM: ${{ steps.compile.outputs.PLATFORM }}
-      TARGET: ${{ steps.compile.outputs.TARGET }}
-      SUBTARGET: ${{ steps.compile.outputs.SUBTARGET }}
+      PLATFORM: ${{ steps.packages.outputs.PLATFORM }}
+      TARGET: ${{ steps.packages.outputs.TARGET }}
+      SUBTARGET: ${{ steps.packages.outputs.SUBTARGET }}
       GENERATE_STATUS: ${{ steps.generate.outputs.GENERATE_STATUS }}
 
     steps:
@@ -108,7 +108,7 @@ jobs:
           make tools/compile -j$(nproc) || make tools/compile -j1 V=s
 
       - name: Compile Packages
-        id: compile
+        id: packages
         run: |
           cd $OPENWRTROOT
           echo -e "$(nproc) thread compile"
@@ -131,7 +131,7 @@ jobs:
           echo "::set-output name=COMPILE_STATUS::success"
 
       - name: Generate Firmware
-        if: steps.compile.outputs.COMPILE_STATUS == 'success'
+        if: steps.packages.outputs.COMPILE_STATUS == 'success'
         id: generate
         run: |
           cd data/opkg
