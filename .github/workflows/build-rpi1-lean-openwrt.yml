@@ -199,22 +199,6 @@ jobs:
           zip -qrm packages-server.zip packages-server
           mv packages-server.zip $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
 
-      - name: Rclone Upload
-        env:
-          RCLONE_PACKAGE: ${{ secrets.RCLONE_PACKAGE }}
-          RCLONE_FIRMWARE: ${{ secrets.RCLONE_FIRMWARE }}
-        if: env.GENERATE_STATUS == 'success' && env.RCLONE_PACKAGE != null
-        run: |
-          cd $OPENWRTROOT
-          curl https://rclone.org/install.sh | sudo bash
-          mkdir -p ~/.config/rclone/
-          cat << EOF > ~/.config/rclone/rclone.conf
-          ${{ secrets.RCLONE_CONFIG }}
-          EOF
-          rclone copy bin $RCLONE_PACKAGE:$(date +"%Y-%m-%d")/lean --filter-from ../data/rclone/upload-rule.txt
-          rclone copy bin/targets $RCLONE_FIRMWARE:$(date +"%Y-%m-%d")/lean --exclude "packages/"
-          echo "::warning file=Firmware-GoogleDrive::Download Link: https://drive.google.com/drive/folders/1_P2RoPbguY99qJxmCU4SKUgP8Kg0Xr03"
-
       - name: Deploy Files To HostHatch Node
         id: hosthatch
         env:
@@ -248,6 +232,7 @@ jobs:
           ssh -q -t -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $HOST \
           bash -c "'mkdir -p $WEBROOT/releases/targets/$TARGET/$SUBTARGET'"
           rsync -chavP --delete -e 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no' $SOURCE_TARGETS $HOST:$DEST_TARGETS
+          echo "::warning file=openwrt.cc::Download Link: https://openwrt.cc/releases/targets/bcm27xx/bcm2708"
 
       - name: Organize Files
         id: organize
@@ -287,7 +272,8 @@ jobs:
           ./OneDriveUploader -f -c "./auth.json" -s $SOURCE_TARGETS -r $DEST_TARGETS
           ./OneDriveUploader -f -c "./auth.json" -s $SOURCE_TARGETS -r "archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/targets/$TARGET/$SUBTARGET"
           ./OneDriveUploader -f -c "./auth.json" -s $OPENWRTROOT/$TARGET-$SUBTARGET.zip -r "archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/bin-archive"
-    
+          echo "::warning file=mirror.openwrt.cc::Download Link: https://mirror.openwrt.cc/releases/targets/bcm27xx/bcm2708"
+
       - name: Delete Artifacts
         uses: geekyeggo/delete-artifact@v1
         with:
