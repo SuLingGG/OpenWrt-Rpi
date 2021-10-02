@@ -25,6 +25,8 @@ rm -rf openwrt-package/luci-app-verysync
 
 # Add luci-app-passwall
 git clone --depth=1 https://github.com/xiaorouji/openwrt-passwall
+sed -i 's/ upx\/host//g' openwrt-passwall/v2ray-plugin/Makefile
+grep -lr upx/host openwrt-passwall/* | xargs -t -I {} sed -i '/upx\/host/d' {}
 
 # Add mentohust & luci-app-mentohust
 git clone --depth=1 https://github.com/BoringCat/luci-app-mentohust
