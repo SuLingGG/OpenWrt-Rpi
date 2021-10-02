@@ -73,6 +73,7 @@ jobs:
           echo "::set-output name=OPENWRTROOT::$(echo $PWD)"
           git pull
           mkdir -p dl
+          echo "::set-output name=SOURCE_COMMIT::$(git log -1 --format='%H')"
 
       - name: Install Feeds
         id: feeds
