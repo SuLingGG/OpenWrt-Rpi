@@ -90,6 +90,7 @@ jobs:
           ../$DIY_SH
           ../scripts/preset-clash-core.sh armv8
           ../scripts/preset-terminal-tools.sh
+          make defconfig
 
       - name: Cache DL Packages
         uses: actions/cache@v2
@@ -103,7 +104,6 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           cd $OPENWRTROOT
-          make defconfig
           make download -j16 && make download -j16
           find dl -size -1024c -exec ls -l {} \;
           find dl -size -1024c -exec rm -f {} \;
