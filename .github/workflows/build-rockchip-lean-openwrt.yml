@@ -18,7 +18,7 @@ on:
 env:
   TOOLCHAIN_TAG: coolsnowwolf-lede-master
   TOOLCHAIN_NAME: toolchain-image-coolsnowwolf-lede-master-rockchip-armv8.img
-  CONFIG_FILE: config/rockchip/rockchip-lean-openwrt.config
+  CONFIG_FILE: config/rockchip/armv8.config
   DIY_SH: scripts/lean-openwrt.sh
   WEBROOT: /data/dnmp/www/openwrt.cc
   UPLOAD_RELEASE: false
@@ -86,6 +86,7 @@ jobs:
         run: |
           [ -e files ] && mv files $OPENWRTROOT/files
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
+          cat config/general-packages.config >> $OPENWRTROOT/.config
           cd $OPENWRTROOT
           ../$DIY_SH
           ../scripts/preset-clash-core.sh armv8
