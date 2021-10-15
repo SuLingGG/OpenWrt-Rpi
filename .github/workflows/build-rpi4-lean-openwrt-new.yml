@@ -6,7 +6,7 @@
 # Blog: https://p3terx.com
 #=================================================
 
-name: Build Raspberry Pi 4 OpenWrt
+name: Test Raspberry Pi 4 OpenWrt
 
 on:
   workflow_dispatch:
@@ -115,20 +115,15 @@ jobs:
         id: make-env
         run: |
           cd $OPENWRTROOT
-          make diffconfig
-          cd $OPENWRTROOT/bin/packages/*
-          PLATFORM=$(basename `pwd`)
-          echo "PLATFORM=$PLATFORM" >> $GITHUB_ENV
-          echo "::set-output name=PLATFORM::$(echo $PLATFORM)"
-          cd $OPENWRTROOT/bin/targets/*
-          TARGET=$(basename `pwd`)
+          export TARGET=$(cat .config | grep CONFIG_TARGET_BOARD | awk -F '"' '{print $2}')
           echo "TARGET=$TARGET" >> $GITHUB_ENV
           echo "::set-output name=TARGET::$(echo $TARGET)"
-          cd *
-          SUBTARGET=$(basename `pwd`)
+          export SUBTARGET=$(cat .config | grep CONFIG_TARGET_SUBTARGET | awk -F '"' '{print $2}')
           echo "SUBTARGET=$SUBTARGET" >> $GITHUB_ENV
           echo "::set-output name=SUBTARGET::$(echo $SUBTARGET)"
-          cd $OPENWRTROOT
+          export PLATFORM=$(cat .config | grep CONFIG_TARGET_ARCH_PACKAGES | awk -F '"' '{print $2}')
+          echo "PLATFORM=$PLATFORM" >> $GITHUB_ENV
+          echo "::set-output name=PLATFORM::$(echo $PLATFORM)"
           rm -rf .config dl bin
 
       - name: Generate Toolchain Image
