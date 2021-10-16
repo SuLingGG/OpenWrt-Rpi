@@ -24,7 +24,7 @@ env:
   TOOLCHAIN_RELEASE_UPLOAD: true
   FIRMWARE_RELEASE_UPLOAD: true
   CURRENT_BRANCH: main
-  OPENWRTROOT: /home/runner/work/Test-Action/Test-Action/openwrt
+  OPENWRTROOT: /home/runner/work/OpenWrt-Rpi/OpenWrt-Rpi/openwrt
   SOURCE_OWNER: immortalwrt
   SOURCE_REPO: immortalwrt
   PLATFORM: aarch64_cortex-a72
