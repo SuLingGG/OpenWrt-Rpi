@@ -137,7 +137,6 @@ jobs:
           mkdir output
           split -d -b 1900M $TOOLCHAIN_IMAGE output/$TOOLCHAIN_IMAGE.img.
           rm $TOOLCHAIN_IMAGE
-          lsblk -lf | grep btrfs
           ls -lh output
 
       - name: Upload Toolchain Image To Artifact
