@@ -83,6 +83,7 @@ jobs:
         run: |
           [ -e files ] && mv files $OPENWRTROOT/files
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
+          cat config/general-packages.config >> $OPENWRTROOT/.config
           chmod +x scripts/*.sh
           cd $OPENWRTROOT
           echo -e "CONFIG_USB_LAN78XX=y\nCONFIG_USB_NET_DRIVERS=y" >> target/linux/bcm27xx/bcm2711/config-5.4
@@ -136,7 +137,7 @@ jobs:
           mkdir output
           split -d -b 1900M $TOOLCHAIN_IMAGE output/$TOOLCHAIN_IMAGE.img.
           rm $TOOLCHAIN_IMAGE
-          df -hT $PWD
+          lsblk -lf | grep btrfs
           ls -lh output
 
       - name: Upload Toolchain Image To Artifact
