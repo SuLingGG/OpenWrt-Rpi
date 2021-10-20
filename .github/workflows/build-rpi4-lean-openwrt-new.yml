@@ -142,9 +142,9 @@ jobs:
           mkdir output
           split -d -b 1900M $TOOLCHAIN_IMAGE output/$TOOLCHAIN_IMAGE.img.
           rm $TOOLCHAIN_IMAGE
-          ls -lh output
           cd $OPENWRTROOT
           echo $CURRENT_HASH > ../output/toolchain-$SOURCE_OWNER-$SOURCE_REPO-$SOURCE_BRANCH-$TARGET-$SUBTARGET.hash
+          ls -lh ../output
 
       # - name: Upload Toolchain Image To Artifact
       #   uses: actions/upload-artifact@main
