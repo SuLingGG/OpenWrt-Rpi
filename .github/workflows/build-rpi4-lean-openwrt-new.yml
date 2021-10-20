@@ -89,20 +89,19 @@ jobs:
             echo "::set-output name=REBUILD_TOOLCHAIN::true"
           fi
 
+      - name: Generate Toolchain Config
+        run: |
+          [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
+          echo "CONFIG_ALL=y" >> $OPENWRTROOT/.config
+          cd $OPENWRTROOT
+          make defconfig
+
       - name: Install Feeds
         if: steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
         run: |
           cd $OPENWRTROOT
           ./scripts/feeds update -a
           ./scripts/feeds install -a
-
-      - name: Generate Toolchain Config
-        if: steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
-        run: |
-          [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
-          echo "CONFIG_ALL=y" >> $OPENWRTROOT/.config
-          cd $OPENWRTROOT
-          make defconfig
 
       - name: Compile Tools
         if: steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
@@ -117,7 +116,6 @@ jobs:
           cd $OPENWRTROOT
           echo -e "$(nproc) thread compile"
           make toolchain/compile -j$(nproc) || make toolchain/compile -j1 V=s
-          rm -rf .config dl bin
 
       - name: Generate Variables
         id: make-env
@@ -135,9 +133,9 @@ jobs:
           export TOOLCHAIN_IMAGE="toolchain-$SOURCE_OWNER-$SOURCE_REPO-$SOURCE_BRANCH-$TARGET-$SUBTARGET"
           echo "TOOLCHAIN_IMAGE=$TOOLCHAIN_IMAGE" >> $GITHUB_ENV
           echo "::set-output name=TOOLCHAIN_IMAGE::$(echo $TOOLCHAIN_IMAGE)"
+          rm -rf .config dl bin
 
       - name: Generate Toolchain Image
-        id: make-toolchainimg
         if: steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
         run: |
           mksquashfs openwrt $TOOLCHAIN_IMAGE -force-gid 1001 -force-uid 1001 -comp zstd
