@@ -21,6 +21,7 @@ env:
   SOURCE_BRANCH: openwrt-18.06-k5.4
   DIY_SH: scripts/immortalwrt.sh
   WEBROOT: /data/dnmp/www/openwrt.cc
+  TOOLCHAIN_TAG: toolchain
   TOOLCHAIN_RELEASE_UPLOAD: true
   FIRMWARE_RELEASE_UPLOAD: true
   TZ: Asia/Shanghai
@@ -34,10 +35,11 @@ jobs:
       OPENWRTROOT: ${{ steps.clone.outputs.OPENWRTROOT }}
       SOURCE_OWNER: ${{ steps.clone.outputs.SOURCE_OWNER }}
       SOURCE_REPO: ${{ steps.clone.outputs.SOURCE_REPO }}
+      CURRENT_HASH: ${{ steps.hash.outputs.CURRENT_HASH }}
       PLATFORM: ${{ steps.make-env.outputs.PLATFORM }}
       TARGET: ${{ steps.make-env.outputs.TARGET }}
       SUBTARGET: ${{ steps.make-env.outputs.SUBTARGET }}
-      TOOLCHAIN_IMAGE: ${{ steps.make-toolchainimg.outputs.TOOLCHAIN_IMAGE }}
+      TOOLCHAIN_IMAGE: ${{ steps.make-env.outputs.TOOLCHAIN_IMAGE }}
 
     steps:
       - name: Initialization Environment
@@ -46,7 +48,7 @@ jobs:
         run: |
           sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
           sudo -E apt-get -qq update
-          sudo -E apt-get -qq install rdate squashfs-tools $(curl -fsSL git.io/depends-ubuntu-2004)
+          sudo -E apt-get -qq install squashfs-tools $(curl -fsSL git.io/depends-ubuntu-2004)
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
           sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
@@ -73,44 +75,49 @@ jobs:
           echo "SOURCE_REPO=$SOURCE_REPO" >> $GITHUB_ENV
           echo "::set-output name=SOURCE_REPO::$(echo $SOURCE_REPO)"
 
+      - name: Compare Toolchain Hash
+        id: hash
+        run: |
+          cd $OPENWRTROOT
+          export CURRENT_HASH=$(git log --pretty=tformat:"%H" -n1 tools toolchain)
+          echo "CURRENT_HASH=$CURRENT_HASH" >> $GITHUB_ENV
+          echo "::set-output name=CURRENT_HASH::$(echo $CURRENT_HASH)"
+          echo "CURRENT_HASH is $CURRENT_HASH"
+          export CACHE_HASH=$(curl -fSsL https://github.com/$GITHUB_REPOSITORY/releases/download/$TOOLCHAIN_TAG/toolchain-$SOURCE_OWNER-$SOURCE_REPO-$SOURCE_BRANCH-$TARGET-$SUBTARGET.hash)
+          echo "CACHE_HASH is $CACHE_HASH"
+          if [ -z "$CACHE_HASH" ] || [ "$CURRENT_HASH" != "$CACHE_HASH" ]; then
+            echo "::set-output name=REBUILD_TOOLCHAIN::true"
+          fi
+
       - name: Install Feeds
+        if: steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
         run: |
           cd $OPENWRTROOT
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
-      - name: Load Custom Configuration
+      - name: Generate Toolchain Config
+        if: steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
         run: |
-          [ -e files ] && mv files $OPENWRTROOT/files
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
-          cat config/general-packages-new.config >> $OPENWRTROOT/.config
-          chmod +x scripts/*.sh
+          echo "CONFIG_ALL=y" >> $OPENWRTROOT/.config
           cd $OPENWRTROOT
-          echo -e "CONFIG_USB_LAN78XX=y\nCONFIG_USB_NET_DRIVERS=y" >> target/linux/bcm27xx/bcm2711/config-5.4
-          ../$DIY_SH
-          ../scripts/preset-clash-core.sh armv8
-          ../scripts/preset-terminal-tools.sh
-          ../scripts/enable-rpi4-wifi.sh
           make defconfig
 
-      - name: Download DL Package
-        run: |
-          cd $OPENWRTROOT
-          make download -j64
-          find dl -size -1024c -exec ls -l {} \;
-          find dl -size -1024c -exec rm -f {} \;
-
       - name: Compile Tools
+        if: steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
         run: |
           cd $OPENWRTROOT
           echo -e "$(nproc) thread compile"
           make tools/compile -j$(nproc) || make tools/compile -j1 V=s
 
       - name: Compile Toolchain
+        if: steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
         run: |
           cd $OPENWRTROOT
           echo -e "$(nproc) thread compile"
           make toolchain/compile -j$(nproc) || make toolchain/compile -j1 V=s
+          rm -rf .config dl bin
 
       - name: Generate Variables
         id: make-env
@@ -125,34 +132,36 @@ jobs:
           export PLATFORM=$(cat .config | grep CONFIG_TARGET_ARCH_PACKAGES | awk -F '"' '{print $2}')
           echo "PLATFORM=$PLATFORM" >> $GITHUB_ENV
           echo "::set-output name=PLATFORM::$(echo $PLATFORM)"
-          rm -rf .config dl bin
-
-      - name: Generate Toolchain Image
-        id: make-toolchainimg
-        run: |
           export TOOLCHAIN_IMAGE="toolchain-$SOURCE_OWNER-$SOURCE_REPO-$SOURCE_BRANCH-$TARGET-$SUBTARGET"
           echo "TOOLCHAIN_IMAGE=$TOOLCHAIN_IMAGE" >> $GITHUB_ENV
           echo "::set-output name=TOOLCHAIN_IMAGE::$(echo $TOOLCHAIN_IMAGE)"
+
+      - name: Generate Toolchain Image
+        id: make-toolchainimg
+        if: steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
+        run: |
           mksquashfs openwrt $TOOLCHAIN_IMAGE -force-gid 1001 -force-uid 1001 -comp zstd
           mkdir output
           split -d -b 1900M $TOOLCHAIN_IMAGE output/$TOOLCHAIN_IMAGE.img.
           rm $TOOLCHAIN_IMAGE
+          cd $OPENWRTROOT
+          echo $CURRENT_HASH > ../output/toolchain-$SOURCE_OWNER-$SOURCE_REPO-$SOURCE_BRANCH-$TARGET-$SUBTARGET.hash
           ls -lh output
 
-      - name: Upload Toolchain Image To Artifact
-        uses: actions/upload-artifact@main
-        with:
-          name: ${{ env.TOOLCHAIN_IMAGE }}
-          path: output
+      # - name: Upload Toolchain Image To Artifact
+      #   uses: actions/upload-artifact@main
+      #   with:
+      #     name: ${{ env.TOOLCHAIN_IMAGE }}
+      #     path: output
 
       - name: Upload Toolchain Image To Release
-        if: env.TOOLCHAIN_RELEASE_UPLOAD == 'true'
+        if: env.TOOLCHAIN_RELEASE_UPLOAD == 'true' && steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
         uses: ncipollo/release-action@v1.8.0
         with:
           name: toolchain-image
           allowUpdates: true
           replacesArtifacts: true
-          tag: toolchain
+          tag: ${{ env.TOOLCHAIN_TAG }}
           commit: ${{ env.CURRENT_BRANCH }}
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: output/*
@@ -182,7 +191,7 @@ jobs:
         run: |
           sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
           sudo -E apt-get -qq update
-          sudo -E apt-get -qq install squashfs-tools $(curl -fsSL git.io/depends-ubuntu-2004)
+          sudo -E apt-get -qq install rdate squashfs-tools $(curl -fsSL git.io/depends-ubuntu-2004)
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
           sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
@@ -211,28 +220,49 @@ jobs:
       - name: Checkout
         uses: actions/checkout@main
 
-      - name: Download Toolchain Image
-        uses: actions/download-artifact@v2
-        with:
-          name: ${{ env.TOOLCHAIN_IMAGE }}
-          path: toolchain
+      # - name: Download Toolchain Image
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: ${{ env.TOOLCHAIN_IMAGE }}
+      #     path: toolchain
+
+      # - name: Prepare Toolchain Image
+      #   id: prepare
+      #   run: |
+      #     cd toolchain
+      #     for i in {1..9}
+      #     do
+      #       cat $TOOLCHAIN_IMAGE.img.0$i >> $TOOLCHAIN_IMAGE.img.00 && rm $TOOLCHAIN_IMAGE.img.0$i || break
+      #     done
+      #     mv $TOOLCHAIN_IMAGE.img.00 ../$TOOLCHAIN_IMAGE.img
+      #     cd ..
+      #     mkdir openwrt-ro openwrt workdir overlay
+      #     sudo mount -o loop $TOOLCHAIN_IMAGE.img openwrt-ro
+      #     sudo mount -t overlay overlay -o lowerdir=openwrt-ro,upperdir=overlay,workdir=workdir openwrt
 
       - name: Prepare Toolchain Image
         id: prepare
         run: |
-          cd toolchain
-          for i in {1..9}
+          for i in {0..9}
           do
-            cat $TOOLCHAIN_IMAGE.img.0$i >> $TOOLCHAIN_IMAGE.img.00 && rm $TOOLCHAIN_IMAGE.img.0$i || break
+            curl -fsL https://github.com/$GITHUB_REPOSITORY/releases/download/$TOOLCHAIN_TAG/$TOOLCHAIN_IMAGE.img.0$i >> TOOLCHAIN_IMAGE.img || break
           done
-          mv $TOOLCHAIN_IMAGE.img.00 ../$TOOLCHAIN_IMAGE.img
-          cd ..
           mkdir openwrt-ro openwrt workdir overlay
           sudo mount -o loop $TOOLCHAIN_IMAGE.img openwrt-ro
           sudo mount -t overlay overlay -o lowerdir=openwrt-ro,upperdir=overlay,workdir=workdir openwrt
+
+      - name: Load Custom Configuration
+        run: |
+          [ -e files ] && mv files $OPENWRTROOT/files
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
           cat config/general-packages-new.config >> $OPENWRTROOT/.config
+          chmod +x scripts/*.sh
           cd $OPENWRTROOT
+          echo -e "CONFIG_USB_LAN78XX=y\nCONFIG_USB_NET_DRIVERS=y" >> target/linux/bcm27xx/bcm2711/config-5.4
+          ../$DIY_SH
+          ../scripts/preset-clash-core.sh armv8
+          ../scripts/preset-terminal-tools.sh
+          ../scripts/enable-rpi4-wifi.sh
           make defconfig
 
       - name: Download DL Package
@@ -256,9 +286,9 @@ jobs:
         id: generate
         run: |
           cd data/opkg
-          sed -i "s/subtarget/$SUBTARGET/g" distfeeds*.conf
-          sed -i "s/target\//$TARGET\//g" distfeeds*.conf
-          sed -i "s/platform/$PLATFORM/g" distfeeds*.conf
+          sed -i "s/subtarget/$SUBTARGET/g" distfeeds.conf
+          sed -i "s/target\//$TARGET\//g" distfeeds.conf
+          sed -i "s/platform/$PLATFORM/g" distfeeds.conf
           cd $OPENWRTROOT
           echo "dtparam=i2c_arm=on,audio=on" >> target/linux/bcm27xx/image/config.txt
           mkdir -p files/etc/uci-defaults/
@@ -285,7 +315,6 @@ jobs:
 
       - name: Print Disk Usage
         run: |
-          df -hT $GITHUB_WORKSPACE
           sudo btrfs filesystem usage $GITHUB_WORKSPACE
 
       - name: Upload Bin Archive
@@ -336,38 +365,38 @@ jobs:
           cd $OPENWRTROOT
           unzip $TARGET-$SUBTARGET.zip
 
-      - name: Deploy Files To HostHatch Node
-        env:
-          HOST: "${{ secrets.REMOTE_USER }}@${{ secrets.HOSTHATCH_IP }}"
-          SOURCE_TARGETS: "openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
-          DEST_TARGETS: "${{ env.WEBROOT }}/releases/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
-          REMOTE_PRIVATEKEY: "${{secrets.HOSTHATCH_PRIVATEKEY}}"
-        if: env.REMOTE_PRIVATEKEY != null
-        run: |
-          mkdir -p ~/.ssh/
-          install -m 600 /dev/null ~/.ssh/id_rsa
-          echo "${{secrets.HOSTHATCH_PRIVATEKEY}}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh -q -t -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $HOST \
-          bash -c "'mkdir -p $WEBROOT/releases/targets/$TARGET/$SUBTARGET'"
-          rsync -chavP --delete -e 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no' $SOURCE_TARGETS $HOST:$DEST_TARGETS
+      # - name: Deploy Files To HostHatch Node
+      #   env:
+      #     HOST: "${{ secrets.REMOTE_USER }}@${{ secrets.HOSTHATCH_IP }}"
+      #     SOURCE_TARGETS: "openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
+      #     DEST_TARGETS: "${{ env.WEBROOT }}/releases/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
+      #     REMOTE_PRIVATEKEY: "${{secrets.HOSTHATCH_PRIVATEKEY}}"
+      #   if: env.REMOTE_PRIVATEKEY != null
+      #   run: |
+      #     mkdir -p ~/.ssh/
+      #     install -m 600 /dev/null ~/.ssh/id_rsa
+      #     echo "${{secrets.HOSTHATCH_PRIVATEKEY}}" > ~/.ssh/id_rsa
+      #     chmod 600 ~/.ssh/id_rsa
+      #     ssh -q -t -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $HOST \
+      #     bash -c "'mkdir -p $WEBROOT/releases/targets/$TARGET/$SUBTARGET'"
+      #     rsync -chavP --delete -e 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no' $SOURCE_TARGETS $HOST:$DEST_TARGETS
 
-      - name: Deploy Files To PacificRack Node
-        env:
-          HOST: "${{ secrets.REMOTE_USER }}@${{ secrets.PACIFICRACK_IP }}"
-          SOURCE_TARGETS: "openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
-          DEST_TARGETS: "${{ env.WEBROOT }}/releases/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
-          REMOTE_PRIVATEKEY: "${{secrets.PACIFICRACK_PRIVATEKEY}}"
-        if: env.REMOTE_PRIVATEKEY != null
-        run: |
-          mkdir -p ~/.ssh/
-          install -m 600 /dev/null ~/.ssh/id_rsa
-          echo "${{secrets.PACIFICRACK_PRIVATEKEY}}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh -q -t -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $HOST \
-          bash -c "'mkdir -p $WEBROOT/releases/targets/$TARGET/$SUBTARGET'"
-          rsync -chavP --delete -e 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no' $SOURCE_TARGETS $HOST:$DEST_TARGETS
-          echo "::warning file=openwrt.cc::Download Link: https://openwrt.cc/releases/targets/bcm27xx/bcm2711"
+      # - name: Deploy Files To PacificRack Node
+      #   env:
+      #     HOST: "${{ secrets.REMOTE_USER }}@${{ secrets.PACIFICRACK_IP }}"
+      #     SOURCE_TARGETS: "openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
+      #     DEST_TARGETS: "${{ env.WEBROOT }}/releases/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
+      #     REMOTE_PRIVATEKEY: "${{secrets.PACIFICRACK_PRIVATEKEY}}"
+      #   if: env.REMOTE_PRIVATEKEY != null
+      #   run: |
+      #     mkdir -p ~/.ssh/
+      #     install -m 600 /dev/null ~/.ssh/id_rsa
+      #     echo "${{secrets.PACIFICRACK_PRIVATEKEY}}" > ~/.ssh/id_rsa
+      #     chmod 600 ~/.ssh/id_rsa
+      #     ssh -q -t -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $HOST \
+      #     bash -c "'mkdir -p $WEBROOT/releases/targets/$TARGET/$SUBTARGET'"
+      #     rsync -chavP --delete -e 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no' $SOURCE_TARGETS $HOST:$DEST_TARGETS
+      #     echo "::warning file=openwrt.cc::Download Link: https://openwrt.cc/releases/targets/bcm27xx/bcm2711"
 
       - name: Organize Files
         run: |
@@ -387,17 +416,17 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           artifacts: ${{ env.OPENWRTROOT }}/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/*
 
-      - name: Deploy Files To Onedrive
-        env:
-          SOURCE_TARGETS: "openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
-          DEST_TARGETS: "releases/targets/${{ env.TARGET }}"
-          ONEDRIVEUPLOADER_CONF: "${{ secrets.ONEDRIVEUPLOADER_CONF }}"
-        if: env.ONEDRIVEUPLOADER_CONF != null
-        run: |
-          echo -e "${ONEDRIVEUPLOADER_CONF}" | tee ./auth.json > /dev/null
-          wget -q https://raw.githubusercontent.com/MoeClub/OneList/master/OneDriveUploader/amd64/linux/OneDriveUploader
-          chmod +x OneDriveUploader
-          ./OneDriveUploader -f -c "./auth.json" -s $SOURCE_TARGETS -r $DEST_TARGETS
-          ./OneDriveUploader -f -c "./auth.json" -s $SOURCE_TARGETS -r "archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/targets/$TARGET/$SUBTARGET"
-          ./OneDriveUploader -f -c "./auth.json" -s $OPENWRTROOT/$TARGET-$SUBTARGET.zip -r "archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/bin-archive"
-          echo "::warning file=mirror.openwrt.cc::Download Link: https://mirror.openwrt.cc/releases/targets/bcm27xx/bcm2711"
+      # - name: Deploy Files To Onedrive
+      #   env:
+      #     SOURCE_TARGETS: "openwrt/bin/targets/${{ env.TARGET }}/${{ env.SUBTARGET }}/"
+      #     DEST_TARGETS: "releases/targets/${{ env.TARGET }}"
+      #     ONEDRIVEUPLOADER_CONF: "${{ secrets.ONEDRIVEUPLOADER_CONF }}"
+      #   if: env.ONEDRIVEUPLOADER_CONF != null
+      #   run: |
+      #     echo -e "${ONEDRIVEUPLOADER_CONF}" | tee ./auth.json > /dev/null
+      #     wget -q https://raw.githubusercontent.com/MoeClub/OneList/master/OneDriveUploader/amd64/linux/OneDriveUploader
+      #     chmod +x OneDriveUploader
+      #     ./OneDriveUploader -f -c "./auth.json" -s $SOURCE_TARGETS -r $DEST_TARGETS
+      #     ./OneDriveUploader -f -c "./auth.json" -s $SOURCE_TARGETS -r "archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/targets/$TARGET/$SUBTARGET"
+      #     ./OneDriveUploader -f -c "./auth.json" -s $OPENWRTROOT/$TARGET-$SUBTARGET.zip -r "archive/$(date +%Y)/$(date +%m)/$(date +%d)/releases/bin-archive"
+      #     echo "::warning file=mirror.openwrt.cc::Download Link: https://mirror.openwrt.cc/releases/targets/bcm27xx/bcm2711"
