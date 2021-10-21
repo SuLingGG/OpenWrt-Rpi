@@ -199,13 +199,15 @@ jobs:
           sudo rm -f /mnt/swapfile
           export ROOT_FREE_KB=$(df --block-size=1024 --output=avail / | tail -1)
           export ROOT_LOOP_KB=$(expr $ROOT_FREE_KB - 1048576)
-          export ROOT_LOOP_BYTES=$(expr $ROOT_LOOP_KB \* 1024)
-          sudo fallocate -l $ROOT_LOOP_BYTES root.img
-          export ROOT_LOOP_DEVNAME=$(sudo losetup -f -P --show root.img)
+          # export ROOT_LOOP_BYTES=$(expr $ROOT_LOOP_KB \* 1024)
+          # sudo fallocate -l $ROOT_LOOP_BYTES /root.img
+          sudo truncate -s $ROOT_LOOP_KB /root.img
+          export ROOT_LOOP_DEVNAME=$(sudo losetup -f -P --show /root.img)
           export MNT_FREE_KB=$(df --block-size=1024 --output=avail /mnt | tail -1)
           export MNT_LOOP_KB=$(expr $MNT_FREE_KB - 102400)
-          export MNT_LOOP_BYTES=$(expr $MNT_LOOP_KB \* 1024)
-          sudo fallocate -l $MNT_LOOP_BYTES /mnt/mnt.img
+          # export MNT_LOOP_BYTES=$(expr $MNT_LOOP_KB \* 1024)
+          # sudo fallocate -l $MNT_LOOP_BYTES /mnt/mnt.img
+          sudo truncate -s $MNT_LOOP_KB /mnt/mnt.img
           export MNT_LOOP_DEVNAME=$(sudo losetup -f -P --show /mnt/mnt.img)
           sudo mkfs.btrfs -f -d raid0 -L combinedisk $ROOT_LOOP_DEVNAME $MNT_LOOP_DEVNAME
           sudo mount -o nossd,compress=zstd $ROOT_LOOP_DEVNAME $GITHUB_WORKSPACE
