@@ -36,11 +36,7 @@ env:
 jobs:
   Build:
     runs-on: ubuntu-20.04
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@main
-
       - name: Initialization Environment
         env:
           DEBIAN_FRONTEND: noninteractive
@@ -70,40 +66,64 @@ jobs:
           sudo mkfs.btrfs -f -d raid0 -L combinedisk $ROOT_LOOP_DEVNAME $MNT_LOOP_DEVNAME
           sudo mount -o nossd,compress=zstd $ROOT_LOOP_DEVNAME $GITHUB_WORKSPACE
           sudo chown -R runner:runner $GITHUB_WORKSPACE
-          lsblk -lf
+          df -hT $GITHUB_WORKSPACE
           sudo btrfs filesystem usage $GITHUB_WORKSPACE
 
       - name: Checkout
         uses: actions/checkout@main
 
-      - name: Download Pre-Build Image
-        run: |
-          mkdir -p prebuild
-          cd prebuild
-          for i in {0..1}
-          do
-            wget -q https://github.com/SuLingGG/OpenWrt-Rpi/releases/download/toolchain/$TOOLCHAIN_IMAGE.img.0$i || break
-          done
+      # - name: Download Toolchain Image
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: ${{ env.TOOLCHAIN_IMAGE }}
+      #     path: toolchain
 
-      - name: Prepare Pre-Build Image
+      # - name: Prepare Toolchain Image
+      #   id: prepare
+      #   run: |
+      #     cd toolchain
+      #     for i in {1..9}
+      #     do
+      #       cat $TOOLCHAIN_IMAGE.img.0$i >> $TOOLCHAIN_IMAGE.img.00 && rm $TOOLCHAIN_IMAGE.img.0$i || break
+      #     done
+      #     mv $TOOLCHAIN_IMAGE.img.00 ../$TOOLCHAIN_IMAGE.img
+      #     cd ..
+      #     mkdir openwrt-ro openwrt workdir overlay
+      #     sudo mount -o loop $TOOLCHAIN_IMAGE.img openwrt-ro
+      #     sudo mount -t overlay overlay -o lowerdir=openwrt-ro,upperdir=overlay,workdir=workdir openwrt
+
+      - name: Prepare Toolchain Image
         id: prepare
         run: |
-          cd prebuild
-          # for i in {1..9}
-          # do
-          #   cat $TOOLCHAIN_IMAGE.img.0$i >> $TOOLCHAIN_IMAGE.img.00 && rm $TOOLCHAIN_IMAGE.img.0$i || break
-          # done
-          cat $TOOLCHAIN_IMAGE.img.01 >> $TOOLCHAIN_IMAGE.img.00 && rm $TOOLCHAIN_IMAGE.img.01
-          mv $TOOLCHAIN_IMAGE.img.00 ../$TOOLCHAIN_IMAGE.img
-          cd ..
+          for i in {0..9}
+          do
+            curl -fsL https://github.com/$GITHUB_REPOSITORY/releases/download/$TOOLCHAIN_TAG/$TOOLCHAIN_IMAGE.img.0$i >> TOOLCHAIN_IMAGE.img || break
+          done
           mkdir openwrt-ro openwrt workdir overlay
           sudo mount -o loop $TOOLCHAIN_IMAGE.img openwrt-ro
           sudo mount -t overlay overlay -o lowerdir=openwrt-ro,upperdir=overlay,workdir=workdir openwrt
+          cd $OPENWRTROOT
+          git pull
+
+      - name: Load Custom Configuration
+        run: |
+          [ -e files ] && mv files $OPENWRTROOT/files
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
           cat config/general-packages-new.config >> $OPENWRTROOT/.config
+          chmod +x scripts/*.sh
           cd $OPENWRTROOT
-          echo "::set-output name=SOURCE_COMMIT::$(git log -1 --format='%H')"
+          echo -e "CONFIG_USB_LAN78XX=y\nCONFIG_USB_NET_DRIVERS=y" >> target/linux/bcm27xx/bcm2711/config-5.4
+          ../$DIY_SH
+          ../scripts/preset-clash-core.sh armv8
+          ../scripts/preset-terminal-tools.sh
+          ../scripts/enable-rpi4-wifi.sh
           make defconfig
+
+      - name: Install Feeds
+        run: |
+          cd $OPENWRTROOT
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
 
       - name: Download DL Package
         id: download
@@ -125,15 +145,16 @@ jobs:
         id: generate
         run: |
           cd data/opkg
-          sed -i "s/subtarget/$SUBTARGET/g" distfeeds*.conf
-          sed -i "s/target\//$TARGET\//g" distfeeds*.conf
-          sed -i "s/platform/$PLATFORM/g" distfeeds*.conf
+          sed -i "s/subtarget/$SUBTARGET/g" distfeeds.conf
+          sed -i "s/target\//$TARGET\//g" distfeeds.conf
+          sed -i "s/platform/$PLATFORM/g" distfeeds.conf
           cd $OPENWRTROOT
           echo "dtparam=i2c_arm=on,audio=on" >> target/linux/bcm27xx/image/config.txt
           mkdir -p files/etc/uci-defaults/
           cp ../scripts/init-settings.sh files/etc/uci-defaults/99-init-settings
           mkdir -p files/www/snapshots
           cp -r bin/targets files/www/snapshots
+          mkdir -p files/etc/opkg
           cp ../data/opkg/distfeeds.conf files/etc/opkg
           mkdir -p files/www/ipv6-modules
           cp bin/packages/$PLATFORM/luci/luci-proto-ipv6* files/www/ipv6-modules
@@ -153,7 +174,6 @@ jobs:
 
       - name: Print Disk Usage
         run: |
-          df -hT $GITHUB_WORKSPACE
           sudo btrfs filesystem usage $GITHUB_WORKSPACE
 
       - name: Upload Bin Archive
@@ -161,6 +181,7 @@ jobs:
         with:
           name: bin-archive
           path: ${{ env.OPENWRTROOT }}/${{ env.TARGET }}-${{ env.SUBTARGET }}.zip
+
 
   # Upload:
   #   needs: [Build]

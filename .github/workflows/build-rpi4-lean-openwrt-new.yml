@@ -35,7 +35,6 @@ jobs:
       OPENWRTROOT: ${{ steps.clone.outputs.OPENWRTROOT }}
       SOURCE_OWNER: ${{ steps.clone.outputs.SOURCE_OWNER }}
       SOURCE_REPO: ${{ steps.clone.outputs.SOURCE_REPO }}
-      CURRENT_HASH: ${{ steps.hash.outputs.CURRENT_HASH }}
       PLATFORM: ${{ steps.make-env.outputs.PLATFORM }}
       TARGET: ${{ steps.make-env.outputs.TARGET }}
       SUBTARGET: ${{ steps.make-env.outputs.SUBTARGET }}
@@ -169,9 +168,6 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@main
-
       - name: Restore Variables
         run: |
           echo "CURRENT_BRANCH=$(echo '${{needs.Toolchain.outputs.CURRENT_BRANCH}}')" >> $GITHUB_ENV
@@ -248,6 +244,8 @@ jobs:
           mkdir openwrt-ro openwrt workdir overlay
           sudo mount -o loop $TOOLCHAIN_IMAGE.img openwrt-ro
           sudo mount -t overlay overlay -o lowerdir=openwrt-ro,upperdir=overlay,workdir=workdir openwrt
+          cd $OPENWRTROOT
+          git pull
 
       - name: Load Custom Configuration
         run: |
@@ -263,6 +261,12 @@ jobs:
           ../scripts/enable-rpi4-wifi.sh
           make defconfig
 
+      - name: Install Feeds
+        run: |
+          cd $OPENWRTROOT
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
+
       - name: Download DL Package
         id: download
         run: |
@@ -275,7 +279,6 @@ jobs:
           echo -e "$(nproc) thread compile"
           make buildinfo
           make diffconfig buildversion feedsversion
-          make target/clean
           make target/compile -j$(nproc) || make target/compile -j1 V=s IGNORE_ERRORS=1
           make package/compile -j$(nproc) IGNORE_ERRORS=1 || make package/compile -j1 V=s IGNORE_ERRORS=1
           make package/index
