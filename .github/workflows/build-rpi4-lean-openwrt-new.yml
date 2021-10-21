@@ -31,14 +31,14 @@ jobs:
     runs-on: ubuntu-20.04
 
     outputs:
-      CURRENT_BRANCH: ${{ steps.clone.outputs.CURRENT_BRANCH }}
       OPENWRTROOT: ${{ steps.clone.outputs.OPENWRTROOT }}
-      SOURCE_OWNER: ${{ steps.clone.outputs.SOURCE_OWNER }}
-      SOURCE_REPO: ${{ steps.clone.outputs.SOURCE_REPO }}
-      PLATFORM: ${{ steps.make-env.outputs.PLATFORM }}
-      TARGET: ${{ steps.make-env.outputs.TARGET }}
-      SUBTARGET: ${{ steps.make-env.outputs.SUBTARGET }}
-      TOOLCHAIN_IMAGE: ${{ steps.make-env.outputs.TOOLCHAIN_IMAGE }}
+      CURRENT_BRANCH: ${{ steps.env.outputs.CURRENT_BRANCH }}
+      SOURCE_OWNER: ${{ steps.env.outputs.SOURCE_OWNER }}
+      SOURCE_REPO: ${{ steps.env.outputs.SOURCE_REPO }}
+      PLATFORM: ${{ steps.env.outputs.PLATFORM }}
+      TARGET: ${{ steps.env.outputs.TARGET }}
+      SUBTARGET: ${{ steps.env.outputs.SUBTARGET }}
+      TOOLCHAIN_IMAGE: ${{ steps.env.outputs.TOOLCHAIN_IMAGE }}
 
     steps:
       - name: Initialization Environment
@@ -60,19 +60,43 @@ jobs:
         id: clone
         run: |
           df -hT $PWD
-          export CURRENT_BRANCH="$(git symbolic-ref --short HEAD)"
-          echo "CURRENT_BRANCH=$CURRENT_BRANCH" >> $GITHUB_ENV
-          echo "::set-output name=CURRENT_BRANCH::$(echo $CURRENT_BRANCH)"
           git clone $SOURCE_URL -b $SOURCE_BRANCH openwrt
           cd openwrt
           echo "OPENWRTROOT=$PWD" >> $GITHUB_ENV
           echo "::set-output name=OPENWRTROOT::$(echo $PWD)"
+
+      - name: Generate Toolchain Config
+        run: |
+          [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
+          echo "CONFIG_ALL=y" >> $OPENWRTROOT/.config
+          cd $OPENWRTROOT
+          make defconfig
+
+      - name: Generate Variables
+        id: env
+        run: |
+          export CURRENT_BRANCH="$(git symbolic-ref --short HEAD)"
+          echo "CURRENT_BRANCH=$CURRENT_BRANCH" >> $GITHUB_ENV
+          echo "::set-output name=CURRENT_BRANCH::$(echo $CURRENT_BRANCH)"
+          cd $OPENWRTROOT
           export SOURCE_OWNER="$(echo $SOURCE_URL | awk -F '/' '{print $(NF-1)}')"
           echo "SOURCE_OWNER=$SOURCE_OWNER" >> $GITHUB_ENV
           echo "::set-output name=SOURCE_OWNER::$(echo $SOURCE_OWNER)"
           export SOURCE_REPO="$(echo $SOURCE_URL | awk -F '/' '{print $(NF)}')"
           echo "SOURCE_REPO=$SOURCE_REPO" >> $GITHUB_ENV
           echo "::set-output name=SOURCE_REPO::$(echo $SOURCE_REPO)"
+          export TARGET=$(cat .config | grep CONFIG_TARGET_BOARD | awk -F '"' '{print $2}')
+          echo "TARGET=$TARGET" >> $GITHUB_ENV
+          echo "::set-output name=TARGET::$(echo $TARGET)"
+          export SUBTARGET=$(cat .config | grep CONFIG_TARGET_SUBTARGET | awk -F '"' '{print $2}')
+          echo "SUBTARGET=$SUBTARGET" >> $GITHUB_ENV
+          echo "::set-output name=SUBTARGET::$(echo $SUBTARGET)"
+          export PLATFORM=$(cat .config | grep CONFIG_TARGET_ARCH_PACKAGES | awk -F '"' '{print $2}')
+          echo "PLATFORM=$PLATFORM" >> $GITHUB_ENV
+          echo "::set-output name=PLATFORM::$(echo $PLATFORM)"
+          export TOOLCHAIN_IMAGE="toolchain-$SOURCE_OWNER-$SOURCE_REPO-$SOURCE_BRANCH-$TARGET-$SUBTARGET"
+          echo "TOOLCHAIN_IMAGE=$TOOLCHAIN_IMAGE" >> $GITHUB_ENV
+          echo "::set-output name=TOOLCHAIN_IMAGE::$(echo $TOOLCHAIN_IMAGE)"
 
       - name: Compare Toolchain Hash
         id: hash
@@ -82,18 +106,11 @@ jobs:
           echo "CURRENT_HASH=$CURRENT_HASH" >> $GITHUB_ENV
           echo "::set-output name=CURRENT_HASH::$(echo $CURRENT_HASH)"
           echo "CURRENT_HASH is $CURRENT_HASH"
-          export CACHE_HASH=$(curl -fSsL https://github.com/$GITHUB_REPOSITORY/releases/download/$TOOLCHAIN_TAG/toolchain-$SOURCE_OWNER-$SOURCE_REPO-$SOURCE_BRANCH-$TARGET-$SUBTARGET.hash)
+          export CACHE_HASH=$(curl -fSsL https://github.com/$GITHUB_REPOSITORY/releases/download/$TOOLCHAIN_TAG/$TOOLCHAIN_IMAGE.hash)
           echo "CACHE_HASH is $CACHE_HASH"
           if [ -z "$CACHE_HASH" ] || [ "$CURRENT_HASH" != "$CACHE_HASH" ]; then
             echo "::set-output name=REBUILD_TOOLCHAIN::true"
           fi
-
-      - name: Generate Toolchain Config
-        run: |
-          [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
-          echo "CONFIG_ALL=y" >> $OPENWRTROOT/.config
-          cd $OPENWRTROOT
-          make defconfig
 
       - name: Install Feeds
         if: steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
@@ -115,24 +132,7 @@ jobs:
           cd $OPENWRTROOT
           echo -e "$(nproc) thread compile"
           make toolchain/compile -j$(nproc) || make toolchain/compile -j1 V=s
-
-      - name: Generate Variables
-        id: make-env
-        run: |
-          cd $OPENWRTROOT
-          export TARGET=$(cat .config | grep CONFIG_TARGET_BOARD | awk -F '"' '{print $2}')
-          echo "TARGET=$TARGET" >> $GITHUB_ENV
-          echo "::set-output name=TARGET::$(echo $TARGET)"
-          export SUBTARGET=$(cat .config | grep CONFIG_TARGET_SUBTARGET | awk -F '"' '{print $2}')
-          echo "SUBTARGET=$SUBTARGET" >> $GITHUB_ENV
-          echo "::set-output name=SUBTARGET::$(echo $SUBTARGET)"
-          export PLATFORM=$(cat .config | grep CONFIG_TARGET_ARCH_PACKAGES | awk -F '"' '{print $2}')
-          echo "PLATFORM=$PLATFORM" >> $GITHUB_ENV
-          echo "::set-output name=PLATFORM::$(echo $PLATFORM)"
-          export TOOLCHAIN_IMAGE="toolchain-$SOURCE_OWNER-$SOURCE_REPO-$SOURCE_BRANCH-$TARGET-$SUBTARGET"
-          echo "TOOLCHAIN_IMAGE=$TOOLCHAIN_IMAGE" >> $GITHUB_ENV
-          echo "::set-output name=TOOLCHAIN_IMAGE::$(echo $TOOLCHAIN_IMAGE)"
-          rm -rf .config dl bin
+          rm -rf .config* dl bin
 
       - name: Generate Toolchain Image
         if: steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
