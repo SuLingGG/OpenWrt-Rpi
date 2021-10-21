@@ -68,7 +68,8 @@ jobs:
       - name: Generate Toolchain Config
         run: |
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
-          echo "CONFIG_ALL=y" >> $OPENWRTROOT/.config
+          echo -e "\nCONFIG_ALL=y" >> $OPENWRTROOT/.config
+          echo -e "\nCONFIG_ALL_NONSHARED=y" >> $OPENWRTROOT/.config
           cd $OPENWRTROOT
           make defconfig > /dev/null 2>&1
 
