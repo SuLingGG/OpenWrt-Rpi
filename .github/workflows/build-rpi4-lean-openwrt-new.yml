@@ -70,7 +70,7 @@ jobs:
           [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRTROOT/.config
           echo "CONFIG_ALL=y" >> $OPENWRTROOT/.config
           cd $OPENWRTROOT
-          make defconfig
+          make defconfig > /dev/null 2>&1
 
       - name: Generate Variables
         id: env
@@ -243,7 +243,7 @@ jobs:
         run: |
           for i in {0..9}
           do
-            curl -fsSL https://github.com/$GITHUB_REPOSITORY/releases/download/$TOOLCHAIN_TAG/$TOOLCHAIN_IMAGE.img.0$i >> TOOLCHAIN_IMAGE.img || break
+            curl -fsL https://github.com/$GITHUB_REPOSITORY/releases/download/$TOOLCHAIN_TAG/$TOOLCHAIN_IMAGE.img.0$i >> $TOOLCHAIN_IMAGE.img || break
           done
           mkdir openwrt-ro openwrt workdir overlay
           sudo mount -o loop $TOOLCHAIN_IMAGE.img openwrt-ro
