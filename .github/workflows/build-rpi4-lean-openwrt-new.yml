@@ -217,7 +217,12 @@ jobs:
           sudo btrfs filesystem usage $GITHUB_WORKSPACE
 
       - name: Checkout
-        uses: actions/checkout@main
+        run: |
+          cd $GITHUB_WORKSPACE
+          git init
+          git remote add origin https://github.com/$GITHUB_REPOSITORY
+          git fetch
+          git checkout -t origin/$CURRENT_BRANCH
 
       # - name: Download Toolchain Image
       #   if: env.TOOLCHAIN_RELEASE_UPLOAD != 'true'
