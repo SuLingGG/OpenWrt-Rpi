@@ -210,7 +210,7 @@ jobs:
           sudo mkfs.btrfs -f -d raid0 -L combinedisk $ROOT_LOOP_DEVNAME $MNT_LOOP_DEVNAME
           sudo mount -o nossd,compress=zstd $ROOT_LOOP_DEVNAME $GITHUB_WORKSPACE
           sudo chown -R runner:runner $GITHUB_WORKSPACE
-          sudo mkdir $GITHUB_WORKSPACE/tmp
+          mkdir $GITHUB_WORKSPACE/tmp
           sudo cp -rp /tmp/* $GITHUB_WORKSPACE/tmp
           sudo mount -B $GITHUB_WORKSPACE/tmp /tmp
           df -hT $GITHUB_WORKSPACE
