@@ -339,7 +339,7 @@ jobs:
           path: ${{ env.OPENWRTROOT }}/${{ env.TARGET }}-${{ env.SUBTARGET }}.zip
 
   Upload:
-    needs: [Build]
+    needs: [Build, Toolchain]
     runs-on: ubuntu-20.04
 
     steps:
