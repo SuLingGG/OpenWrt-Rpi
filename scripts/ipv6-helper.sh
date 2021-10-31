@@ -27,7 +27,7 @@ Welcome(){
     echo -e "Optional Usage:"
     echo -e "\tipv6-helper server: Set IPV6 configuration to server mode"
     echo -e "\tipv6-helper relay: Set IPV6 configuration to relay mode"
-    echo -e "\tipv6-helper hybird: Set IPV6 configuration to hybird mode"
+    echo -e "\tipv6-helper hybrid: Set IPV6 configuration to hybrid mode"
     echo -e "\tipv6-helper clean: Remove mwan3 modules\n"
 }
 
@@ -44,7 +44,7 @@ RebootConfirm(){
 
 CheckInstall(){
     if [ ! -f "/etc/opkg/ipv6-installed" ];then
-        echo -e "${Green_font_prefix}\nYou shoud execute 'ipv6-helper install' first.\n${Green_font_prefix}"
+        echo -e "${Red_background_prefix}\nYou shoud execute 'ipv6-helper install' first.\n${Font_color_suffix}"
     else
         echo -e "${Green_font_prefix}\nConfiguring...\n${Font_color_suffix}"
     fi
@@ -144,28 +144,28 @@ elif [[ $1 = "relay" ]]; then
     
     RebootConfirm
     
-elif [[ $1 = "hybird" ]]; then
+elif [[ $1 = "hybrid" ]]; then
     CheckInstall
     
-    # Set hybird to lan
-    uci set dhcp.lan.dhcpv6=hybird
-    uci set dhcp.lan.ndp=hybird
-    uci set dhcp.lan.ra=hybird
+    # Set hybrid to lan
+    uci set dhcp.lan.dhcpv6=hybrid
+    uci set dhcp.lan.ndp=hybrid
+    uci set dhcp.lan.ra=hybrid
     uci set dhcp.lan.ra_management=1
     uci set dhcp.lan.ra_default=1
     
-    # Set hybird to wan6
+    # Set hybrid to wan6
     uci set dhcp.wan6=dhcp
     uci set dhcp.wan6.interface=wan
-    uci set dhcp.wan6.ra=hybird
-    uci set dhcp.wan6.dhcpv6=hybird
-    uci set dhcp.wan6.ndp=hybird
+    uci set dhcp.wan6.ra=hybrid
+    uci set dhcp.wan6.dhcpv6=hybrid
+    uci set dhcp.wan6.ndp=hybrid
     uci set dhcp.wan6.master=1
     
     # Commit changes
     uci commit
     
-    echo -e "${Green_font_prefix}Hybird mode configure successfully.\n${Font_color_suffix}"
+    echo -e "${Green_font_prefix}Hybrid mode configure successfully.\n${Font_color_suffix}"
     
     RebootConfirm
     
