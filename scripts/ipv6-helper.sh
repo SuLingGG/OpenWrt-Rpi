@@ -103,17 +103,17 @@ elif [[ $1 = "server" ]]; then
     # Set server to lan
     uci set dhcp.lan.dhcpv6=server
     uci set dhcp.lan.ra=server
+    uci set dhcp.wan6.ndp=hybrid
     uci set dhcp.lan.ra_management=1
     uci set dhcp.lan.ra_default=1
-    uci delete dhcp.lan.ndp
     
     # Set server to wan6
     uci set dhcp.wan6=dhcp
     uci set dhcp.wan6.interface=wan
     uci set dhcp.wan6.ra=server
     uci set dhcp.wan6.dhcpv6=server
+    uci set dhcp.wan6.ndp=hybrid
     uci set dhcp.wan6.master=1
-    uci delete dhcp.wan6.ndp
     
     # Commit changes
     uci commit
