@@ -63,6 +63,7 @@ elif [[ $1 = "install" ]]; then
     # Set server to lan
     uci set dhcp.lan.dhcpv6=server
     uci set dhcp.lan.ra=server
+    uci set dhcp.lan.ndp=hybrid
     uci set dhcp.lan.ra_management=1
     uci set dhcp.lan.ra_default=1
     
@@ -71,6 +72,7 @@ elif [[ $1 = "install" ]]; then
     uci set dhcp.wan6.interface=wan
     uci set dhcp.wan6.ra=server
     uci set dhcp.wan6.dhcpv6=server
+    uci set dhcp.wan6.ndp=hybrid
     uci set dhcp.wan6.master=1
     
     # Disable IPV6 ula prefix
