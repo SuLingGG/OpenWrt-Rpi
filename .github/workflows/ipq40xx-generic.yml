@@ -275,7 +275,6 @@ jobs:
           $GITHUB_WORKSPACE/$DIY_SH
           $GITHUB_WORKSPACE/scripts/preset-clash-core.sh $CLASH_BINARY_PLATFORM
           $GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
-          $GITHUB_WORKSPACE/scripts/enable-rpi4-wifi.sh
           make defconfig
 
       - name: Install Feeds
