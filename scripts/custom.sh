@@ -37,11 +37,6 @@ git clone --depth=1 https://github.com/KFERMercer/luci-app-tcpdump
 # Add luci-app-oaf
 git clone --depth=1 https://github.com/destan19/OpenAppFilter -b oaf-3.0.1
 
-# Add luci-udptools
-svn co https://github.com/zcy85611/Openwrt-Package/trunk/luci-udptools
-svn co https://github.com/zcy85611/Openwrt-Package/trunk/udp2raw
-svn co https://github.com/zcy85611/Openwrt-Package/trunk/udpspeeder-tunnel
-
 # Add luci-theme-argon_armygreen
 git clone --depth=1 https://github.com/XXKDB/luci-theme-argon_armygreen
 popd
@@ -49,12 +44,6 @@ popd
 # Fix mt76 wireless driver
 pushd package/kernel/mt76
 sed -i '/mt7662u_rom_patch.bin/a\\techo mt76-usb disable_usb_sg=1 > $\(1\)\/etc\/modules.d\/mt76-usb' Makefile
-popd
-
-# Fix luci-app-aria2
-pushd feeds/luci/applications
-rm -rf luci-app-aria2
-svn co https://github.com/coolsnowwolf/luci/trunk/applications/luci-app-aria2
 popd
 
 # Rename hostname to OpenWrt
