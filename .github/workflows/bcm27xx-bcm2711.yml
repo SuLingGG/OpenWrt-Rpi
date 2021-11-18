@@ -20,11 +20,11 @@ env:
   SOURCE_URL: https://github.com/immortalwrt/immortalwrt
   SOURCE_BRANCH: openwrt-18.06-k5.4
   DIY_SH: scripts/custom.sh
-  WEBROOT: /data/dnmp/www/openwrt.cc
   TOOLCHAIN_TAG: toolchain
   CLASH_BINARY_PLATFORM: armv8
   TOOLCHAIN_RELEASE_UPLOAD: true
   FIRMWARE_RELEASE_UPLOAD: true
+  WEB_ROOT_PATH: /data/dnmp/www/openwrt.cc
   TZ: Asia/Shanghai
 
 jobs:
@@ -378,13 +378,17 @@ jobs:
           cd $OPENWRT_ROOT_PATH
           unzip $DEVICE_TARGET-$DEVICE_SUBTARGET.zip
 
+      - name: Organize Files
+        run: |
+          cd $OPENWRT_ROOT_PATH/bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET
+          rm -rf packages
+          df -hT $PWD
+
       - name: Deploy Files To HostHatch Node
         env:
           HOST: "${{ secrets.REMOTE_USER }}@${{ secrets.HOSTHATCH_IP }}"
           SOURCE_TARGETS: "${{ env.OPENWRT_ROOT_PATH }}/bin/targets/${{ env.DEVICE_TARGET }}/${{ env.DEVICE_SUBTARGET }}/"
-          SOURCE_PACKAGES: "${{ env.OPENWRT_ROOT_PATH }}/bin/packages/${{ env.DEVICE_PLATFORM }}/"
           DEST_TARGETS: "${{ env.WEB_ROOT_PATH }}/snapshots/targets/${{ env.DEVICE_TARGET }}/${{ env.DEVICE_SUBTARGET }}/"
-          DEST_PACKAGES: "${{ env.WEB_ROOT_PATH }}/snapshots/packages/${{ env.DEVICE_PLATFORM }}/"
           REMOTE_PRIVATEKEY: "${{ secrets.HOSTHATCH_PRIVATEKEY }}"
         if: env.REMOTE_PRIVATEKEY != null
         run: |
@@ -396,15 +400,12 @@ jobs:
           bash -c "'mkdir -p $WEB_ROOT_PATH/snapshots/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET \
           $WEB_ROOT_PATH/snapshots/packages/$DEVICE_PLATFORM'"
           rsync -chavP --delete -e 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no' $SOURCE_TARGETS $HOST:$DEST_TARGETS
-          rsync -chavP --delete -e 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no' $SOURCE_PACKAGES $HOST:$DEST_PACKAGES
 
       - name: Deploy Files To PacificRack Node
         env:
           HOST: "${{ secrets.REMOTE_USER }}@${{ secrets.PACIFICRACK_IP }}"
           SOURCE_TARGETS: "${{ env.OPENWRT_ROOT_PATH }}/bin/targets/${{ env.DEVICE_TARGET }}/${{ env.DEVICE_SUBTARGET }}/"
-          SOURCE_PACKAGES: "${{ env.OPENWRT_ROOT_PATH }}/bin/packages/${{ env.DEVICE_PLATFORM }}/"
           DEST_TARGETS: "${{ env.WEB_ROOT_PATH }}/snapshots/targets/${{ env.DEVICE_TARGET }}/${{ env.DEVICE_SUBTARGET }}/"
-          DEST_PACKAGES: "${{ env.WEB_ROOT_PATH }}/snapshots/packages/${{ env.DEVICE_PLATFORM }}/"
           REMOTE_PRIVATEKEY: "${{ secrets.PACIFICRACK_PRIVATEKEY }}"
         if: env.REMOTE_PRIVATEKEY != null
         run: |
@@ -416,13 +417,6 @@ jobs:
           bash -c "'mkdir -p $WEB_ROOT_PATH/snapshots/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET \
           $WEB_ROOT_PATH/snapshots/packages/$DEVICE_PLATFORM'"
           rsync -chavP --delete -e 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no' $SOURCE_TARGETS $HOST:$DEST_TARGETS
-          rsync -chavP --delete -e 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no' $SOURCE_PACKAGES $HOST:$DEST_PACKAGES
-
-      - name: Organize Files
-        run: |
-          cd $OPENWRT_ROOT_PATH/bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET
-          rm -rf packages
-          df -hT $PWD
 
       - name: Deploy Files To Release
         uses: ncipollo/release-action@v1.8.0
