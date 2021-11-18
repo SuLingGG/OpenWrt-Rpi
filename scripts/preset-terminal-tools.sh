@@ -21,6 +21,6 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ./.oh-my-zsh/
 git clone https://github.com/zsh-users/zsh-completions ./.oh-my-zsh/custom/plugins/zsh-completions
 
 # Get .zshrc dotfile
-cp ../../../data/zsh/.zshrc .
+cp $GITHUB_WORKSPACE/data/zsh/.zshrc .
 
 popd

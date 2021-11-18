@@ -13,11 +13,4 @@ uci set luci.main.mediaurlbase='/luci-static/argon'
 uci set fstab.@global[0].check_fs=1
 uci commit
 
-# Disable opkg signature check
-sed -i 's/option check_signature/# option check_signature/g' /etc/opkg.conf
-
-# Disable autostart by default for some packages
-cd /etc/rc.d
-rm -f S98udptools || true
-
 exit 0
