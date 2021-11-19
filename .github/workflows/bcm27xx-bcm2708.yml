@@ -328,7 +328,10 @@ jobs:
           zip -r $DEVICE_TARGET-$DEVICE_SUBTARGET.zip bin
 
       - name: Print Disk Usage
+        if: always()
         run: |
+          lsblk -f
+          df -h
           sudo btrfs filesystem usage $GITHUB_WORKSPACE
 
       - name: Upload Bin Archive
