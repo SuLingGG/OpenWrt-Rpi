@@ -306,12 +306,20 @@ jobs:
         id: generate
         run: |
           if grep -q $DEVICE_TARGET/$DEVICE_SUBTARGET $GITHUB_WORKSPACE/data/support-targets.txt; then
-            mkdir -p $OPENWRT_ROOT_PATH/files/etc/opkg
-            cp $GITHUB_WORKSPACE/data/opkg/distfeeds.conf $OPENWRT_ROOT_PATH/files/etc/opkg
-            cd $OPENWRT_ROOT_PATH/files/etc/opkg
+            mkcd $OPENWRT_ROOT_PATH/files/etc/opkg
+            cp $GITHUB_WORKSPACE/data/opkg/distfeeds.conf .
             sed -i "s/DEVICE_SUBTARGET/$DEVICE_SUBTARGET/g" distfeeds.conf
             sed -i "s/DEVICE_TARGET/$DEVICE_TARGET/g" distfeeds.conf
             sed -i "s/DEVICE_PLATFORM/$DEVICE_PLATFORM/g" distfeeds.conf
+            cd $OPENWRT_ROOT_PATH
+            git clone https://git.openwrt.org/project/usign.git
+            cd usign
+            cmake .
+            make
+            sudo mv usign /bin
+            mkcd $OPENWRT_ROOT_PATH/files/etc/opkg/keys
+            wget -q https://openwrt.cc/snapshots/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET/key-build.pub
+            mv key-build.pub $(usign -F -p key-build.pub)
           fi
           cd $OPENWRT_ROOT_PATH
           echo "dtparam=i2c_arm=on,audio=on" >> target/linux/bcm27xx/image/config.txt
