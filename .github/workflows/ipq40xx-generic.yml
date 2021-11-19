@@ -303,7 +303,8 @@ jobs:
         id: generate
         run: |
           if grep -q $DEVICE_TARGET/$DEVICE_SUBTARGET $GITHUB_WORKSPACE/data/support-targets.txt; then
-            mkcd $OPENWRT_ROOT_PATH/files/etc/opkg
+            mkdir -p $OPENWRT_ROOT_PATH/files/etc/opkg
+            cd $OPENWRT_ROOT_PATH/files/etc/opkg
             cp $GITHUB_WORKSPACE/data/opkg/distfeeds.conf .
             sed -i "s/DEVICE_SUBTARGET/$DEVICE_SUBTARGET/g" distfeeds.conf
             sed -i "s/DEVICE_TARGET/$DEVICE_TARGET/g" distfeeds.conf
@@ -314,7 +315,8 @@ jobs:
             cmake .
             make
             sudo mv usign /bin
-            mkcd $OPENWRT_ROOT_PATH/files/etc/opkg/keys
+            mkdir -p $OPENWRT_ROOT_PATH/files/etc/opkg/keys
+            cd $OPENWRT_ROOT_PATH/files/etc/opkg/keys
             wget -q https://openwrt.cc/snapshots/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET/key-build.pub
             mv key-build.pub $(usign -F -p key-build.pub)
           fi
