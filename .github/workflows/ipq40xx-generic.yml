@@ -210,7 +210,7 @@ jobs:
           export MNT_LOOP_BYTES=$(expr $MNT_LOOP_KB \* 1024)
           sudo fallocate -l $MNT_LOOP_BYTES /mnt/mnt.img
           export MNT_LOOP_DEVNAME=$(sudo losetup -f -P --show /mnt/mnt.img)
-          sudo mkfs.btrfs -f -d raid0 -L combinedisk $ROOT_LOOP_DEVNAME $MNT_LOOP_DEVNAME
+          sudo mkfs.btrfs -f -d single -L combinedisk $ROOT_LOOP_DEVNAME $MNT_LOOP_DEVNAME
           sudo mount -o nossd,compress=zstd $ROOT_LOOP_DEVNAME $GITHUB_WORKSPACE
           sudo chown -R runner:runner $GITHUB_WORKSPACE
           mkdir $GITHUB_WORKSPACE/tmp
@@ -326,9 +326,15 @@ jobs:
       - name: Print Disk Usage
         if: always()
         run: |
+          echo 'lsblk -f'
           lsblk -f
+          echo '-----'
+          echo 'df -h'
           df -h
+          echo '-----'
+          echo 'btrfs filesystem usage'
           sudo btrfs filesystem usage $GITHUB_WORKSPACE
+          echo '-----'
 
       - name: Upload Bin Archive
         uses: actions/upload-artifact@main
