@@ -204,14 +204,19 @@ jobs:
           export ROOT_LOOP_KB=$(expr $ROOT_FREE_KB - 1048576)
           export ROOT_LOOP_BYTES=$(expr $ROOT_LOOP_KB \* 1024)
           sudo fallocate -l $ROOT_LOOP_BYTES /root.img
-          export ROOT_LOOP_DEVNAME=$(sudo losetup -f -P --show /root.img)
+          export ROOT_LOOP_DEVNAME=$(sudo losetup -Pf --show /root.img)
+          sudo pvcreate -f $ROOT_LOOP_DEVNAME
           export MNT_FREE_KB=$(df --block-size=1024 --output=avail /mnt | tail -1)
           export MNT_LOOP_KB=$(expr $MNT_FREE_KB - 102400)
           export MNT_LOOP_BYTES=$(expr $MNT_LOOP_KB \* 1024)
           sudo fallocate -l $MNT_LOOP_BYTES /mnt/mnt.img
-          export MNT_LOOP_DEVNAME=$(sudo losetup -f -P --show /mnt/mnt.img)
-          sudo mkfs.btrfs -f -d single -L combinedisk $ROOT_LOOP_DEVNAME $MNT_LOOP_DEVNAME
-          sudo mount -o nossd,compress=zstd $ROOT_LOOP_DEVNAME $GITHUB_WORKSPACE
+          export MNT_LOOP_DEVNAME=$(sudo losetup -Pf --show /mnt/mnt.img)
+          sudo pvcreate -f $MNT_LOOP_DEVNAME
+          sudo vgcreate vgstorage $ROOT_LOOP_DEVNAME $MNT_LOOP_DEVNAME
+          sudo lvcreate -n lvstorage -l 100%FREE vgstorage
+          export LV_DEVNAME=$(sudo lvscan | awk -F "'" '{print $2}')
+          sudo mkfs.btrfs -L combinedisk $LV_DEVNAME
+          sudo mount -o compress=zstd $LV_DEVNAME $GITHUB_WORKSPACE
           sudo chown -R runner:runner $GITHUB_WORKSPACE
           mkdir $GITHUB_WORKSPACE/tmp
           chmod 777 $GITHUB_WORKSPACE/tmp
