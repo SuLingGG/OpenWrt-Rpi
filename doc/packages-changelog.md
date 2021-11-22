@@ -4,7 +4,7 @@
 
 请用
 
-`opkg update && opkg install ipv6-helper` 
+`opkg update && opkg install ipv6helper` 
 
 启用 IPV6 支持。
 
