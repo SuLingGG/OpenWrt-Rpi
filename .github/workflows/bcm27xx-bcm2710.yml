@@ -284,11 +284,11 @@ jobs:
           cat config/general-packages.config >> $OPENWRT_ROOT_PATH/.config
           cat config/extra-drivers.config >> $OPENWRT_ROOT_PATH/.config
           cd $OPENWRT_ROOT_PATH
-          make defconfig
           chmod +x $GITHUB_WORKSPACE/scripts/*.sh
           $GITHUB_WORKSPACE/$DIY_SH
           $GITHUB_WORKSPACE/scripts/preset-clash-core.sh $CLASH_BINARY_PLATFORM
           $GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
+          make defconfig
 
       - name: Download DL Package
         id: download

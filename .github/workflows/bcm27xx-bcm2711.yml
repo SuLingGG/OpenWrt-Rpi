@@ -284,13 +284,13 @@ jobs:
           cat config/general-packages.config >> $OPENWRT_ROOT_PATH/.config
           cat config/extra-drivers.config >> $OPENWRT_ROOT_PATH/.config
           cd $OPENWRT_ROOT_PATH
-          make defconfig
           echo -e "CONFIG_USB_LAN78XX=y\nCONFIG_USB_NET_DRIVERS=y" >> target/linux/bcm27xx/bcm2711/config-5.4
           sed -i 's/36/44/g;s/VHT80/VHT20/g' package/kernel/mac80211/files/lib/wifi/mac80211.sh
           chmod +x $GITHUB_WORKSPACE/scripts/*.sh
           $GITHUB_WORKSPACE/$DIY_SH
           $GITHUB_WORKSPACE/scripts/preset-clash-core.sh $CLASH_BINARY_PLATFORM
           $GITHUB_WORKSPACE/scripts/preset-terminal-tools.sh
+          make defconfig
 
       - name: Download DL Package
         id: download
