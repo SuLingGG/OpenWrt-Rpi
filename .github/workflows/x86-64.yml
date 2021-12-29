@@ -24,7 +24,7 @@ env:
   CLASH_BINARY_PLATFORM: amd64
   TOOLCHAIN_RELEASE_UPLOAD: true
   FIRMWARE_RELEASE_UPLOAD: true
-  WEB_ROOT_PATH: /data/dnmp/www/openwrt.cc
+  WEB_ROOT_PATH: /data/www/openwrt.cc
   TZ: Asia/Shanghai
 
 jobs:
