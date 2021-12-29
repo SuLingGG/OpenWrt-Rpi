@@ -420,21 +420,18 @@ jobs:
           bash -c "'mkdir -p $WEB_ROOT_PATH/releases/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET'"
           rsync -chavP --delete -e 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no' $SOURCE_TARGETS $HOST:$DEST_TARGETS
 
-      - name: Deploy Files To PacificRack Node
+      - name: Deploy Files To Backblaze
         env:
-          HOST: "${{ secrets.REMOTE_USER }}@${{ secrets.PACIFICRACK_IP }}"
+          B2_APPLICATION_KEY: "${{ secrets.B2_APPLICATION_KEY }}"
+          B2_APPLICATION_KEY_ID: "${{ secrets.B2_APPLICATION_KEY_ID }}"
           SOURCE_TARGETS: "${{ env.OPENWRT_ROOT_PATH }}/bin/targets/${{ env.DEVICE_TARGET }}/${{ env.DEVICE_SUBTARGET }}/"
-          DEST_TARGETS: "${{ env.WEB_ROOT_PATH }}/releases/targets/${{ env.DEVICE_TARGET }}/${{ env.DEVICE_SUBTARGET }}/"
-          REMOTE_PRIVATEKEY: "${{ secrets.PACIFICRACK_PRIVATEKEY }}"
-        if: env.REMOTE_PRIVATEKEY != null
+          DEST_TARGETS: "b2://${{ secrets.B2_BUCKETNAME }}/releases/targets/${{ env.DEVICE_TARGET }}/${{ env.DEVICE_SUBTARGET }}/"
+        if: env.B2_APPLICATION_KEY != null && env.B2_APPLICATION_KEY_ID != null
         run: |
-          mkdir -p ~/.ssh/
-          install -m 600 /dev/null ~/.ssh/id_rsa
-          echo "${{ secrets.PACIFICRACK_PRIVATEKEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh -q -t -i ~/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $HOST \
-          bash -c "'mkdir -p $WEB_ROOT_PATH/releases/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET'"
-          rsync -chavP --delete -e 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no' $SOURCE_TARGETS $HOST:$DEST_TARGETS
+          sudo wget -q -O /bin/b2 https://github.com/Backblaze/B2_Command_Line_Tool/releases/latest/download/b2-linux
+          sudo chmod +x /bin/b2
+          b2 authorize-account $B2_APPLICATION_KEY_ID $B2_APPLICATION_KEY
+          b2 sync --noProgress --threads 32 --keepDays 7 --replaceNewer $SOURCE_TARGETS $DEST_TARGETS
 
       - name: Delete Old Toolchain Assets
         if: steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
