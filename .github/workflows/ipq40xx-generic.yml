@@ -323,7 +323,7 @@ jobs:
             sudo mv usign /bin
             mkdir -p $OPENWRT_ROOT_PATH/files/etc/opkg/keys
             cd $OPENWRT_ROOT_PATH/files/etc/opkg/keys
-            wget -q https://openwrt.cc/snapshots/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET/key-build.pub
+            wget -q https://openwrt.cc/keys/key-build.pub
             mv key-build.pub $(usign -F -p key-build.pub)
           fi
           cd $OPENWRT_ROOT_PATH
