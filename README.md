@@ -10,6 +10,7 @@
 6. 预置最新版 Clash 核心、预置 oh-my-zsh，最大程度减少配置成本
 7. 提供全格式固件 / 文件 (ext4/squashfs/ubi/initramfs/rootfs)
 8. 对于高级用户，提供完整的固件/软件包构建工具 (imagebuilder / sdk / toolchain)
+9. 如果你想捐助此项目，请移步 [FUNDING.md](https://github.com/SuLingGG/OpenWrt-Mini/blob/main/FUNDING.md)
 
 ## 文档
 
