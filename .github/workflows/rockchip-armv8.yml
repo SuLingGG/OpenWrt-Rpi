@@ -157,6 +157,16 @@ jobs:
           name: ${{ env.TOOLCHAIN_IMAGE }}
           path: output
 
+      - name: Delete Old Toolchain Assets From Release
+        if: env.TOOLCHAIN_RELEASE_UPLOAD == 'true' && steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
+        uses: mknejp/delete-release-assets@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ env.TOOLCHAIN_TAG }}
+          assets: "toolchain-${{ env.TARGET_INFO }}.*"
+          fail-if-no-assets: false
+          fail-if-no-release: false
+
       - name: Upload Toolchain Image To Release
         if: env.TOOLCHAIN_RELEASE_UPLOAD == 'true' && steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
         uses: ncipollo/release-action@v1.8.0
