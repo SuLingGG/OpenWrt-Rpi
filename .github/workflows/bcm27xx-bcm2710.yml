@@ -163,7 +163,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ env.TOOLCHAIN_TAG }}
-          assets: "toolchain-${{ env.TARGET_INFO }}.*"
+          assets: "toolchain-${{ env.TOOLCHAIN_IMAGE }}.*"
           fail-if-no-assets: false
           fail-if-no-release: false
 
