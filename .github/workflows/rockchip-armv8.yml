@@ -348,6 +348,11 @@ jobs:
           make json_overview_image_info
           make checksum
 
+      - name: Print Sha256sums
+        run: |
+          cd $OPENWRT_ROOT_PATH/bin/targets/$DEVICE_TARGET/$DEVICE_SUBTARGET
+          cat sha256sums
+
       - name: Compress Bin Folder
         run: |
           cd $OPENWRT_ROOT_PATH
@@ -447,7 +452,7 @@ jobs:
           b2 authorize-account $B2_APPLICATION_KEY_ID $B2_APPLICATION_KEY
           b2 sync --noProgress --threads 32 --keepDays 7 --replaceNewer $SOURCE_TARGETS $DEST_TARGETS
 
-      - name: Delete Old Toolchain Assets
+      - name: Delete Old Firmware Assets
         if: steps.hash.outputs.REBUILD_TOOLCHAIN == 'true'
         uses: mknejp/delete-release-assets@v1
         with:
