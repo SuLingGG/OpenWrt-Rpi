@@ -1,0 +1,4 @@
+qBittorrent 上传种子文件 程序自动关闭
+
+确认是上游问题，据说immortalwrt已经修复，但本软件源中的qbittorrent仍然有此问题，希望更新。
+issue链接：https://github.com/immortalwrt/packages/issues/192
