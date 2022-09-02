@@ -18,6 +18,4 @@
 
 **4. 未满 18 岁及尚无独立经济收入来源者不建议捐赠本项目。**
 
-**5. 【即使你真的想捐赠，捐赠数额也不建议大于 10 RMB...】**
-
 <img src="https://img03.mifile.cn/v1/MI_542ED8B1722DC/6d609b4650ce286cfe9871260dffc224.png" alt="FUNDING.png" title="FUNDING.png" />
