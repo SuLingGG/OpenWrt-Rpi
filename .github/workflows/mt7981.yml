@@ -6,7 +6,7 @@
 # Blog: https://p3terx.com
 #=================================================
 
-name: Build rockchip/armv8 openwrt
+name: Build mt7981/armv8 openwrt
 
 on:
   workflow_dispatch:
@@ -16,9 +16,9 @@ on:
   #   types: started
 
 env:
-  CONFIG_FILE: config/rockchip/armv8.config
-  SOURCE_URL: https://github.com/immortalwrt/immortalwrt
-  SOURCE_BRANCH: openwrt-18.06-k5.4
+  CONFIG_FILE: defconfig/mt7981-ax3000.config
+  SOURCE_URL: https://github.com/hanwckf/immortalwrt-mt798x
+  SOURCE_BRANCH: openwrt-21.02
   DIY_SH: scripts/custom.sh
   TOOLCHAIN_TAG: toolchain
   CLASH_BINARY_PLATFORM: armv8
