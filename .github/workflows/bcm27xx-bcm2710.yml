@@ -65,7 +65,7 @@ jobs:
           git clone $SOURCE_URL -b $SOURCE_BRANCH workspace/openwrt
           cd workspace/openwrt
           echo "OPENWRT_ROOT_PATH=$PWD" >> $GITHUB_ENV
-          echo "::set-output name=OPENWRT_ROOT_PATH::$(echo $PWD)"
+          echo "OPENWRT_ROOT_PATH=$(echo $PWD)" >> $GITHUB_OUTPUT
 
       - name: Generate Toolchain Config
         run: |
@@ -80,26 +80,26 @@ jobs:
         run: |
           export CURRENT_BRANCH="$(git symbolic-ref --short HEAD)"
           echo "CURRENT_BRANCH=$CURRENT_BRANCH" >> $GITHUB_ENV
-          echo "::set-output name=CURRENT_BRANCH::$(echo $CURRENT_BRANCH)"
+          echo "CURRENT_BRANCH=$(echo $CURRENT_BRANCH)" >> $GITHUB_OUTPUT
           cd $OPENWRT_ROOT_PATH
           export SOURCE_OWNER="$(echo $SOURCE_URL | awk -F '/' '{print $(NF-1)}')"
           echo "SOURCE_OWNER=$SOURCE_OWNER" >> $GITHUB_ENV
-          echo "::set-output name=SOURCE_OWNER::$(echo $SOURCE_OWNER)"
+          echo "SOURCE_OWNER=$(echo $SOURCE_OWNER)" >> $GITHUB_OUTPUT
           export SOURCE_REPO="$(echo $SOURCE_URL | awk -F '/' '{print $(NF)}')"
           echo "SOURCE_REPO=$SOURCE_REPO" >> $GITHUB_ENV
-          echo "::set-output name=SOURCE_REPO::$(echo $SOURCE_REPO)"
+          echo "SOURCE_REPO=$(echo $SOURCE_REPO)" >> $GITHUB_OUTPUT
           export DEVICE_TARGET=$(cat .config | grep CONFIG_TARGET_BOARD | awk -F '"' '{print $2}')
           echo "DEVICE_TARGET=$DEVICE_TARGET" >> $GITHUB_ENV
-          echo "::set-output name=DEVICE_TARGET::$(echo $DEVICE_TARGET)"
+          echo "DEVICE_TARGET=$(echo $DEVICE_TARGET)" >> $GITHUB_OUTPUT
           export DEVICE_SUBTARGET=$(cat .config | grep CONFIG_TARGET_SUBTARGET | awk -F '"' '{print $2}')
           echo "DEVICE_SUBTARGET=$DEVICE_SUBTARGET" >> $GITHUB_ENV
-          echo "::set-output name=DEVICE_SUBTARGET::$(echo $DEVICE_SUBTARGET)"
+          echo "DEVICE_SUBTARGET=$(echo $DEVICE_SUBTARGET)" >> $GITHUB_OUTPUT
           export DEVICE_PLATFORM=$(cat .config | grep CONFIG_TARGET_ARCH_PACKAGES | awk -F '"' '{print $2}')
           echo "DEVICE_PLATFORM=$DEVICE_PLATFORM" >> $GITHUB_ENV
-          echo "::set-output name=DEVICE_PLATFORM::$(echo $DEVICE_PLATFORM)"
+          echo "DEVICE_PLATFORM=$(echo $DEVICE_PLATFORM)" >> $GITHUB_OUTPUT
           export TOOLCHAIN_IMAGE="toolchain-$SOURCE_OWNER-$SOURCE_REPO-$SOURCE_BRANCH-$DEVICE_TARGET-$DEVICE_SUBTARGET"
           echo "TOOLCHAIN_IMAGE=$TOOLCHAIN_IMAGE" >> $GITHUB_ENV
-          echo "::set-output name=TOOLCHAIN_IMAGE::$(echo $TOOLCHAIN_IMAGE)"
+          echo "TOOLCHAIN_IMAGE=$(echo $TOOLCHAIN_IMAGE)" >> $GITHUB_OUTPUT
 
       - name: Compare Toolchain Hash
         id: hash
@@ -107,12 +107,12 @@ jobs:
           cd $OPENWRT_ROOT_PATH
           export CURRENT_HASH=$(git log --pretty=tformat:"%H" -n1 tools toolchain)
           echo "CURRENT_HASH=$CURRENT_HASH" >> $GITHUB_ENV
-          echo "::set-output name=CURRENT_HASH::$(echo $CURRENT_HASH)"
+          echo "CURRENT_HASH=$(echo $CURRENT_HASH)" >> $GITHUB_OUTPUT
           echo "CURRENT_HASH is $CURRENT_HASH"
           export CACHE_HASH=$(curl -fSsL https://github.com/$GITHUB_REPOSITORY/releases/download/$TOOLCHAIN_TAG/$TOOLCHAIN_IMAGE.hash)
           echo "CACHE_HASH is $CACHE_HASH"
           if [ -z "$CACHE_HASH" ] || [ "$CURRENT_HASH" != "$CACHE_HASH" ]; then
-            echo "::set-output name=REBUILD_TOOLCHAIN::true"
+            echo "REBUILD_TOOLCHAIN=true" >> $GITHUB_OUTPUT
           fi
 
       - name: Install Feeds
